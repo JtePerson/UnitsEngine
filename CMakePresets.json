@@ -1,0 +1,24 @@
+{
+	"version": 3,
+	"configurePresets": [
+		{
+			"name": "All Multi-Config",
+			"generator": "Ninja Multi-Config",
+			"binaryDir": "${sourceDir}/build",
+			"cacheVariables": {
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "All Debug",
+			"configurePreset": "All Multi-Config",
+			"configuration": "Debug"
+		},
+		{
+			"name": "All Release",
+			"configurePreset": "All Multi-Config",
+			"configuration": "Release"
+		}
+	]
+}

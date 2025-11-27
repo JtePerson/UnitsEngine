@@ -7,3 +7,6 @@
 [submodule "UnitsEngine/vendor/imgui"]
 	path = UnitsEngine/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "UnitsEngine/vendor/sdl_image"]
+	path = UnitsEngine/vendor/sdl_image
+	url = https://github.com/libsdl-org/SDL_image.git

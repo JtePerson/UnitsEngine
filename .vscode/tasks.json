@@ -1,0 +1,104 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "CMake: clean Cache Windows",
+			"type": "shell",
+			"command": "rmdir /s /q ${workspaceFolder}\\build",
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake: clean Cache Linux/MacOS",
+			"type": "shell",
+			"command": "rm -rf ${workspaceFolder}/build",
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake: clean All Multi-Config",
+			"type": "cmake",
+			"command": "clean",
+			"preset": "",
+			"problemMatcher": [],
+			"detail": "CMake All Multi-Config clean task"
+		},
+		{
+			"label": "CMake: configure All Multi-Config",
+			"type": "cmake",
+			"command": "configure",
+			"problemMatcher": [],
+			"detail": "CMake All Multi-Config configure task"
+		},
+		{
+			"label": "Build UnitsEngine Debug",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitsEngine"
+			],
+			"preset": "All Debug"
+		},
+		{
+			"label": "Build UnitsEngine Release",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitsEngine"
+			],
+			"preset": "All Release"
+		},
+		{
+			"label": "Build UnitsEditor Debug",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitsEditor"
+			],
+			"preset": "All Debug"
+		},
+		{
+			"label": "Build UnitsEditor Release",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitsEditor"
+			],
+			"preset": "All Release"
+		},
+		{
+			"label": "Build UnitTests Debug",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitTests"
+			],
+			"preset": "All Debug"
+		},
+		{
+			"label": "Build UnitTests Release",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitTests"
+			],
+			"preset": "All Release"
+		},
+		{
+			"label": "Build Sandbox Debug",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"Sandbox"
+			],
+			"preset": "All Debug"
+		},
+		{
+			"label": "Build Sandbox Release",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"Sandbox"
+			],
+			"preset": "All Release"
+		}
+	]
+}
