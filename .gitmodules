@@ -7,3 +7,6 @@
 [submodule "UnitsEngine/vendor/sdl_image"]
 	path = UnitsEngine/vendor/sdl_image
 	url = https://github.com/libsdl-org/SDL_image.git
+[submodule "UnitsEngine/vendor/sdl"]
+	path = UnitsEngine/vendor/sdl
+	url = https://github.com/libsdl-org/SDL.git
