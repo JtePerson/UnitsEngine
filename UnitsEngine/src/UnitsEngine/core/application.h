@@ -4,25 +4,31 @@
 int main(int p_argc, char** p_argv);
 
 namespace Units {
+  class UE_API Application;
+  // Defined in Client
+  extern Application* createApplication() noexcept;
+
   class UE_API Application {
   public:
     struct Specs {};
   public:
-    static inline Application* getInstance(const Specs& p_specs= {}) noexcept {
-      static inline Application s_instance{p_specs};
-      return &s_instance;
+    static inline Application* getInstance() noexcept {
+      static Application* s_instance_ptr= createApplication();
+      return s_instance_ptr;
     }
-  private:
-    friend int ::main(int p_argc, char** p_argv);
-  private:
+  protected:
     Application(const Specs& p_specs) noexcept;
     ~Application() noexcept;
     Application(Application&&) noexcept= delete;
     Application(const Application&) noexcept= delete;
     Application operator=(Application&&) noexcept= delete;
     Application operator=(const Application&) noexcept= delete;
+  private:
+    friend int ::main(int p_argc, char** p_argv);
+  private:
+    bool should_run_= false;
 
     void run();
-    void quit();
+    void quit() noexcept;
   };
 } // namespace Units

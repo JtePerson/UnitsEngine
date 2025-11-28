@@ -47,24 +47,6 @@
 			"preset": "All Release"
 		},
 		{
-			"label": "Build UnitsEditor Debug",
-			"type": "cmake",
-			"command": "build",
-			"targets": [
-				"UnitsEditor"
-			],
-			"preset": "All Debug"
-		},
-		{
-			"label": "Build UnitsEditor Release",
-			"type": "cmake",
-			"command": "build",
-			"targets": [
-				"UnitsEditor"
-			],
-			"preset": "All Release"
-		},
-		{
 			"label": "Build UnitTests Debug",
 			"type": "cmake",
 			"command": "build",
@@ -83,22 +65,84 @@
 			"preset": "All Release"
 		},
 		{
-			"label": "Build Sandbox Debug",
+			"label": "Run UnitTests Debug",
+			"type": "shell",
+			"command": "${workspaceFolder}/build/UnitTests/Debug/UnitTests",
+      "dependsOn": "Build UnitTests Debug",
+      "problemMatcher": []
+		},
+		{
+			"label": "Run UnitTests Release",
+			"type": "shell",
+			"command": "${workspaceFolder}/build/UnitTests/Release/UnitTests",
+      "dependsOn": "Build UnitTests Release",
+      "problemMatcher": []
+		},
+		{
+			"label": "Build UnitsEditor Debug",
 			"type": "cmake",
 			"command": "build",
 			"targets": [
-				"Sandbox"
+				"UnitsEditor"
 			],
 			"preset": "All Debug"
 		},
 		{
-			"label": "Build Sandbox Release",
+			"label": "Build UnitsEditor Release",
 			"type": "cmake",
 			"command": "build",
 			"targets": [
-				"Sandbox"
+				"UnitsEditor"
 			],
 			"preset": "All Release"
-		}
+		},
+		{
+			"label": "Run UnitsEditor Debug",
+			"type": "shell",
+			"command": "${workspaceFolder}/build/UnitsEditor/Debug/UnitsEditor",
+      "dependsOn": "Build UnitsEditor Debug",
+      "problemMatcher": []
+		},
+		{
+			"label": "Run UnitsEditor Release",
+			"type": "shell",
+			"command": "${workspaceFolder}/build/UnitsEditor/Release/UnitsEditor",
+      "dependsOn": "Build UnitsEditor Release",
+      "problemMatcher": []
+		},
+		{
+			"label": "Build UnitsGame Debug",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitsGameLogic",
+				"UnitsGame"
+			],
+			"preset": "All Debug"
+		},
+		{
+			"label": "Build UnitsGame Release",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"UnitsGameLogic",
+				"UnitsGame"
+			],
+			"preset": "All Release"
+		},
+		{
+			"label": "Run UnitsGame Debug",
+			"type": "shell",
+			"command": "${workspaceFolder}/build/UnitsGame/Debug/UnitsGame",
+      "dependsOn": "Build UnitsGame Debug",
+      "problemMatcher": []
+		},
+		{
+			"label": "Run UnitsGame Release",
+			"type": "shell",
+			"command": "${workspaceFolder}/build/UnitsGame/Release/UnitsGame",
+      "dependsOn": "Build UnitsGame Release",
+      "problemMatcher": []
+		},
 	]
 }

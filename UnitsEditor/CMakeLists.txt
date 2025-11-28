@@ -3,3 +3,15 @@ set(UnitsEditor_CPP_SRC
 	${UnitsEditor_SRC_DIR}/main.cpp
 )
 add_executable(UnitsEditor ${UnitsEditor_CPP_SRC})
+target_include_directories(UnitsEditor PRIVATE
+  ${UnitsEditor_SRC_DIR}
+)
+target_link_libraries(UnitsEditor PRIVATE
+  UnitsEngine
+)
+if(WIN32)
+  add_custom_command(TARGET UnitsEditor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:UnitsEngine> $<TARGET_FILE_DIR:UnitsEditor>
+  )
+endif()

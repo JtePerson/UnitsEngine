@@ -1,5 +1,5 @@
 #pragma once
-#include "UnitsEngine/core/engine_defines.h"
+#include "UnitsEngine/core/units_engine_api.h"
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -14,8 +14,10 @@ namespace Units {
       s_core_logger_= spdlog::stdout_color_mt("UNITS-ENGINE");
       s_core_logger_->set_level(spdlog::level::trace);
 
-      s_client_logger_= spdlog::stdout_color_mt("SANDBOX");
+      s_client_logger_= spdlog::stdout_color_mt("CLIENT-APP");
       s_client_logger_->set_level(spdlog::level::trace);
+
+      s_core_logger_->info("Logging Initialized");
     }
 
     static inline std::shared_ptr<spdlog::logger>& getCoreLogger() noexcept { return s_core_logger_; }
