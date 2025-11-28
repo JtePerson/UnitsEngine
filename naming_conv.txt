@@ -1,0 +1,16 @@
+# Naming Convention
+- Macros/defines---------------------> ALL_CAPS_SNAKE_CASE
+- Namespace names--------------------> snake_case // Except root namespace name-> PascalCase
+- Template names---------------------> PascalCase
+- Type names-------------------------> PascalCase
+- Function names---------------------> camelCase
+- Struct Member/Local Variable names-> snake_case
+- Class Member names-----------------> snake_case_underscored_
+- Const variable names---------------> PascalCase
+
+# Naming Prefixes
+- Parameters-> p_
+- Static-----> s_
+- Member-----> m_
+- Global-----> g_
+- Constant---> k_
