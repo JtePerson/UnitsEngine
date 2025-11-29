@@ -1,21 +1,21 @@
-#include <UnitsEngine/core/application.h>
-#include <UnitsEngine/core/entry_point.h>
+#include <UnitsEngine/application.h>
+#include <UnitsEngine/log.h>
 
-class UnitTests final : public Units::Application {
+class UnitTests : public Units::IApplication {
 public:
-  UnitTests() noexcept: Application({}) {
+  inline UnitTests() noexcept: IApplication{this, {}} {
     UE_WARN("Initializing UnitTests");
-    UE_INFO("UnitTest Initialized");
+    UE_INFO("UnitTests Initialized");
   }
-  ~UnitTests() noexcept {
-    UE_WARN("Deinitializing UnitTests");
-    UE_INFO("UnitTest Deinitialized");
+  virtual inline ~UnitTests() noexcept override {
+    UE_WARN("Quitting UnitTests");
+    UE_INFO("UnitTests Quit");
   }
 private:
 };
 
-namespace Units {
-  Application* createApplication() noexcept {
-    return new UnitTests();
-  }
-} // namespace Units
+int main(int p_argc, char** p_argv) {
+  UnitTests unit_tests{};
+  unit_tests.run();
+  return 0;
+}
