@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 
-#include "UnitsEngine/assert.h"
+#include "UnitsEngine/core/assert.h"
 
 namespace Units {
 	template<typename KeyT, typename BaseT, typename PtrT= BaseT*, typename KeyHashT= std::hash<KeyT>>

@@ -11,9 +11,9 @@
 - Enum type names--------------------> PascalCase
 
 # Naming Prefixes
-- Parameters-> p_
-- Static-----> s_
-- Member-----> m_
-- Global-----> g_
-- Constant---> k_
-- Enum-------> k_
+- Parameters---> p_
+- Static-------> s_
+- Class Member-> m_
+- Global-------> g_
+- Constant-----> k_
+- Enum---------> k_

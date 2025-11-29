@@ -1,7 +1,7 @@
 #pragma once
-#include "UnitsEngine/macros.h"
-#include "UnitsEngine/debug.h"
-#include "UnitsEngine/log.h"
+#include "UnitsEngine/core/macros.h"
+#include "UnitsEngine/core/debug.h"
+#include "UnitsEngine/core/log.h"
 #include <filesystem>
 
 #ifdef UE_ASSERT_ENABLED

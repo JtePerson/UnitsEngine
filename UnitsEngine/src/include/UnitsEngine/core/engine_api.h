@@ -1,5 +1,5 @@
 #pragma once
-#include "UnitsEngine/platform_defines.h"
+#include "UnitsEngine/core/platform_defines.h"
 
 #if defined(UE_PLATFORM_WIN632) || defined(UE_PLATFORM_WIN64)
   #if defined(UE_BUILD_ENGINE)

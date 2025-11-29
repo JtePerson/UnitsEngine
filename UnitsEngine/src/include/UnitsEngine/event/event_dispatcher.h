@@ -7,12 +7,12 @@
 namespace Units {
   class EventDispatcher final {
   public:
-    inline EventDispatcher(IEvent&& p_event_ptr) noexcept
-    : m_event_ptr_{p_event_ptr}
+    inline EventDispatcher(IEvent& p_event) noexcept
+    : m_event_ptr_{p_event}
     {}
     
     template<typename EventT>
-    inline bool dispatch(const EventListener<EventT>& p_listener) const noexcept {
+    inline bool dispatch(EventListener<EventT>&& p_listener) const noexcept {
       static_assert((std::is_base_of<IEvent, EventT>::value && "EventType must derive from Event!"));
       if (EventT::getStaticId() == m_event_ptr_.getId()) {
         m_event_ptr_.m_handled_|= p_listener(static_cast<EventT&>(m_event_ptr_));

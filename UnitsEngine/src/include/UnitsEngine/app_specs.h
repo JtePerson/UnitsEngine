@@ -2,5 +2,5 @@
 
 namespace Units {
   // Application Specifications
-  struct AppSpecs {};
+  struct AppSpecs final {};
 } // namespace Units
