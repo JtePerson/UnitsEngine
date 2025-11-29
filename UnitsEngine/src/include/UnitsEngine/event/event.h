@@ -1,5 +1,5 @@
 #pragma once
-#include "UnitsEngine/event_type.h"
+#include "UnitsEngine/event/event_type.h"
 
 #include <stdint.h>
 
@@ -21,5 +21,5 @@ namespace Units {
                                 virtual inline const char* getName() const noexcept override { return #p_type; }
 } // namespace Units
 
-#include "UnitsEngine/event_listener.h"
-#include "UnitsEngine/event_dispatcher.h"
+#include "UnitsEngine/event/event_listener.h"
+#include "UnitsEngine/event/event_dispatcher.h"

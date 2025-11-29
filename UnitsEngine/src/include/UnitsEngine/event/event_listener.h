@@ -5,12 +5,12 @@ namespace Units {
   template<typename EventT>
   class EventListener final {
   public:
-    template<typename Callable>
-    inline EventListener(Callable&& p_callable) noexcept {
+    template<typename CallableT>
+    inline EventListener(CallableT&& p_callable) noexcept {
       m_callback_= p_callable;
     }
-    template<typename Callable>
-    inline EventListener& operator=(Callable&& p_callable) noexcept {
+    template<typename CallableT>
+    inline EventListener& operator=(CallableT&& p_callable) noexcept {
       m_callback_= p_callable;
       return *this;
     }

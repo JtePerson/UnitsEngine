@@ -1,6 +1,6 @@
 #pragma once
-#include "UnitsEngine/event.h"
-#include "UnitsEngine/event_listener.h"
+#include "UnitsEngine/event/event.h"
+#include "UnitsEngine/event/event_listener.h"
 
 #include <type_traits>
 

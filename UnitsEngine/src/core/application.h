@@ -2,6 +2,7 @@
 #include "UnitsEngine/application.h"
 
 #include "UnitsEngine/log.h"
+#include "core/layer_stack.h"
 
 namespace Units {
   namespace core {
@@ -11,6 +12,10 @@ namespace Units {
         static Application instance{p_specs};
         return &instance;
       }
+
+      void attatchLayer(const Id& p_layer_id, const I& p_i) noexcept;
+      void detatchLayer(const Id& p_layer_id, const I& p_i) noexcept;
+
       void run();
       inline void quit() noexcept {
         if (!m_should_run_) { return; }
@@ -22,6 +27,8 @@ namespace Units {
       ~Application() noexcept;
 
       bool m_should_run_= false;
+
+      LayerStack m_layer_stack_;
     };
   } // namespace core
 } // namespace Units

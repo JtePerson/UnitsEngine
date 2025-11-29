@@ -2,6 +2,8 @@ set(UnitsEngine_SRC_DIR ${PROJECT_SOURCE_DIR}/UnitsEngine/src)
 set(UnitsEngine_CPP_SRC
   ${UnitsEngine_SRC_DIR}/core/log.cpp
   ${UnitsEngine_SRC_DIR}/core/application.cpp
+  ${UnitsEngine_SRC_DIR}/core/layer.cpp
+  ${UnitsEngine_SRC_DIR}/core/layer_stack.cpp
 )
 
 set(UnitsEngine_VENDOR_DIR ${PROJECT_SOURCE_DIR}/UnitsEngine/vendor)

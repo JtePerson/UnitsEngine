@@ -1,9 +1,10 @@
 #pragma once
-#include "UnitsEngine/engine_api.h"
-#include "UnitsEngine/app_specs.h"
-
 #include <memory>
 #include <type_traits>
+
+#include "UnitsEngine/engine_api.h"
+#include "UnitsEngine/app_specs.h"
+#include "UnitsEngine/layer.h"
 
 namespace Units {
   // Interface class for Application
@@ -16,6 +17,20 @@ namespace Units {
       static_assert((std::is_base_of<IApplication, ApplicationType>::value && "ApplicationType must derive from IApplication!"));
       return static_cast<ApplicationType*>(s_instance_ptr_);
     }
+
+    // Attatches Layer to Layer Stack
+    void attatchLayer(const Id& p_layer_id, const I& p_i) noexcept;
+    template<typename LayerT>
+    inline void attatchLayer(const I& p_i) noexcept {
+      attatchLayer(LayerTraits<LayerT>::id, p_i);
+    }
+    // Detatches Layer from Layer Stack
+    void detatchLayer(const Id& p_layer_id, const I& p_i) noexcept;
+    template<typename LayerT>
+    inline void detatchLayer(const I& p_i) noexcept {
+      detatchLayer(LayerTraits<LayerT>::id, p_i);
+    }
+
     // Runs Application
     void run() const noexcept;
     // Attempts to Quit Application
