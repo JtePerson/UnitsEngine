@@ -4,16 +4,24 @@
 #include "UnitsEngine/engine_api.h"
 #include "UnitsEngine/types/number.h"
 #include "UnitsEngine/types/factory.h"
+#include "UnitsEngine/event/event.h"
 
 namespace Units {
   class ILayer {
   public:
     // Destructor should not access anything outside of ILayer
     virtual inline ~ILayer() noexcept= default;
-    // Called when layer attatched to stack; Can access outside content
+    // Called when layer attatched to stack
+    // Can access outside content
     virtual void onAttatch() noexcept= 0;
-    // Called when layer detatched from stack; Can access outside content
+    // Called when layer detatched from stack
+    // Can access outside content
     virtual void onDetatch() noexcept= 0;
+    // Called when Layer recieves Event
+    virtual void onEvent(IEvent& p_event) noexcept= 0;
+    // Called when Layer gets ticked
+    // Return false to prevent tick from propagating through layers
+    virtual bool onTick() noexcept= 0;
   protected:
     // Constructor should not access anything outside of ILayer
     inline ILayer() noexcept= default;

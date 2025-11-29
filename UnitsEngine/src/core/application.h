@@ -3,6 +3,7 @@
 
 #include "UnitsEngine/log.h"
 #include "core/layer_stack.h"
+#include "UnitsEngine/event/event.h"
 
 namespace Units {
   namespace core {
@@ -22,6 +23,8 @@ namespace Units {
         UE_CORE_WARN("Attempt made to quit Application");
         m_should_run_= false;
       }
+
+      void onEvent(IEvent& p_event) noexcept;
     private:
       Application(const AppSpecs& p_specs) noexcept;
       ~Application() noexcept;

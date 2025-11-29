@@ -4,6 +4,10 @@
 #include <stdint.h>
 
 namespace Units {
+  /*
+    Event System is blocking for all User Events
+    UnitsEngine Events are non-blocking and occur before ticking application
+  */
   class IEvent {
   public:
     friend class EventDispatcher;

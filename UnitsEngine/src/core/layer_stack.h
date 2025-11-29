@@ -6,6 +6,7 @@
 
 #include "UnitsEngine/layer.h"
 #include "UnitsEngine/types/number.h"
+#include "UnitsEngine/event/event.h"
 
 namespace Units {
   namespace core {
@@ -23,6 +24,9 @@ namespace Units {
 
       void processLayerQueue() noexcept;
       void detatchAllLayers() noexcept;
+
+      void processLayerEvents(IEvent& p_event) noexcept;
+      void processLayerTick() noexcept;
     private:
       std::queue<std::tuple<Id, I, int>> m_layer_queue_;
       std::vector<std::unique_ptr<ILayer>> m_layer_vector_;

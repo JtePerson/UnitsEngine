@@ -1,6 +1,7 @@
 #include <UnitsEngine/application.h>
 #include <UnitsEngine/log.h>
 #include <UnitsEngine/layer.h>
+#include <UnitsEngine/event/event.h>
 
 class TestLayer : public Units::ILayer {
 public:
@@ -12,6 +13,12 @@ public:
   }
   virtual inline void onDetatch() noexcept override {
     UE_TRACE("Test Layer Detatched");
+  }
+
+  virtual inline void onEvent(Units::IEvent& p_event) noexcept override {}
+  virtual inline bool onTick() noexcept override {
+    UE_TRACE("Test Layer Tick");
+    return true;
   }
 private:
 };
@@ -26,6 +33,11 @@ public:
   virtual inline ~UnitTests() noexcept override {
     UE_WARN("Quitting UnitTests");
     UE_INFO("UnitTests Quit");
+  }
+
+  virtual inline void onEvent(Units::IEvent& p_event) noexcept override {}
+  virtual inline void onTick() noexcept override {
+    UE_TRACE("UnitTests Tick");
   }
 private:
 };

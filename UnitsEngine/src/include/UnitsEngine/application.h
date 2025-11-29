@@ -5,6 +5,7 @@
 #include "UnitsEngine/engine_api.h"
 #include "UnitsEngine/app_specs.h"
 #include "UnitsEngine/layer.h"
+#include "UnitsEngine/event/event.h"
 
 namespace Units {
   // Interface class for Application
@@ -35,6 +36,9 @@ namespace Units {
     void run() const noexcept;
     // Attempts to Quit Application
     void quit() const noexcept;
+
+    virtual void onEvent(IEvent& p_event) noexcept= 0;
+    virtual void onTick() noexcept= 0;
   protected:
     IApplication(IApplication* p_derived_ptr, AppSpecs&& p_specs) noexcept;
     static inline IApplication* s_instance_ptr_= nullptr;

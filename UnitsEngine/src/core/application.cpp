@@ -2,6 +2,8 @@
 #include "core/application.h"
 
 #include "UnitsEngine/log.h"
+#include "UnitsEngine/app_specs.h"
+#include "UnitsEngine/event/event.h"
 
 namespace Units {
   IApplication::IApplication(IApplication* p_derived_ptr, AppSpecs&& p_specs) noexcept {
@@ -50,10 +52,19 @@ namespace Units {
       while (m_should_run_) {
         // Run Application
         m_layer_stack_.processLayerQueue();
+        IApplication::getInstance()->onTick();
+        m_layer_stack_.processLayerTick();
         quit();
       }
       m_layer_stack_.detatchAllLayers();
       UE_CORE_INFO("Application Ran");
+    }
+
+    void Application::onEvent(IEvent& p_event) noexcept {
+      IApplication::getInstance()->onEvent(p_event);
+      if (!p_event.handled()) {
+        m_layer_stack_.processLayerEvents(p_event);
+      }
     }
   } // namespace core
 } // namespace Units
