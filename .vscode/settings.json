@@ -67,6 +67,7 @@
     "charconv": "cpp",
     "execution": "cpp",
     "print": "cpp",
-    "algorithm": "cpp"
+    "algorithm": "cpp",
+    "__config": "cpp"
   }
 }

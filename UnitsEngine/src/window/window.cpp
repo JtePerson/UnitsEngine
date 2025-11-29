@@ -15,7 +15,7 @@ namespace Units {
     m_title_= p_specs.title;
     m_expired_= false;
   }
-  Window& Window::newWindow(WindowSpecs&& p_specs) noexcept {
+  Window& Window::newWindow(const WindowSpecs& p_specs) noexcept {
     UE_CORE_ASSERT(s_window_title_map_.find(p_specs.title) == s_window_title_map_.end(), "Window with WindowSpecs.title already exists!");
     auto& new_window= s_window_title_map_[p_specs.title]= p_specs;
     core::Window::createWindow(p_specs, &new_window, &new_window.m_id_);

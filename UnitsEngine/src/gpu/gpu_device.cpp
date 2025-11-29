@@ -8,7 +8,7 @@
 
 namespace Units {
   GPUDevice::GPUDevice() noexcept {
-    UE_CORE_WARN("Initializing Renderer");
+    UE_CORE_WARN("Initializing GPUDevice");
     SDL_GPUShaderFormat shader_format= SDL_GPU_SHADERFORMAT_SPIRV |
                                        SDL_GPU_SHADERFORMAT_DXIL |
                                        SDL_GPU_SHADERFORMAT_DXBC |
@@ -20,7 +20,10 @@ namespace Units {
       constexpr bool debug_mode= false;
     #endif
     m_gpu_device_ptr_= reinterpret_cast<void*>(SDL_CreateGPUDevice(shader_format, debug_mode, nullptr));
-    UE_CORE_ASSERT((m_gpu_device_ptr_ != nullptr && "GPUDevice could not initialize GPU Device!"));
+    if (m_gpu_device_ptr_ == nullptr) {
+      UE_CORE_ERROR("SDL error: {0}", SDL_GetError());
+      UE_CORE_ASSERT(false, "Could not initialize GPUDevice!");
+    }
     UE_CORE_TRACE("GPUDevice backend: {0}", SDL_GetGPUDeviceDriver(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_)));
     UE_CORE_INFO("GPUDevice Initialized");
   }

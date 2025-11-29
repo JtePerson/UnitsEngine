@@ -6,12 +6,16 @@
 #include "UnitsEngine/app_specs.h"
 #include "UnitsEngine/layer.h"
 #include "UnitsEngine/event/event.h"
+#include "UnitsEngine/gpu/gpu_device.h"
 
 namespace Units {
   // Interface class for Application
   class UE_API IApplication {
   public:
     virtual ~IApplication() noexcept;
+
+    std::unique_ptr<GPUDevice> m_gpu_device_uptr_= nullptr;
+
     // Get Singleton Instance
     template<typename ApplicationType= IApplication>
     static inline ApplicationType* getInstance() noexcept {

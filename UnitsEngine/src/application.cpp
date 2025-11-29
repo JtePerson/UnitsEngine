@@ -2,20 +2,20 @@
 #include "application.h"
 
 #include <SDL3/SDL.h>
+#include <imgui/imgui.h>
 
 #include "UnitsEngine/core/log.h"
 #include "UnitsEngine/core/assert.h"
 #include "UnitsEngine/app_specs.h"
 #include "UnitsEngine/event/event.h"
 #include "UnitsEngine/gpu/gpu_device.h"
-#include "UnitsEngine/gpu/gpu_command_buffer.h"
-#include "UnitsEngine/gpu/gpu_render_pass.h"
 
 namespace Units {
   IApplication::IApplication(IApplication* p_derived_ptr, AppSpecs&& p_specs) noexcept {
     core::Application::getInstance(p_specs);
     if (s_instance_ptr_ != nullptr) { return; }
     s_instance_ptr_= p_derived_ptr;
+    m_gpu_device_uptr_= std::make_unique<GPUDevice>();
   }
 
   void IApplication::attatchLayer(const Id& p_layer_id, const I& p_i) noexcept {

@@ -20,7 +20,7 @@ namespace Units {
     inline Window& operator=(const Window&) noexcept= delete;
     ~Window() noexcept;
 
-    static Window& newWindow(WindowSpecs&& p_specs) noexcept;
+    static Window& newWindow(const WindowSpecs& p_specs) noexcept;
     static inline Window& getFromTitle(const std::string& p_window_title) noexcept {
       UE_CORE_ASSERT(s_window_title_map_.find(p_window_title) != s_window_title_map_.end(), "Window with Title does not exist!");
       return s_window_title_map_.at(p_window_title);

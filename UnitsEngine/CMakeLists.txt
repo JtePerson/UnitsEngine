@@ -11,14 +11,7 @@ set(UnitsEngine_CPP_SRC
 )
 
 set(UnitsEngine_VENDOR_DIR ${PROJECT_SOURCE_DIR}/UnitsEngine/vendor)
-add_subdirectory(${UnitsEngine_VENDOR_DIR}/spdlog)
-
-set(SDL_STATIC ON)
-set(SDL_SHARED OFF)
-set(BUILD_SHARED_LIBS OFF)
-
-add_subdirectory(${UnitsEngine_VENDOR_DIR}/sdl)
-add_subdirectory(${UnitsEngine_VENDOR_DIR}/sdl_image)
+add_subdirectory(${UnitsEngine_VENDOR_DIR})
 
 add_library(UnitsEngine SHARED ${UnitsEngine_CPP_SRC})
 target_include_directories(UnitsEngine
@@ -43,6 +36,7 @@ PRIVATE
 target_link_libraries(UnitsEngine
 PUBLIC
   spdlog
+  ImGui
 PRIVATE
   SDL3::SDL3
   SDL3_image::SDL3_image
