@@ -6,6 +6,7 @@
 #include <UnitsEngine/window/window.h>
 #include <UnitsEngine/gpu/gpu.h>
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 class UnitTests : public Units::IApplication {
 public:
@@ -29,6 +30,11 @@ public:
   virtual inline void onEvent(Units::IEvent& p_event) noexcept override {}
   virtual inline void onTick() noexcept override {
     beginImGui();
+    ImGui::Begin("DockSpace Example");
+    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+    ImGui::DockSpace(dockspace_id);
+    ImGui::End();
+
     if (m_show_imgui_demo_window_) { ImGui::ShowDemoWindow(&m_show_imgui_demo_window_); }
     Units::GPUCommandBuffer gpu_command_buffer{*m_gpu_device_uptr_};
     prepareImGui(gpu_command_buffer);

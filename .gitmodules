@@ -11,3 +11,6 @@
 	path = UnitsEngine/vendor/imgui/imgui
 	url = https://github.com/ocornut/imgui.git
   branch = docking
+[submodule "UnitsEngine/vendor/glm"]
+	path = UnitsEngine/vendor/glm
+	url = https://github.com/g-truc/glm.git
