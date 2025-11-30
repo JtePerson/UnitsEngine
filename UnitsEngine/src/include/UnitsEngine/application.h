@@ -6,7 +6,9 @@
 #include "UnitsEngine/app_specs.h"
 #include "UnitsEngine/layer.h"
 #include "UnitsEngine/event/event.h"
+#include "UnitsEngine/window/window.h"
 #include "UnitsEngine/gpu/gpu_device.h"
+#include "UnitsEngine/gpu/gpu_render_pass.h"
 
 namespace Units {
   // Interface class for Application
@@ -15,6 +17,7 @@ namespace Units {
     virtual ~IApplication() noexcept;
 
     std::unique_ptr<GPUDevice> m_gpu_device_uptr_= nullptr;
+    Window& m_main_window_;
 
     // Get Singleton Instance
     template<typename ApplicationType= IApplication>
@@ -43,6 +46,9 @@ namespace Units {
 
     virtual void onEvent(IEvent& p_event) noexcept= 0;
     virtual void onTick() noexcept= 0;
+
+    void prepareImGui(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
+    void renderImGui(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
   protected:
     IApplication(IApplication* p_derived_ptr, AppSpecs&& p_specs) noexcept;
     static inline IApplication* s_instance_ptr_= nullptr;

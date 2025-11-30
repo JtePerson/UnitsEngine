@@ -17,6 +17,7 @@ add_library(UnitsEngine SHARED ${UnitsEngine_CPP_SRC})
 target_include_directories(UnitsEngine
 PUBLIC
   ${UnitsEngine_SRC_DIR}/include
+  ${UnitsEngine_VENDOR_DIR}/imgui
 PRIVATE
   ${UnitsEngine_SRC_DIR}
 )

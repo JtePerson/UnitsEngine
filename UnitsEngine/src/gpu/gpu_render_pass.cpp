@@ -8,7 +8,7 @@
 
 namespace Units {
   GPURenderPass::GPURenderPass(Window& p_window, GPUCommandBuffer& p_pipeline) noexcept {
-    auto* command_buffer_ptr= reinterpret_cast<SDL_GPUCommandBuffer*>(p_pipeline.getCommandBufferPtr());
+    auto* command_buffer_ptr= reinterpret_cast<SDL_GPUCommandBuffer*>(p_pipeline.getGPUCommandBufferPtr());
     auto* window_ptr= core::Window::getFromId(p_window.getId()).getSDLWindowPtr();
     SDL_GPUDepthStencilTargetInfo depth_stencil_target_info= {};
     SDL_GPUTexture* swapchain_texture;

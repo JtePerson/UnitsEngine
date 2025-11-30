@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 #include <unordered_map>
 #include <memory>
+#include <imgui/imgui.h>
 
 #include "UnitsEngine/types/number.h"
 #include "UnitsEngine/core/log.h"
@@ -11,6 +12,8 @@
 #include "UnitsEngine/event/event.h"
 #include "window/window.h"
 #include "UnitsEngine/gpu/gpu_device.h"
+#include "UnitsEngine/gpu/gpu_command_buffer.h"
+#include "UnitsEngine/gpu/gpu_render_pass.h"
 
 namespace Units {
   namespace core {
@@ -41,6 +44,9 @@ namespace Units {
         core::Window::destroyWindow(p_event.getWindowId());
         return false;
       }
+      
+      void prepareImgui(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
+      void renderImGui(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
     private:
       Application(const AppSpecs& p_specs) noexcept;
       ~Application() noexcept;
@@ -49,6 +55,8 @@ namespace Units {
 
       LayerStack m_layer_stack_;
       SDL_Event m_sdl_event_;
+
+      ImDrawData* m_imgui_draw_data_ptr_= nullptr;
 
       std::unordered_map<Id, std::function<std::unique_ptr<IEvent>(const SDL_Event&)>> m_sdl_event_callbacks_;
       template<typename CallbackT>

@@ -5,19 +5,19 @@
 #include <UnitsEngine/event/event.h>
 #include <UnitsEngine/window/window.h>
 #include <UnitsEngine/gpu/gpu.h>
+#include <imgui/imgui.h>
 
 class UnitTests : public Units::IApplication {
 public:
-  inline UnitTests() noexcept: IApplication{this, {}} {
-    UE_WARN("Initializing UnitTests");
-    Units::WindowSpecs window_specs{
+  inline UnitTests() noexcept: IApplication{this, Units::AppSpecs{
+    .main_window_specs= {
       .title= "UnitTests Window",
       .width= 640,
       .height= 360,
       .flags= UE_WINDOW_RESIZABLE
-    };
-    Units::Window::newWindow(window_specs);
-    m_gpu_device_uptr_->claimWindow(Units::Window::getFromTitle("UnitTests Window"));
+    }
+  }} {
+    UE_WARN("Initializing UnitTests");
     UE_INFO("UnitTests Initialized");
   }
   virtual inline ~UnitTests() noexcept override {
@@ -27,10 +27,12 @@ public:
 
   virtual inline void onEvent(Units::IEvent& p_event) noexcept override {}
   virtual inline void onTick() noexcept override {
+    ImGui::NewFrame();
     Units::GPUCommandBuffer gpu_command_buffer{*m_gpu_device_uptr_};
+    prepareImGui(gpu_command_buffer);
     {
-      auto& window= Units::Window::getFromTitle("UnitTests Window");
-      Units::GPURenderPass gpu_render_pass{window, gpu_command_buffer};
+      Units::GPURenderPass gpu_render_pass{m_main_window_, gpu_command_buffer};
+      renderImGui(gpu_command_buffer, gpu_render_pass);
     }
     gpu_command_buffer.submit();
   }

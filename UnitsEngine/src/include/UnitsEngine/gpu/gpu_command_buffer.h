@@ -10,7 +10,7 @@ namespace Units {
     
     void submit() noexcept;
     
-    inline void* getCommandBufferPtr() noexcept {
+    inline void* getGPUCommandBufferPtr() noexcept {
       return m_gpu_command_buffer_ptr_;
     }
   private:
