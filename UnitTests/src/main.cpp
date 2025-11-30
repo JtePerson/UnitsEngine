@@ -18,6 +18,7 @@ public:
     }
   }} {
     UE_WARN("Initializing UnitTests");
+    initImGui();
     UE_INFO("UnitTests Initialized");
   }
   virtual inline ~UnitTests() noexcept override {
@@ -27,7 +28,8 @@ public:
 
   virtual inline void onEvent(Units::IEvent& p_event) noexcept override {}
   virtual inline void onTick() noexcept override {
-    ImGui::NewFrame();
+    beginImGui();
+    if (m_show_imgui_demo_window_) { ImGui::ShowDemoWindow(&m_show_imgui_demo_window_); }
     Units::GPUCommandBuffer gpu_command_buffer{*m_gpu_device_uptr_};
     prepareImGui(gpu_command_buffer);
     {
@@ -37,6 +39,7 @@ public:
     gpu_command_buffer.submit();
   }
 private:
+  bool m_show_imgui_demo_window_= true;
 };
 
 int main(int p_argc, char** p_argv) {

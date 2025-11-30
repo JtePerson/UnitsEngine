@@ -45,6 +45,10 @@ namespace Units {
         return false;
       }
       
+      inline ImGuiContext*& getImGuiContext() noexcept {
+        return m_imgui_context_ptr_;
+      }
+      void beginImGui() noexcept;
       void prepareImgui(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
       void renderImGui(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
     private:
@@ -57,6 +61,7 @@ namespace Units {
       SDL_Event m_sdl_event_;
 
       ImDrawData* m_imgui_draw_data_ptr_= nullptr;
+      ImGuiContext* m_imgui_context_ptr_= nullptr;
 
       std::unordered_map<Id, std::function<std::unique_ptr<IEvent>(const SDL_Event&)>> m_sdl_event_callbacks_;
       template<typename CallbackT>

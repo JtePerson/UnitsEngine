@@ -26,7 +26,7 @@ namespace Units {
     m_gpu_device_uptr_->claimWindow(m_main_window_);
     
     IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+    core::Application::getInstance()->getImGuiContext()= ImGui::CreateContext();
     ImGuiIO& io= ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
@@ -66,6 +66,12 @@ namespace Units {
     core::Application::getInstance()->quit();
   }
   
+  ImGuiContext* IApplication::getImGuiContext() noexcept {
+    return core::Application::getInstance()->getImGuiContext();
+  }
+  void IApplication::beginImGui() noexcept {
+    core::Application::getInstance()->beginImGui();
+  }
   void IApplication::prepareImGui(GPUCommandBuffer& p_gpu_command_buffer) noexcept {
     core::Application::getInstance()->prepareImgui(p_gpu_command_buffer);
   }
@@ -105,6 +111,7 @@ namespace Units {
         m_layer_stack_.processLayerQueue();
 
         while (SDL_PollEvent(&m_sdl_event_)) {
+          ImGui_ImplSDL3_ProcessEvent(&m_sdl_event_);
           auto current_event= sdlEventCallback(m_sdl_event_);
           if (current_event->getId() != static_cast<EventId>(EventType::kNone)) {
             if (onEvent(*current_event)) { break; }
@@ -141,6 +148,11 @@ namespace Units {
       return false;
     }
 
+    void Application::beginImGui() noexcept {
+      ImGui_ImplSDLGPU3_NewFrame();
+      ImGui_ImplSDL3_NewFrame();
+      ImGui::NewFrame();
+    }
     void Application::prepareImgui(GPUCommandBuffer& p_gpu_command_buffer) noexcept {
       ImGui::Render();
       m_imgui_draw_data_ptr_= ImGui::GetDrawData();

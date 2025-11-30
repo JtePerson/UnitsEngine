@@ -7,6 +7,10 @@ namespace Units {
   class UE_API GPURenderPass final {
   public:
     GPURenderPass(Window& p_window, GPUCommandBuffer& p_pipeline) noexcept;
+    inline GPURenderPass(GPURenderPass&&) noexcept= delete;
+    inline GPURenderPass(const GPURenderPass&) noexcept= delete;
+    inline GPURenderPass& operator=(GPURenderPass&&) noexcept= delete;
+    inline GPURenderPass& operator=(const GPURenderPass&) noexcept= delete;
     ~GPURenderPass() noexcept;
     
     inline void* getGPURenderPass() noexcept {

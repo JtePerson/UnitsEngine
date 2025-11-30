@@ -6,6 +6,10 @@ namespace Units {
   class UE_API GPUDevice final {
   public:
     GPUDevice() noexcept;
+    inline GPUDevice(GPUDevice&&) noexcept= delete;
+    inline GPUDevice(const GPUDevice&) noexcept= delete;
+    inline GPUDevice& operator=(GPUDevice&&) noexcept= delete;
+    inline GPUDevice& operator=(const GPUDevice&) noexcept= delete;
     ~GPUDevice() noexcept;
     
     void claimWindow(Window& p_window) noexcept;

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <type_traits>
+#include <imgui/imgui.h>
 
 #include "UnitsEngine/core/engine_api.h"
 #include "UnitsEngine/app_specs.h"
@@ -47,6 +48,11 @@ namespace Units {
     virtual void onEvent(IEvent& p_event) noexcept= 0;
     virtual void onTick() noexcept= 0;
 
+    ImGuiContext* getImGuiContext() noexcept;
+    inline void initImGui() noexcept {
+      ImGui::SetCurrentContext(getImGuiContext());
+    }
+    void beginImGui() noexcept;
     void prepareImGui(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
     void renderImGui(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
   protected:
