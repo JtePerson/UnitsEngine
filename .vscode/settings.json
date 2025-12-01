@@ -68,6 +68,7 @@
     "execution": "cpp",
     "print": "cpp",
     "algorithm": "cpp",
-    "__config": "cpp"
+    "__config": "cpp",
+    "tuple": "cpp"
   }
 }

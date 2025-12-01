@@ -1,52 +1,74 @@
-#include <memory>
-#include <UnitsEngine/application.h>
-#include <UnitsEngine/layer.h>
-#include <UnitsEngine/core/core.h>
-#include <UnitsEngine/event/event.h>
-#include <UnitsEngine/window/window.h>
-#include <UnitsEngine/gpu/gpu.h>
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
+#include <UnitsEngine/iapplication.h>
+#include <UnitsEngine/ilayer.h>
+#include <UnitsEngine/core/log.h>
 
-class UnitTests final : public Units::IApplication {
+class TestLayer : public Units::ILayer {
 public:
-  inline UnitTests() noexcept: IApplication{this, Units::AppSpecs{
-    .main_window_specs= {
-      .title= "UnitTests Window",
-      .width= 640,
-      .height= 360,
-      .flags= UE_WINDOW_RESIZABLE
-    }
-  }} {
-    UE_WARN("Initializing UnitTests");
-    initImGui();
-    UE_INFO("UnitTests Initialized");
+  inline TestLayer() noexcept= default;
+  virtual inline ~TestLayer() noexcept= default;
+ 
+  virtual void onAttatch() noexcept override {
+    UE_TRACE("TestLayer Attatched");
   }
-  virtual inline ~UnitTests() noexcept override {
-    UE_WARN("Quitting UnitTests");
-    UE_INFO("UnitTests Quit");
+  virtual void onDetatch() noexcept override {
+    UE_TRACE("TestLayer Detatched");
   }
 
-  virtual inline void onEvent(Units::IEvent& p_event) noexcept override {}
-  virtual inline void onTick() noexcept override {}
-  virtual inline void onImGui() noexcept override {
-    ImGui::ShowDemoWindow();
+  virtual void onEvent() noexcept override {}
+  virtual void onFixedTick() noexcept override {}
+  virtual void onTick() noexcept override {
+    UE_TRACE("TestLayer Ticked");
   }
-  virtual inline void onRender() noexcept override {
-    Units::GPUCommandBuffer gpu_command_buffer{*m_gpu_device_uptr_};
-    prepareImGui(gpu_command_buffer);
-    {
-      Units::GPURenderPass gpu_render_pass{m_main_window_, gpu_command_buffer};
-      renderImGui(gpu_command_buffer, gpu_render_pass);
-    }
-    gpu_command_buffer.submit();
+  virtual void onImGui() noexcept override {}
+  virtual void onRender() noexcept override {}
+protected:
+};
+class AnotherTestLayer : public Units::ILayer {
+public:
+  inline AnotherTestLayer() noexcept= default;
+  virtual inline ~AnotherTestLayer() noexcept= default;
+ 
+  virtual void onAttatch() noexcept override {
+    UE_TRACE("AnotherTestLayer Attatched");
+  }
+  virtual void onDetatch() noexcept override {
+    UE_TRACE("AnotherTestLayer Detatched");
+  }
+
+  virtual void onEvent() noexcept override {}
+  virtual void onFixedTick() noexcept override {}
+  virtual void onTick() noexcept override {
+    UE_TRACE("AnotherTestLayer Ticked");
+  }
+  virtual void onImGui() noexcept override {}
+  virtual void onRender() noexcept override {}
+protected:
+};
+
+class TestApplication final : public Units::IApplication {
+public:
+  inline TestApplication() noexcept {
+    UE_WARN("Initializing TestApplication");
+    UE_INFO("TestApplication Initialized");
+  }
+  virtual inline ~TestApplication() noexcept {
+    UE_WARN("Quitting TestApplication");
+    UE_INFO("TestApplication Quit");
+  }
+
+  virtual inline void onRun() noexcept {
+    UE_TRACE("TestApplication onRun");
+    attatchLayer<TestLayer>(0);
+    attatchLayer<AnotherTestLayer>(1);
+  }
+  virtual inline void onQuit() noexcept {
+    UE_TRACE("TestApplication onQuit");
   }
 private:
-  bool m_show_imgui_demo_window_= true;
 };
 
 int main(int p_argc, char** p_argv) {
-  UnitTests unit_tests{};
-  unit_tests.run();
+  TestApplication test_application{};
+  test_application.run();
   return 0;
 }

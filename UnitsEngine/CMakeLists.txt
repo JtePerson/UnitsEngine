@@ -1,15 +1,9 @@
 set(UnitsEngine_SRC_DIR ${PROJECT_SOURCE_DIR}/UnitsEngine/src)
 set(UnitsEngine_CPP_SRC
   ${UnitsEngine_SRC_DIR}/core/log.cpp
+  ${UnitsEngine_SRC_DIR}/iapplication.cpp
   ${UnitsEngine_SRC_DIR}/application.cpp
-  ${UnitsEngine_SRC_DIR}/layer.cpp
-  ${UnitsEngine_SRC_DIR}/layer_stack.cpp
-  ${UnitsEngine_SRC_DIR}/window/window.cpp
-  ${UnitsEngine_SRC_DIR}/gpu/gpu_command_buffer.cpp
-  ${UnitsEngine_SRC_DIR}/gpu/gpu_render_pass.cpp
-  ${UnitsEngine_SRC_DIR}/gpu/gpu_device.cpp
-  ${UnitsEngine_SRC_DIR}/gpu/gpu_texture.cpp
-  ${UnitsEngine_SRC_DIR}/gpu/gpu_sampler.cpp
+  ${UnitsEngine_SRC_DIR}/layer_factory.cpp
 )
 
 set(UnitsEngine_VENDOR_DIR ${PROJECT_SOURCE_DIR}/UnitsEngine/vendor)

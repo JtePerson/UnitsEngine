@@ -1,5 +1,5 @@
 #pragma once
-#include <UnitsEngine/layer.h>
+#include <UnitsEngine/ilayer.h>
 #include <UnitsEngine/event/event.h>
 
 namespace Editor {
@@ -10,11 +10,12 @@ namespace Editor {
 
     virtual void onAttatch() noexcept override;
     virtual void onDetatch() noexcept override;
-    virtual void onEvent(Units::IEvent& p_event) noexcept override;
-    virtual bool onTick() noexcept override;
-    virtual bool onImGui() noexcept override;
+
+    virtual void onEvent() noexcept override;
+    virtual void onFixedTick() noexcept override;
+    virtual void onTick() noexcept override;
+    virtual void onImGui() noexcept override;
+    virtual void onRender() noexcept override;
   private:
-    void showTestWindow() noexcept;
-    void showAnotherTestWindow() noexcept;
   };
 } // namespace Editor

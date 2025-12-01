@@ -1,9 +1,6 @@
 #include "editor_layer.h"
 
-#include <UnitsEngine/event/event.h>
-#include <imgui/imgui.h>
-#include <glm/vec2.hpp>
-#include <UnitsEngine/application.h>
+#include <UnitsEngine/iapplication.h>
 #include <UnitsEngine/core/log.h>
 
 namespace Editor {
@@ -11,25 +8,18 @@ namespace Editor {
   }
   EditorLayer::~EditorLayer() noexcept {}
 
-  void EditorLayer::onAttatch() noexcept {}
-  void EditorLayer::onDetatch() noexcept {}
-  void EditorLayer::onEvent(Units::IEvent& p_event) noexcept {}
-  bool EditorLayer::onTick() noexcept { return false; }
-  bool EditorLayer::onImGui() noexcept {
-    ImGui::DockSpaceOverViewport(ImGui::GetID("Editor Dockspace"), ImGui::GetMainViewport());
-    showTestWindow();
-    showAnotherTestWindow();
-    return false;
+  void EditorLayer::onAttatch() noexcept {
+    UE_TRACE("EditorLayer attatched");
+  }
+  void EditorLayer::onDetatch() noexcept {
+    UE_TRACE("EditorLayer detatched");
   }
 
-  void EditorLayer::showTestWindow() noexcept {
-    ImGui::SetNextWindowSize({ 100.0f, 100.0f }, ImGuiCond_FirstUseEver);
-    ImGui::Begin("Test Window");
-    ImGui::End();
+  void EditorLayer::onEvent() noexcept {}
+  void EditorLayer::onFixedTick() noexcept {}
+  void EditorLayer::onTick() noexcept {
+    UE_TRACE("EditorLayer ticked");
   }
-  void EditorLayer::showAnotherTestWindow() noexcept {
-    ImGui::SetNextWindowSize({ 100.0f, 100.0f }, ImGuiCond_FirstUseEver);
-    ImGui::Begin("Another Test Window");
-    ImGui::End();
-  }
+  void EditorLayer::onImGui() noexcept {}
+  void EditorLayer::onRender() noexcept {}
 } // namespace Editor

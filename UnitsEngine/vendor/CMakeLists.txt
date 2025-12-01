@@ -35,11 +35,9 @@ PRIVATE
   ${UnitsEngine_VENDOR_DIR}/imgui/imgui
 )
 target_link_libraries(ImGui PRIVATE SDL3::SDL3-static)
-foreach(ImGui_BACKEND_H_SRC ${ImGui_BACKENDS_H_SRC})
+#[[ foreach(ImGui_BACKEND_H_SRC ${ImGui_BACKENDS_H_SRC})
   add_custom_command(TARGET ImGui POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${ImGui_BACKEND_H_SRC} ${UnitsEngine_VENDOR_DIR}/imgui/imgui
   )
-endforeach()
-
-
+endforeach() ]]#
