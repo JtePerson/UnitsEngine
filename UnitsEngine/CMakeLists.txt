@@ -8,6 +8,8 @@ set(UnitsEngine_CPP_SRC
   ${UnitsEngine_SRC_DIR}/gpu/gpu_command_buffer.cpp
   ${UnitsEngine_SRC_DIR}/gpu/gpu_render_pass.cpp
   ${UnitsEngine_SRC_DIR}/gpu/gpu_device.cpp
+  ${UnitsEngine_SRC_DIR}/gpu/gpu_texture.cpp
+  ${UnitsEngine_SRC_DIR}/gpu/gpu_sampler.cpp
 )
 
 set(UnitsEngine_VENDOR_DIR ${PROJECT_SOURCE_DIR}/UnitsEngine/vendor)
@@ -38,6 +40,7 @@ target_link_libraries(UnitsEngine
 PUBLIC
   spdlog
   ImGui
+  glm::glm-header-only
 PRIVATE
   SDL3::SDL3
   SDL3_image::SDL3_image

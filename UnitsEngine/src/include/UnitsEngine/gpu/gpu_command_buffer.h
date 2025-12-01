@@ -5,11 +5,17 @@
 namespace Units {
   class UE_API GPUCommandBuffer final {
   public:
+    inline GPUCommandBuffer() noexcept= default;
     GPUCommandBuffer(GPUDevice& p_gpu_device) noexcept;
-    inline GPUCommandBuffer(GPUCommandBuffer&&) noexcept= delete;
-    inline GPUCommandBuffer(const GPUCommandBuffer&) noexcept= delete;
-    inline GPUCommandBuffer& operator=(GPUCommandBuffer&&) noexcept= delete;
-    inline GPUCommandBuffer& operator=(const GPUCommandBuffer&) noexcept= delete;
+    inline GPUCommandBuffer(GPUCommandBuffer&& p_gpu_command_buffer) noexcept {
+      *this= p_gpu_command_buffer;
+      p_gpu_command_buffer.m_gpu_command_buffer_ptr_= nullptr;
+    }
+    inline GPUCommandBuffer& operator=(GPUCommandBuffer&& p_gpu_command_buffer) noexcept {
+      *this= p_gpu_command_buffer;
+      p_gpu_command_buffer.m_gpu_command_buffer_ptr_= nullptr;
+      return *this;
+    }
     ~GPUCommandBuffer() noexcept;
     
     void submit() noexcept;
@@ -18,6 +24,9 @@ namespace Units {
       return m_gpu_command_buffer_ptr_;
     }
   private:
+    inline GPUCommandBuffer(const GPUCommandBuffer&) noexcept= default;
+    inline GPUCommandBuffer& operator=(const GPUCommandBuffer&) noexcept= default;
+
     void* m_gpu_command_buffer_ptr_= nullptr;
   };
 } // namespace Units

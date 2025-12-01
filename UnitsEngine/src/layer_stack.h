@@ -27,6 +27,7 @@ namespace Units {
 
       void processLayerEvents(IEvent& p_event) noexcept;
       void processLayerTick() noexcept;
+      void processLayerImGui() noexcept;
     private:
       std::queue<std::tuple<Id, I, int>> m_layer_queue_;
       std::vector<std::unique_ptr<ILayer>> m_layer_vector_;

@@ -38,5 +38,12 @@ namespace Units {
         }
       }
     }
+    void LayerStack::processLayerImGui() noexcept {
+      for (auto& layer : m_layer_vector_) {
+        if (!layer->onImGui()) {
+          break;
+        }
+      }
+    }
   } // namespace core
 } // namespace Units

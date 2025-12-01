@@ -17,15 +17,19 @@ namespace Units {
   public:
     virtual ~IApplication() noexcept;
 
-    std::unique_ptr<GPUDevice> m_gpu_device_uptr_= nullptr;
-    Window& m_main_window_;
+    // Runs Application
+    void run() const noexcept;
+    // Attempts to Quit Application
+    void quit() const noexcept;
 
-    // Get Singleton Instance
-    template<typename ApplicationType= IApplication>
-    static inline ApplicationType* getInstance() noexcept {
-      static_assert((std::is_base_of<IApplication, ApplicationType>::value && "ApplicationType must derive from IApplication!"));
-      return static_cast<ApplicationType*>(s_instance_ptr_);
-    }
+    // Called when Application recieves IEvent
+    virtual void onEvent(IEvent& p_event) noexcept= 0;
+    // Called when Application gets ticked
+    virtual void onTick() noexcept= 0;
+    // Called after ImGui::NewFrame()
+    virtual void onImGui() noexcept= 0;
+    // Called when Application gets rendered
+    virtual void onRender() noexcept= 0;
 
     // Attatches Layer to Layer Stack
     void attatchLayer(const Id& p_layer_id, const I& p_i) noexcept;
@@ -40,19 +44,20 @@ namespace Units {
       detatchLayer(LayerTraits<LayerT>::id, p_i);
     }
 
-    // Runs Application
-    void run() const noexcept;
-    // Attempts to Quit Application
-    void quit() const noexcept;
+    std::unique_ptr<GPUDevice> m_gpu_device_uptr_= nullptr;
+    Window& m_main_window_;
 
-    virtual void onEvent(IEvent& p_event) noexcept= 0;
-    virtual void onTick() noexcept= 0;
+    // Get Singleton Instance
+    template<typename ApplicationType= IApplication>
+    static inline ApplicationType* getInstance() noexcept {
+      static_assert((std::is_base_of<IApplication, ApplicationType>::value && "ApplicationType must derive from IApplication!"));
+      return static_cast<ApplicationType*>(s_instance_ptr_);
+    }
 
     ImGuiContext* getImGuiContext() noexcept;
     inline void initImGui() noexcept {
       ImGui::SetCurrentContext(getImGuiContext());
     }
-    void beginImGui() noexcept;
     void prepareImGui(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
     void renderImGui(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
   protected:

@@ -49,6 +49,7 @@ namespace Units {
         return m_imgui_context_ptr_;
       }
       void beginImGui() noexcept;
+      void endImGui() noexcept;
       void prepareImgui(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
       void renderImGui(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
     private:

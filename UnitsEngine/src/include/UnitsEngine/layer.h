@@ -22,6 +22,8 @@ namespace Units {
     // Called when Layer gets ticked
     // Return false to prevent tick from propagating through layers
     virtual bool onTick() noexcept= 0;
+    // Called after ImGui::NewFrame()
+    virtual bool onImGui() noexcept= 0;
   protected:
     // Constructor should not access anything outside of ILayer
     inline ILayer() noexcept= default;

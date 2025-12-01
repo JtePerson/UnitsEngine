@@ -6,7 +6,7 @@
 
 namespace Units {
   struct WindowSpecs final {
-    std::string title= "";
+    std::string title= "new window";
     int width= 100, height= 100;
     WindowFlags flags= 0;
   };

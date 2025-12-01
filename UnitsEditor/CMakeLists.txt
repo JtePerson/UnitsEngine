@@ -1,6 +1,8 @@
 set(UnitsEditor_SRC_DIR ${PROJECT_SOURCE_DIR}/UnitsEditor/src)
 set(UnitsEditor_CPP_SRC
-	${UnitsEditor_SRC_DIR}/main.cpp
+	${UnitsEditor_SRC_DIR}/editor_layer.cpp
+	${UnitsEditor_SRC_DIR}/editor_application.cpp
+	${UnitsEditor_SRC_DIR}/entry.cpp
 )
 add_executable(UnitsEditor ${UnitsEditor_CPP_SRC})
 target_include_directories(UnitsEditor PRIVATE

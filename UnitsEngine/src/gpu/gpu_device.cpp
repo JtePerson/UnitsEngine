@@ -29,7 +29,9 @@ namespace Units {
   }
   GPUDevice::~GPUDevice() noexcept {
     UE_CORE_WARN("Quitting GPUDevice");
-    SDL_DestroyGPUDevice(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_));
+    if (m_gpu_device_ptr_ != nullptr) {
+      SDL_DestroyGPUDevice(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_));
+    }
     UE_CORE_INFO("GPUDevice Quit");
   }
 

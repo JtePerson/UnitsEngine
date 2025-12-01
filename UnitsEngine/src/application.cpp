@@ -28,7 +28,7 @@ namespace Units {
     IMGUI_CHECKVERSION();
     core::Application::getInstance()->getImGuiContext()= ImGui::CreateContext();
     ImGuiIO& io= ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 
     ImGui::StyleColorsDark();
 
@@ -68,9 +68,6 @@ namespace Units {
   
   ImGuiContext* IApplication::getImGuiContext() noexcept {
     return core::Application::getInstance()->getImGuiContext();
-  }
-  void IApplication::beginImGui() noexcept {
-    core::Application::getInstance()->beginImGui();
   }
   void IApplication::prepareImGui(GPUCommandBuffer& p_gpu_command_buffer) noexcept {
     core::Application::getInstance()->prepareImgui(p_gpu_command_buffer);
@@ -121,6 +118,13 @@ namespace Units {
 
         IApplication::getInstance()->onTick();
         m_layer_stack_.processLayerTick();
+        beginImGui();
+        IApplication::getInstance()->onImGui();
+        m_layer_stack_.processLayerImGui();
+        IApplication::getInstance()->onRender();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        endImGui();
       }
       m_layer_stack_.detatchAllLayers();
       UE_CORE_INFO("Application Ran");
@@ -152,6 +156,9 @@ namespace Units {
       ImGui_ImplSDLGPU3_NewFrame();
       ImGui_ImplSDL3_NewFrame();
       ImGui::NewFrame();
+    }
+    void Application::endImGui() noexcept {
+      ImGui::EndFrame();
     }
     void Application::prepareImgui(GPUCommandBuffer& p_gpu_command_buffer) noexcept {
       ImGui::Render();

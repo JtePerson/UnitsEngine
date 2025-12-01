@@ -5,8 +5,10 @@
 #include <SDL3/SDL.h>
 #include <memory>
 #include <string>
+#include <glm/vec2.hpp>
 
 #include "UnitsEngine/core/assert.h"
+#include "UnitsEngine/gpu/gpu_texture.h"
 
 namespace Units {
   std::unordered_map<std::string, Window> Window::s_window_title_map_;
@@ -31,6 +33,16 @@ namespace Units {
       core::Window::s_window_id_map_.erase(m_id_);
     }
     m_expired_= true;
+  }
+
+  glm::i32vec2 Window::getSize() noexcept {
+    glm::i32vec2 i32v2{};
+    SDL_GetWindowSize(core::Window::getFromId(m_id_).getSDLWindowPtr(), &i32v2.x, &i32v2.y);
+    return i32v2;
+  }
+
+  GPUTexture Window::getGPUTexture(GPUCommandBuffer& p_gpu_command_buffer, const bool& p_wait) noexcept {
+    return GPUTexture{p_gpu_command_buffer, *this, p_wait};
   }
 
   namespace core {

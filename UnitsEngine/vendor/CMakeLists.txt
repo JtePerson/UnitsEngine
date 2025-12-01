@@ -7,6 +7,10 @@ set(BUILD_SHARED_LIBS OFF)
 add_subdirectory(${UnitsEngine_VENDOR_DIR}/sdl)
 add_subdirectory(${UnitsEngine_VENDOR_DIR}/sdl_image)
 
+set(GLM_BUILD_TESTS OFF)
+
+add_subdirectory(${UnitsEngine_VENDOR_DIR}/glm)
+
 set(ImGui_CPP_SRC
   ${UnitsEngine_VENDOR_DIR}/imgui/imgui/imgui_demo.cpp
   ${UnitsEngine_VENDOR_DIR}/imgui/imgui/imgui_draw.cpp
@@ -37,3 +41,5 @@ foreach(ImGui_BACKEND_H_SRC ${ImGui_BACKENDS_H_SRC})
     ${ImGui_BACKEND_H_SRC} ${UnitsEngine_VENDOR_DIR}/imgui/imgui
   )
 endforeach()
+
+
