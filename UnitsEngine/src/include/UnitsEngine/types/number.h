@@ -1,13 +1,13 @@
 #pragma once
 #include <stdint.h>
 
-namespace Units {
+namespace units {
   // Identifier
-  using Id= uint16_t;
-  constexpr Id k_null_Id= -1;
+  using Id= uint32_t;
+  constexpr Id k_null_Id= ~0u;
   // Index
-  using I= uint16_t;
-  constexpr Id k_null_I= -1;
+  using I= uint32_t;
+  constexpr Id k_null_I= ~0u;
   // Number/Count
-  using N= uint16_t;
-} // namespace Units
+  using N= uint32_t;
+} // namespace units

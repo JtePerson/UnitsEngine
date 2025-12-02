@@ -7,7 +7,7 @@
 #include "UnitsEngine/ilayer.h"
 #include "UnitsEngine/layer_factory.h"
 
-namespace Units {
+namespace units {
   class LayerStack final {
   public:
     inline LayerStack() noexcept= default;
@@ -79,4 +79,4 @@ namespace Units {
       m_layer_vector_[p_layer_i].reset();
     }
   };
-} // namespace Units
+} // namespace units

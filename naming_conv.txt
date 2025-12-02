@@ -1,6 +1,6 @@
 # Naming Convention
 - Macros/defines---------------------> ALL_CAPS_SNAKE_CASE
-- Namespace names--------------------> snake_case // Except root namespace name-> PascalCase
+- Namespace names--------------------> snake_case
 - Template type names----------------> PascalCaseT
 - Template non-type names------------> PascalCase
 - Type names-------------------------> PascalCase

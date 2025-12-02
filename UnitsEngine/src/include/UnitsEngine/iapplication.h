@@ -5,8 +5,10 @@
 #include "UnitsEngine/core/engine_api.h"
 #include "UnitsEngine/types/number.h"
 #include "UnitsEngine/layer_traits.h"
+#include "UnitsEngine/event/event_bus.h"
+#include "UnitsEngine/event/event_dispatcher.h"
 
-namespace Units {
+namespace units {
   class UE_API IApplication {
   public:
     virtual ~IApplication() noexcept;
@@ -23,6 +25,19 @@ namespace Units {
     }
     void detatchLayer(const I& p_layer_i) noexcept;
 
+    template<typename EventT>
+    inline void pushEvent(const EventT& p_event, const EventType& p_type, const EventCategory& p_category) noexcept {
+      m_event_bus_.push(p_event, p_type, p_category);
+    }
+    template<typename EventT>
+    inline void registerEventListener(const Id& p_type, const std::function<bool(EventT&)>& p_listener) noexcept {
+      m_event_dispatcher_.registerListener(p_type, p_listener);
+    }
+    template<typename EventT>
+    inline void dispatchEvent(Event& p_event, const EventT* p_data_ptr) noexcept {
+      m_event_dispatcher_.dispatch(p_event, reinterpret_cast<const void*>(p_data_ptr));
+    }
+
     template<typename ApplicationT>
     static inline ApplicationT* getInstance() noexcept {
       static_assert(std::is_base_of<IApplication, ApplicationT>::value, "ApplicationT must inherit from IApplication!");
@@ -31,11 +46,16 @@ namespace Units {
   protected:
     IApplication() noexcept;
   private:
+    friend struct Impl;
+  private:
     struct Impl;
     std::unique_ptr<Impl> m_impl_uptr_= nullptr;
 
     static inline IApplication* s_application_instance_= nullptr;
 
+    EventBus m_event_bus_;
+    EventDispatcher m_event_dispatcher_{0};
+
     void attatchLayer(const Id& p_layer_id, const I& p_layer_i) noexcept;
   };
-} // namespace Units
+} // namespace units

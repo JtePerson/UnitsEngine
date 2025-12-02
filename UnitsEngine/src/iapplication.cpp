@@ -3,10 +3,11 @@
 
 #include "UnitsEngine/core/macros.h"
 
-namespace Units {
+namespace units {
   IApplication::IApplication() noexcept {
     if (s_application_instance_ != nullptr) { return; }
     m_impl_uptr_= std::make_unique<Impl>();
+    m_impl_uptr_->m_application_ptr_= this;
     m_impl_uptr_->m_on_run_callback_= UE_BIND_FUNCTION(onRun);
     m_impl_uptr_->m_on_quit_callback_= UE_BIND_FUNCTION(onQuit);
   }
@@ -27,4 +28,4 @@ namespace Units {
   void IApplication::detatchLayer(const I& p_layer_i) noexcept {
     m_impl_uptr_->m_layer_stack_.detatchLayer(p_layer_i);
   }
-} // namespace Units
+} // namespace units

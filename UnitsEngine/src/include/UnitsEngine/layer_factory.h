@@ -6,7 +6,7 @@
 #include "UnitsEngine/types/factory.h"
 #include "UnitsEngine/ilayer.h"
 
-namespace Units {
+namespace units {
   class LayerFactory final {
   public:
     static inline std::unique_ptr<ILayer> createLayer(const Id& p_layer_id) noexcept {
@@ -27,4 +27,4 @@ namespace Units {
       return layer_id;
     }
   };
-} // namespace Units
+} // namespace units

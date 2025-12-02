@@ -1,8 +1,9 @@
 #include <UnitsEngine/iapplication.h>
 #include <UnitsEngine/ilayer.h>
 #include <UnitsEngine/core/log.h>
+#include <UnitsEngine/event/application_event.h>
 
-class TestLayer : public Units::ILayer {
+class TestLayer : public units::ILayer {
 public:
   inline TestLayer() noexcept= default;
   virtual inline ~TestLayer() noexcept= default;
@@ -14,7 +15,6 @@ public:
     UE_TRACE("TestLayer Detatched");
   }
 
-  virtual void onEvent() noexcept override {}
   virtual void onFixedTick() noexcept override {}
   virtual void onTick() noexcept override {
     UE_TRACE("TestLayer Ticked");
@@ -23,7 +23,7 @@ public:
   virtual void onRender() noexcept override {}
 protected:
 };
-class AnotherTestLayer : public Units::ILayer {
+class AnotherTestLayer : public units::ILayer {
 public:
   inline AnotherTestLayer() noexcept= default;
   virtual inline ~AnotherTestLayer() noexcept= default;
@@ -35,7 +35,6 @@ public:
     UE_TRACE("AnotherTestLayer Detatched");
   }
 
-  virtual void onEvent() noexcept override {}
   virtual void onFixedTick() noexcept override {}
   virtual void onTick() noexcept override {
     UE_TRACE("AnotherTestLayer Ticked");
@@ -45,7 +44,7 @@ public:
 protected:
 };
 
-class TestApplication final : public Units::IApplication {
+class TestApplication final : public units::IApplication {
 public:
   inline TestApplication() noexcept {
     UE_WARN("Initializing TestApplication");
@@ -60,6 +59,10 @@ public:
     UE_TRACE("TestApplication onRun");
     attatchLayer<TestLayer>(0);
     attatchLayer<AnotherTestLayer>(1);
+    registerEventListener<units::ApplicationQuitEvent>(kUE_EventTypeApplicationQuit, [](units::ApplicationQuitEvent&){
+      UE_TRACE("Application Quit Event!");
+      return false;
+    });
   }
   virtual inline void onQuit() noexcept {
     UE_TRACE("TestApplication onQuit");

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Units {
+namespace units {
   class ILayer {
   public:
     virtual inline ~ILayer() noexcept= default;
@@ -8,7 +8,6 @@ namespace Units {
     virtual void onAttatch() noexcept= 0;
     virtual void onDetatch() noexcept= 0;
 
-    virtual void onEvent() noexcept= 0;
     virtual void onFixedTick() noexcept= 0;
     virtual void onTick() noexcept= 0;
     virtual void onImGui() noexcept= 0;
@@ -16,4 +15,4 @@ namespace Units {
   protected:
     inline ILayer() noexcept= default;
   };
-} // namespace Units
+} // namespace units

@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>
 
 #if defined(UE_LOGGING_ENABLED)
-  namespace Units {
+  namespace units {
     class UE_API Log final {
     public:
       static void init() noexcept;
@@ -19,24 +19,24 @@
       static std::shared_ptr<spdlog::logger> s_core_logger_;
       static std::shared_ptr<spdlog::logger> s_client_logger_;
     };
-  } // namespace Units
+  } // namespace units
 
   // --- Init ---
-  #define UE_INIT_LOG() ::Units::Log::init()
+  #define UE_INIT_LOG() ::units::Log::init()
   // ------------
   // --- Core Logging Macros ---
-  #define UE_CORE_TRACE(...) ::Units::Log::getCoreLogger()->trace(__VA_ARGS__)
-  #define UE_CORE_INFO(...) ::Units::Log::getCoreLogger()->info(__VA_ARGS__)
-  #define UE_CORE_WARN(...) ::Units::Log::getCoreLogger()->warn(__VA_ARGS__)
-  #define UE_CORE_ERROR(...) ::Units::Log::getCoreLogger()->error(__VA_ARGS__)
-  #define UE_CORE_CRITICAL(...) ::Units::Log::getCoreLogger()->critical(__VA_ARGS__)
+  #define UE_CORE_TRACE(...) ::units::Log::getCoreLogger()->trace(__VA_ARGS__)
+  #define UE_CORE_INFO(...) ::units::Log::getCoreLogger()->info(__VA_ARGS__)
+  #define UE_CORE_WARN(...) ::units::Log::getCoreLogger()->warn(__VA_ARGS__)
+  #define UE_CORE_ERROR(...) ::units::Log::getCoreLogger()->error(__VA_ARGS__)
+  #define UE_CORE_CRITICAL(...) ::units::Log::getCoreLogger()->critical(__VA_ARGS__)
   // ---------------------------
   // --- Core Logging Macros ---
-  #define UE_TRACE(...) ::Units::Log::getClientLogger()->trace(__VA_ARGS__)
-  #define UE_INFO(...) ::Units::Log::getClientLogger()->info(__VA_ARGS__)
-  #define UE_WARN(...) ::Units::Log::getClientLogger()->warn(__VA_ARGS__)
-  #define UE_ERROR(...) ::Units::Log::getClientLogger()->error(__VA_ARGS__)
-  #define UE_CRITICAL(...) ::Units::Log::getClientLogger()->critical(__VA_ARGS__)
+  #define UE_TRACE(...) ::units::Log::getClientLogger()->trace(__VA_ARGS__)
+  #define UE_INFO(...) ::units::Log::getClientLogger()->info(__VA_ARGS__)
+  #define UE_WARN(...) ::units::Log::getClientLogger()->warn(__VA_ARGS__)
+  #define UE_ERROR(...) ::units::Log::getClientLogger()->error(__VA_ARGS__)
+  #define UE_CRITICAL(...) ::units::Log::getClientLogger()->critical(__VA_ARGS__)
   // ---------------------------
 #else
   // --- Init ---
