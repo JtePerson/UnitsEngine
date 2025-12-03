@@ -2,6 +2,7 @@
 #include <UnitsEngine/ilayer.h>
 #include <UnitsEngine/core/log.h>
 #include <UnitsEngine/event/application_event.h>
+#include <UnitsEngine/window/window.h>
 
 class TestLayer : public units::ILayer {
 public:
@@ -16,9 +17,7 @@ public:
   }
 
   virtual void onFixedTick() noexcept override {}
-  virtual void onTick() noexcept override {
-    UE_TRACE("TestLayer Ticked");
-  }
+  virtual void onTick() noexcept override {}
   virtual void onImGui() noexcept override {}
   virtual void onRender() noexcept override {}
 protected:
@@ -36,9 +35,7 @@ public:
   }
 
   virtual void onFixedTick() noexcept override {}
-  virtual void onTick() noexcept override {
-    UE_TRACE("AnotherTestLayer Ticked");
-  }
+  virtual void onTick() noexcept override {}
   virtual void onImGui() noexcept override {}
   virtual void onRender() noexcept override {}
 protected:
@@ -48,6 +45,12 @@ class TestApplication final : public units::IApplication {
 public:
   inline TestApplication() noexcept {
     UE_WARN("Initializing TestApplication");
+    m_window_= units::WindowSpecs{
+      .title= "Test Window",
+      .width= 640,
+      .height= 360,
+      .flags= UE_WINDOW_RESIZABLE
+    };
     UE_INFO("TestApplication Initialized");
   }
   virtual inline ~TestApplication() noexcept {
@@ -68,6 +71,7 @@ public:
     UE_TRACE("TestApplication onQuit");
   }
 private:
+  units::Window m_window_;
 };
 
 int main(int p_argc, char** p_argv) {

@@ -16,6 +16,8 @@ namespace units {
 
     IApplication* m_application_ptr_;
 
+    SDL_Event m_sdl_event_;
+
     bool m_should_run_= false;
 
     std::function<void()> m_on_run_callback_;

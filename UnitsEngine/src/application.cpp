@@ -10,6 +10,7 @@
 namespace units {
   IApplication::Impl::Impl() noexcept {
     UE_CORE_WARN("Initializing Application");
+    SDL_zero(m_sdl_event_);
     UE_CORE_INFO("Application Initialized");
   }
   IApplication::Impl::~Impl() noexcept {
@@ -25,10 +26,8 @@ namespace units {
     while (m_should_run_) {
       m_layer_stack_.processLayerQueue();
       {
-        SDL_Event sdl_event;
-        SDL_zero(sdl_event);
-        while (SDL_PollEvent(&sdl_event)) {
-          if (sdl_event.type == SDL_EVENT_QUIT) {
+        while (SDL_PollEvent(&m_sdl_event_)) {
+          if (m_sdl_event_.type == SDL_EVENT_QUIT) {
             quit();
             break;
           }
@@ -42,7 +41,6 @@ namespace units {
       m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
         p_layer_uptr->onTick();
       });
-      quit();
     }
     m_layer_stack_.detatchAllLayers();
     m_on_quit_callback_();

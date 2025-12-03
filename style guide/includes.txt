@@ -1,0 +1,26 @@
+# Includes
+
+Include all dependencies even if an include file already includes them.
+Do not include dependencies of dependencies unless the current file needs them outside of its other dependencies.
+
+- Example -
+
+--- file1.h --- // Common header that requires <stdint.h>
+...
+#include <stdint.h>
+uint64_t my_uint64= 0u;
+...
+--- file2.cpp --- // File only requires uint64_t for included my_uint64
+...
+#include "file1.h"
+int my_int= 5;
+my_uint64+= static_cast<uint64_t>(my_int);
+...
+--- file3.cpp --- // File requires uint64_t for more than included my_uint64
+...
+#include <stdint.h>
+#include "file1.h"
+my_uint64+= 10u;
+uint64_t another_uint64= 20u;
+...
+-----------------

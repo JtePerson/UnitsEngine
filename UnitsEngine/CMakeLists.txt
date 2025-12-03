@@ -4,6 +4,7 @@ set(UnitsEngine_CPP_SRC
   ${UnitsEngine_SRC_DIR}/iapplication.cpp
   ${UnitsEngine_SRC_DIR}/application.cpp
   ${UnitsEngine_SRC_DIR}/layer_factory.cpp
+  ${UnitsEngine_SRC_DIR}/window/window.cpp
 )
 
 set(UnitsEngine_VENDOR_DIR ${PROJECT_SOURCE_DIR}/UnitsEngine/vendor)
