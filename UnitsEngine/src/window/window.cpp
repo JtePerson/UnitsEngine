@@ -22,6 +22,10 @@ namespace units {
     s_title_map_[p_specs.title]= this;
   }
   Window::~Window() noexcept {
+    destroy();
+  }
+
+  void Window::destroy() noexcept {
     if (m_window_ptr_ != nullptr) {
       SDL_DestroyWindow(reinterpret_cast<SDL_Window*>(m_window_ptr_));
       s_id_map_.erase(m_id_);

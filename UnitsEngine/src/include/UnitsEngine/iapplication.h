@@ -29,9 +29,9 @@ namespace units {
     inline void pushEvent(const EventT& p_event, const EventType& p_type, const EventCategory& p_category) noexcept {
       m_event_bus_.push(p_event, p_type, p_category);
     }
-    template<typename EventT>
-    inline void registerEventListener(const Id& p_type, const std::function<bool(EventT&)>& p_listener) noexcept {
-      m_event_dispatcher_.registerListener(p_type, p_listener);
+    template<typename CallableT>
+    inline void registerEventListener(CallableT&& p_listener) noexcept {
+      m_event_dispatcher_.registerListener(std::forward<CallableT>(p_listener));
     }
     template<typename EventT>
     inline void dispatchEvent(Event& p_event, const EventT* p_data_ptr) noexcept {

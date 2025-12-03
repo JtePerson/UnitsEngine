@@ -3,11 +3,11 @@
 
 namespace units {
   constexpr Id k_UserEventTypeStart= 100;
+  enum EventType : units::Id {
+    kUE_EventTypeNone= 0,
+    kUE_EventTypeApplicationQuit,
+    kUE_EventTypeWindowClose,
+    kUE_EventTypeEnd,
+    kUE_EventTypeUser= units::k_UserEventTypeStart
+  };
 } // namespace units
-
-enum EventType : units::Id {
-  kUE_EventTypeNone= 0,
-  kUE_EventTypeApplicationQuit,
-  kUE_EventTypeEnd,
-  kUE_EventTypeUser= units::k_UserEventTypeStart
-};

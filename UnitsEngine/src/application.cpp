@@ -6,6 +6,7 @@
 #include "UnitsEngine/event/event_type.h"
 #include "UnitsEngine/event/event_category.h"
 #include "UnitsEngine/event/application_event.h"
+#include "UnitsEngine/event/window_event.h"
 
 namespace units {
   IApplication::Impl::Impl() noexcept {
@@ -31,6 +32,19 @@ namespace units {
             quit();
             break;
           }
+          if (m_sdl_event_.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED) {
+            Event event{
+              .type= kUE_EventTypeWindowClose,
+              .category= UE_EVENTCATEGORY_NONE,
+              .size= sizeof(WindowCloseEvent),
+              .handled= false
+            };
+            WindowCloseEvent window_close_event{
+              .window_ptr= Window::getFromId(m_sdl_event_.window.windowID)
+            };
+            m_application_ptr_->m_event_dispatcher_.dispatch(event, &window_close_event);
+            window_close_event.window_ptr->destroy();
+          }
         }
         Event event;
         const void* data_ptr;
@@ -49,6 +63,6 @@ namespace units {
     UE_CORE_WARN("Attempt made to quit Application");
     if (!m_should_run_) { return; }
     m_should_run_= false;
-    m_application_ptr_->m_event_bus_.push(ApplicationQuitEvent{}, kUE_EventTypeApplicationQuit, UE_EVENTCATEGORY_NONE);
+    m_application_ptr_->m_event_bus_.push(ApplicationQuitEvent{});
   }
 } // namespace units

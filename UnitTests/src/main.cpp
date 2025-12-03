@@ -2,6 +2,7 @@
 #include <UnitsEngine/ilayer.h>
 #include <UnitsEngine/core/log.h>
 #include <UnitsEngine/event/application_event.h>
+#include <UnitsEngine/event/window_event.h>
 #include <UnitsEngine/window/window.h>
 
 class TestLayer : public units::ILayer {
@@ -46,7 +47,7 @@ public:
   inline TestApplication() noexcept {
     UE_WARN("Initializing TestApplication");
     m_window_= units::WindowSpecs{
-      .title= "Test Window",
+      .title= "Test Window 0",
       .width= 640,
       .height= 360,
       .flags= UE_WINDOW_RESIZABLE
@@ -62,8 +63,12 @@ public:
     UE_TRACE("TestApplication onRun");
     attatchLayer<TestLayer>(0);
     attatchLayer<AnotherTestLayer>(1);
-    registerEventListener<units::ApplicationQuitEvent>(kUE_EventTypeApplicationQuit, [](units::ApplicationQuitEvent&){
+    registerEventListener([](units::ApplicationQuitEvent&){
       UE_TRACE("Application Quit Event!");
+      return false;
+    });
+    registerEventListener([](units::WindowCloseEvent& p_event){
+      UE_TRACE("Window Close Event [ptr: {0}]!", reinterpret_cast<void*>(p_event.window_ptr));
       return false;
     });
   }

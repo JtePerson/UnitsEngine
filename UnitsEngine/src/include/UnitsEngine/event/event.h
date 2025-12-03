@@ -11,4 +11,7 @@ namespace units {
     size_t size= sizeof(Event);
     bool handled= true;
   };
+
+  #define UE_EVENT_TYPE(type) static inline ::units::EventType getType() noexcept { return static_cast<::units::EventType>(type); }
+  #define UE_EVENT_CATEGORY(category) static inline uint64_t getCategory() noexcept { return category; }
 } // namespace units

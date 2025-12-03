@@ -15,16 +15,18 @@ namespace units {
     : m_user_listeners_(p_user_event_count)
     {}
 
-    template<typename EventT>
-    inline void registerListener(Id p_type, const std::function<bool(EventT&)>& p_listener) noexcept {
-      if (p_type < m_listeners_.size()) {
-        m_listeners_[static_cast<size_t>(p_type)].emplace_back(makeWrapper<EventT>(p_listener));
+    template<typename CallableT>
+    inline void registerListener(CallableT&& p_listener) noexcept {
+      using EventT= typename CallableTraits<decltype(&std::decay_t<CallableT>::operator())>::EventT;
+      auto type_i= static_cast<size_t>(EventT::getType());
+      if (type_i < m_listeners_.size()) {
+        m_listeners_[type_i].emplace_back(makeWrapper<EventT>(p_listener));
       } else {
-        p_type -= m_listeners_.size();
-        if (p_type >= m_user_listeners_.size()) {
-          m_user_listeners_.resize(p_type + 1);
+        type_i -= m_listeners_.size();
+        if (type_i >= m_user_listeners_.size()) {
+          m_user_listeners_.resize(type_i + 1);
         }
-        m_user_listeners_[static_cast<size_t>(p_type)].emplace_back(makeWrapper<EventT>(p_listener));
+        m_user_listeners_[type_i].emplace_back(makeWrapper<EventT>(p_listener));
       }
     }
 
@@ -41,6 +43,14 @@ namespace units {
     }
   private:
     using ListenerFunc= std::function<void(Event&, const void*)>;
+
+    template<typename CallableT>
+    struct CallableTraits;
+    
+    template<typename ClassT, typename EventType>
+    struct CallableTraits<bool(ClassT::*)(EventType&) const> {
+      using EventT= EventType;
+    };
   private:
     std::array<std::vector<ListenerFunc>, EventType::kUE_EventTypeEnd> m_listeners_;
     std::vector<std::vector<ListenerFunc>> m_user_listeners_;

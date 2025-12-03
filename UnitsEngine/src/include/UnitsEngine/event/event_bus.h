@@ -10,7 +10,7 @@ namespace units {
     friend class IApplication;
   public:
     template<typename EventT>
-    inline void push(const EventT& p_event, const EventType& p_type, const EventCategory& p_category) noexcept {
+    inline void push(const EventT& p_event) noexcept {
       static_assert(std::is_standard_layout<EventT>::value, "EventT must be POD!");
       static_assert(std::is_trivially_copyable<EventT>::value, "EventT must be POD!");
 
@@ -22,7 +22,7 @@ namespace units {
         ++m_generation_;
       }
 
-      const Event header{.type= p_type, .category= p_category, .size= sizeof(EventT), .handled= false };
+      const Event header{.type= EventT::getType(), .category= EventT::getCategory(), .size= sizeof(EventT), .handled= false };
       std::memcpy(m_event_buffer_.data() + k_old_size, &header, sizeof(Event));
       std::memcpy(m_event_buffer_.data() + k_old_size + sizeof(Event), &p_event, sizeof(EventT));
     }
