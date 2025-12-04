@@ -58,7 +58,7 @@ namespace Editor {
     {
       units::GPURenderPassSpecs gpu_render_pass_specs{
         .texture_ptr= &m_gpu_texture_,
-        .clear_color= {1.0f, 1.0f, 1.0f, 1.0f}
+        .clear_color= {0.117f, 0.117f, 0.176f, 1.0f}
       };
       units::GPURenderPass gpu_render_pass{gpu_command_buffer, gpu_render_pass_specs};
     }
