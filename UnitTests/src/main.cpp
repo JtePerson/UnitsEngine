@@ -51,12 +51,13 @@ public:
   virtual void onAttatch() noexcept override {
     UE_TRACE("TestLayer Attatched");
     m_window_= units::WindowSpecs{
-      .title= "Test Window 0",
+      .title= "Test Window",
       .width= 640,
       .height= 360,
       .flags= UE_WINDOW_RESIZABLE
     };
     m_gpu_device_= units::GPUDevice{m_window_};
+    TestApplication::getInstance()->initImGui(m_window_, m_gpu_device_);
   }
   virtual void onDetatch() noexcept override {
     UE_TRACE("TestLayer Detatched");
@@ -64,9 +65,12 @@ public:
 
   virtual void onFixedTick() noexcept override {}
   virtual void onTick() noexcept override {}
-  virtual void onImGui() noexcept override {}
+  virtual void onImGui() noexcept override {
+    ImGui::ShowDemoWindow();
+  }
   virtual void onRender() noexcept override {
     units::GPUCommandBuffer gpu_command_buffer{m_gpu_device_};
+    TestApplication::getInstance()->prepareImGuiDrawData(gpu_command_buffer);
     {
       units::GPUTexture window_gpu_texture{gpu_command_buffer, m_window_};
       units::GPURenderPassSpecs gpu_render_pass_specs= {
@@ -74,6 +78,7 @@ public:
         .clear_color= {.r= 0.117f, .g= 0.117f, .b=0.176f, .a= 1.0f}
       };
       units::GPURenderPass gpu_render_pass{gpu_command_buffer, gpu_render_pass_specs};
+      TestApplication::getInstance()->renderImGuiDrawData(gpu_command_buffer, gpu_render_pass);
     }
     gpu_command_buffer.submit();
   }

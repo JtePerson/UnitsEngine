@@ -51,6 +51,9 @@ namespace units {
       }
       return window_it->second;
     }
+    static inline N count() noexcept {
+      return s_id_map_.size();
+    }
   private:
     inline Window(const Window& p_other) noexcept= default;
     inline Window& operator=(const Window& p_other) noexcept= default;

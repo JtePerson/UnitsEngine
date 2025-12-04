@@ -1,10 +1,9 @@
 #include "application.h"
 
 #include <SDL3/SDL.h>
-/* #include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
+#include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl3.h>
-#include <imgui/imgui_impl_sdlgpu3.h> */
+#include <imgui/imgui_impl_sdlgpu3.h>
 
 #include "UnitsEngine/core/log.h"
 #include "UnitsEngine/event/event_type.h"
@@ -16,16 +15,25 @@ namespace units {
   IApplication::Impl::Impl() noexcept {
     UE_CORE_WARN("Initializing Application");
     SDL_zero(m_sdl_event_);
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+      UE_CORE_ERROR("SDL error: {0}", SDL_GetError());
+      UE_CORE_ASSERT(false, "Could not Initialize SDL!");
+    }
+    UE_CORE_INFO("Application Initialized");
+  }
+  IApplication::Impl::~Impl() noexcept {
+    UE_CORE_WARN("Quitting Application");
+    ImGui_ImplSDLGPU3_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
+    ImGui::DestroyContext();
+    UE_CORE_INFO("Application Quit");
+  }
 
-    /* IMGUI_CHECKVERSION();
-    m_application_ptr_->m_imgui_context_ptr= ImGui::CreateContext();
-    ImGuiIO& io= ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+  void IApplication::initImGuiBackend(Window& p_window, GPUDevice& p_gpu_device) noexcept {
+    ImGui::SetCurrentContext(m_imgui_context_ptr_);
 
-    ImGui::StyleColorsDark();
-
-    auto* sdl_main_window_ptr= core::Window::getFromId(m_main_window_.getId()).getSDLWindowPtr();
-    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_uptr_->getDevicePtr());
+    auto* sdl_main_window_ptr= reinterpret_cast<SDL_Window*>(p_window.getWindowPtr());
+    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(p_gpu_device.getGPUDevicePtr());
     ImGui_ImplSDL3_InitForSDLGPU(sdl_main_window_ptr);
     ImGui_ImplSDLGPU3_InitInfo imgui_init_info = {};
     imgui_init_info.Device = sdl_gpu_device_ptr;
@@ -33,12 +41,23 @@ namespace units {
     imgui_init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;                      // Only used in multi-viewports mode.
     imgui_init_info.SwapchainComposition = SDL_GPU_SWAPCHAINCOMPOSITION_SDR;  // Only used in multi-viewports mode.
     imgui_init_info.PresentMode = SDL_GPU_PRESENTMODE_VSYNC;
-    ImGui_ImplSDLGPU3_Init(&imgui_init_info); */
-    UE_CORE_INFO("Application Initialized");
+    ImGui_ImplSDLGPU3_Init(&imgui_init_info);
   }
-  IApplication::Impl::~Impl() noexcept {
-    UE_CORE_WARN("Quitting Application");
-    UE_CORE_INFO("Application Quit");
+
+  void IApplication::prepareImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer) noexcept {
+    ImGui::Render();
+    m_imgui_draw_data_ptr_= ImGui::GetDrawData();
+    ImGui_ImplSDLGPU3_PrepareDrawData(
+      m_imgui_draw_data_ptr_,
+      reinterpret_cast<SDL_GPUCommandBuffer*>(p_gpu_command_buffer.getGPUCommandBufferPtr())
+    );
+  }
+  void IApplication::renderImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept {
+    ImGui_ImplSDLGPU3_RenderDrawData(
+      m_imgui_draw_data_ptr_,
+      reinterpret_cast<SDL_GPUCommandBuffer*>(p_gpu_command_buffer.getGPUCommandBufferPtr()),
+      reinterpret_cast<SDL_GPURenderPass*>(p_gpu_render_pass.getGPURenderPassPtr())
+    );
   }
 
   void IApplication::Impl::run() noexcept {
@@ -50,6 +69,7 @@ namespace units {
       m_layer_stack_.processLayerQueue();
       {
         while (SDL_PollEvent(&m_sdl_event_)) {
+          ImGui_ImplSDL3_ProcessEvent(&m_sdl_event_);
           if (m_sdl_event_.type == SDL_EVENT_QUIT) {
             quit();
             break;
@@ -66,6 +86,10 @@ namespace units {
             };
             m_application_ptr_->m_event_dispatcher_.dispatch(event, &window_close_event);
             window_close_event.window_ptr->destroy();
+            if (Window::count() == 0) {
+              quit();
+              break;
+            }
           }
         }
         Event event;
@@ -74,12 +98,22 @@ namespace units {
           m_application_ptr_->m_event_dispatcher_.dispatch(event, data_ptr);
         }
       }
+      if (!m_should_run_) { break; }
       m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
         p_layer_uptr->onTick();
+      });
+      ImGui_ImplSDLGPU3_NewFrame();
+      ImGui_ImplSDL3_NewFrame();
+      ImGui::NewFrame();
+      m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
+        p_layer_uptr->onImGui();
       });
       m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
         p_layer_uptr->onRender();
       });
+      ImGui::UpdatePlatformWindows();
+      ImGui::RenderPlatformWindowsDefault();
+      ImGui::EndFrame();
     }
     m_layer_stack_.detatchAllLayers();
     m_on_quit_callback_();

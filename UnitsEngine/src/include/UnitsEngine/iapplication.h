@@ -8,6 +8,10 @@
 #include "UnitsEngine/layer_traits.h"
 #include "UnitsEngine/event/event_bus.h"
 #include "UnitsEngine/event/event_dispatcher.h"
+#include "UnitsEngine/window/window.h"
+#include "UnitsEngine/gpu/gpu_device.h"
+#include "UnitsEngine/gpu/gpu_command_buffer.h"
+#include "UnitsEngine/gpu/gpu_render_pass.h"
 
 namespace units {
   class UE_API IApplication {
@@ -39,9 +43,19 @@ namespace units {
       m_event_dispatcher_.dispatch(p_event, reinterpret_cast<const void*>(p_data_ptr));
     }
 
-    inline void initImGui() noexcept {
-      ImGui::SetCurrentContext(m_imgui_context_ptr);
+    inline void initImGui(Window& p_window, GPUDevice&p_gpu_device) noexcept {
+      IMGUI_CHECKVERSION();
+      m_imgui_context_ptr_= ImGui::CreateContext();
+      ImGuiIO& io= ImGui::GetIO(); (void)io;
+      io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+
+      ImGui::StyleColorsDark();
+
+      initImGuiBackend(p_window, p_gpu_device);
     }
+    void prepareImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
+    void renderImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
+
 
     template<typename ApplicationT>
     static inline ApplicationT* getInstance() noexcept {
@@ -61,8 +75,12 @@ namespace units {
     EventBus m_event_bus_;
     EventDispatcher m_event_dispatcher_{0};
 
-    ImGuiContext* m_imgui_context_ptr= nullptr;
+    ImGuiContext* m_imgui_context_ptr_= nullptr;
+
+    ImDrawData* m_imgui_draw_data_ptr_= nullptr;
 
     void attatchLayer(const Id& p_layer_id, const I& p_layer_i) noexcept;
+
+    void initImGuiBackend(Window& p_window, GPUDevice& p_gpu_device) noexcept;
   };
 } // namespace units
