@@ -29,9 +29,13 @@ namespace units {
       }
       return *this;
     }
-    ~Window() noexcept;
+    inline ~Window() noexcept { destroy(); }
 
     inline bool expired() noexcept { return m_window_ptr_ == nullptr; }
+
+    void destroy() noexcept;
+
+    inline void* getWindowPtr() noexcept { return m_window_ptr_; }
 
     static inline Window* getFromId(const Id& p_window_id) noexcept {
       const auto window_it= s_id_map_.find(p_window_id);
@@ -48,16 +52,12 @@ namespace units {
       return window_it->second;
     }
   private:
-    friend class IApplication;
-  private:
     inline Window(const Window& p_other) noexcept= default;
     inline Window& operator=(const Window& p_other) noexcept= default;
 
     void* m_window_ptr_= nullptr;
     Id m_id_= k_null_Id;
     std::string m_title_= "";
-
-    void destroy() noexcept;
 
     static std::unordered_map<Id, Window*> s_id_map_;
     static std::unordered_map<std::string, Window*> s_title_map_;

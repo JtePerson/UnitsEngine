@@ -2,20 +2,13 @@
 
 #include <SDL3/SDL.h>
 
-#include "UnitsEngine/application.h"
-#include "window/window.h"
-#include "UnitsEngine/gpu/gpu_device.h"
-#include "UnitsEngine/gpu/gpu_texture_specs.h"
-#include "UnitsEngine/gpu/gpu_command_buffer.h"
 #include "UnitsEngine/core/log.h"
 #include "UnitsEngine/core/assert.h"
-#include "UnitsEngine/window/window.h"
 
-namespace Units {
+namespace units {
   GPUTexture::GPUTexture(GPUDevice& p_gpu_device, GPUTextureSpecs& p_specs) noexcept {
-    if (p_gpu_device.getDevicePtr() == nullptr) { return; }
-    m_gpu_device_ptr_= p_gpu_device.getDevicePtr();
-    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(p_gpu_device.getDevicePtr());
+    if (p_gpu_device.expired()) { return; }
+    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(p_gpu_device.getGPUDevicePtr());
     SDL_GPUTextureCreateInfo sdl_texture_create_info= {
       .type= static_cast<SDL_GPUTextureType>(p_specs.type),
       .format= static_cast<SDL_GPUTextureFormat>(p_specs.format),
@@ -34,7 +27,7 @@ namespace Units {
   }
   GPUTexture::GPUTexture(GPUCommandBuffer& p_gpu_command_buffer, Window& p_window, const bool& p_wait) noexcept {
     auto* sdl_gpu_command_buffer_ptr= reinterpret_cast<SDL_GPUCommandBuffer*>(p_gpu_command_buffer.getGPUCommandBufferPtr());
-    auto* sdl_window_ptr= core::Window::getFromId(p_window.getId()).getSDLWindowPtr();
+    auto* sdl_window_ptr= reinterpret_cast<SDL_Window*>(p_window.getWindowPtr());
     SDL_GPUTexture* tmp_sdl_gpu_texture_ptr= nullptr;
     if (p_wait) {
       SDL_WaitAndAcquireGPUSwapchainTexture(sdl_gpu_command_buffer_ptr, sdl_window_ptr, &tmp_sdl_gpu_texture_ptr, nullptr, nullptr);
@@ -44,9 +37,11 @@ namespace Units {
     m_gpu_texture_ptr_= reinterpret_cast<void*>(tmp_sdl_gpu_texture_ptr);
     m_from_window_= true;
   }
-  GPUTexture::~GPUTexture() noexcept {
-    if (!m_from_window_ && m_gpu_texture_ptr_ != nullptr) {
+
+  void GPUTexture::destroy() noexcept {
+    if (!expired() && !m_from_window_) {
       SDL_ReleaseGPUTexture(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_), reinterpret_cast<SDL_GPUTexture*>(m_gpu_texture_ptr_));
+      m_gpu_texture_ptr_= nullptr;
     }
   }
-} // namespace Units
+} // namespace units

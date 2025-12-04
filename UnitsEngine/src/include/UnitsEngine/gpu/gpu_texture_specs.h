@@ -5,7 +5,7 @@
 #include "UnitsEngine/gpu/gpu_texture_format.h"
 #include "UnitsEngine/gpu/gpu_texture_usage.h"
 
-namespace Units {
+namespace units {
   struct GPUTextureSpecs final {
     GPUTextureType type= UE_GPU_TEXTURETYPE_2D;
     GPUTextureFormat format= UE_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
@@ -14,4 +14,4 @@ namespace Units {
     uint32_t height= 0u;
     uint32_t layer_count_or_depth= 1;
   };
-} // namespace Units
+} // namespace units

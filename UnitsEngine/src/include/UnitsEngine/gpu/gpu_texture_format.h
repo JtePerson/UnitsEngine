@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Units {
+namespace units {
   enum GPUTextureFormat {
       UE_GPU_TEXTUREFORMAT_INVALID,
 
@@ -124,4 +124,4 @@ namespace Units {
       UE_GPU_TEXTUREFORMAT_ASTC_12x10_FLOAT,
       UE_GPU_TEXTUREFORMAT_ASTC_12x12_FLOAT
   };
-} // namespace Units
+} // namespace units

@@ -4,8 +4,9 @@
 #include "UnitsEngine/core/macros.h"
 
 namespace units {
-  IApplication::IApplication() noexcept {
+  IApplication::IApplication(IApplication* p_instance) noexcept {
     if (s_application_instance_ != nullptr) { return; }
+    s_application_instance_= p_instance;
     m_impl_uptr_= std::make_unique<Impl>();
     m_impl_uptr_->m_application_ptr_= this;
     m_impl_uptr_->m_on_run_callback_= UE_BIND_FUNCTION(onRun);

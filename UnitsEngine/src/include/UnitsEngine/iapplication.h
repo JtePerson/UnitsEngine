@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <type_traits>
+#include <imgui/imgui.h>
 
 #include "UnitsEngine/core/engine_api.h"
 #include "UnitsEngine/types/number.h"
@@ -38,13 +39,17 @@ namespace units {
       m_event_dispatcher_.dispatch(p_event, reinterpret_cast<const void*>(p_data_ptr));
     }
 
+    inline void initImGui() noexcept {
+      ImGui::SetCurrentContext(m_imgui_context_ptr);
+    }
+
     template<typename ApplicationT>
     static inline ApplicationT* getInstance() noexcept {
       static_assert(std::is_base_of<IApplication, ApplicationT>::value, "ApplicationT must inherit from IApplication!");
       return static_cast<ApplicationT*>(s_application_instance_);
     }
   protected:
-    IApplication() noexcept;
+    IApplication(IApplication* p_instance) noexcept;
   private:
     friend struct Impl;
   private:
@@ -55,6 +60,8 @@ namespace units {
 
     EventBus m_event_bus_;
     EventDispatcher m_event_dispatcher_{0};
+
+    ImGuiContext* m_imgui_context_ptr= nullptr;
 
     void attatchLayer(const Id& p_layer_id, const I& p_layer_i) noexcept;
   };
