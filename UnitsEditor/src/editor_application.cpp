@@ -5,7 +5,7 @@
 #include "editor_layer.h"
 
 namespace Editor {
-  Application::Application() noexcept: Units::IApplication() {}
+  Application::Application() noexcept: units::IApplication{this} {}
   Application::~Application() noexcept {}
 
   void Application::onRun() noexcept {
