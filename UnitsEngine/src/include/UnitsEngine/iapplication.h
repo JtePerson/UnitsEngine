@@ -53,6 +53,7 @@ namespace units {
 
       initImGuiBackend(p_window, p_gpu_device);
     }
+    void quitImGui() noexcept;
     void prepareImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer) noexcept;
     void renderImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
 

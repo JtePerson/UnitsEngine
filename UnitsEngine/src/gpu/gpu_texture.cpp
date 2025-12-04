@@ -24,6 +24,8 @@ namespace units {
       UE_CORE_ERROR("SDL error: {0}", SDL_GetError());
       UE_CORE_ASSERT(false, "Could not create GPUTexture!");
     }
+    m_width_= p_specs.width;
+    m_height_= p_specs.height;
   }
   GPUTexture::GPUTexture(GPUCommandBuffer& p_gpu_command_buffer, Window& p_window, const bool& p_wait) noexcept {
     auto* sdl_gpu_command_buffer_ptr= reinterpret_cast<SDL_GPUCommandBuffer*>(p_gpu_command_buffer.getGPUCommandBufferPtr());

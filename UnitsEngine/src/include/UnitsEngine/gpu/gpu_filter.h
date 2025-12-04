@@ -1,8 +1,8 @@
 #pragma once
 
-namespace Units {
+namespace units {
   enum GPUFilter {
       UE_GPU_FILTER_NEAREST,  /**< Point filtering. */
       UE_GPU_FILTER_LINEAR    /**< Linear filtering. */
   };
-} // namespace Units
+} // namespace units

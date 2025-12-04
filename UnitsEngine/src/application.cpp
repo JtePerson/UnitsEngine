@@ -23,9 +23,7 @@ namespace units {
   }
   IApplication::Impl::~Impl() noexcept {
     UE_CORE_WARN("Quitting Application");
-    ImGui_ImplSDLGPU3_Shutdown();
-    ImGui_ImplSDL3_Shutdown();
-    ImGui::DestroyContext();
+    SDL_Quit();
     UE_CORE_INFO("Application Quit");
   }
 
@@ -42,6 +40,11 @@ namespace units {
     imgui_init_info.SwapchainComposition = SDL_GPU_SWAPCHAINCOMPOSITION_SDR;  // Only used in multi-viewports mode.
     imgui_init_info.PresentMode = SDL_GPU_PRESENTMODE_VSYNC;
     ImGui_ImplSDLGPU3_Init(&imgui_init_info);
+  }
+  void IApplication::quitImGui() noexcept {
+    ImGui_ImplSDL3_Shutdown();
+    ImGui_ImplSDLGPU3_Shutdown();
+    ImGui::DestroyContext();
   }
 
   void IApplication::prepareImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer) noexcept {

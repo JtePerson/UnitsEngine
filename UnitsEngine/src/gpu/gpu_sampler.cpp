@@ -7,11 +7,11 @@
 #include "UnitsEngine/core/log.h"
 #include "UnitsEngine/core/assert.h"
 
-namespace Units {
+namespace units {
   GPUSampler::GPUSampler(GPUDevice& p_gpu_device, GPUSamplerSpecs& p_specs) noexcept {
-    if (p_gpu_device.getDevicePtr() == nullptr) { return; }
-    m_gpu_device_ptr_= p_gpu_device.getDevicePtr();
-    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(p_gpu_device.getDevicePtr());
+    m_gpu_device_ptr_= p_gpu_device.getGPUDevicePtr();
+    if (m_gpu_device_ptr_ == nullptr) { return; }
+    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_);
     SDL_GPUSamplerCreateInfo sdl_gpu_sampler_create_info= {
       .min_filter= static_cast<SDL_GPUFilter>(p_specs.min_filter),
       .mag_filter= static_cast<SDL_GPUFilter>(p_specs.mag_filter),
@@ -23,12 +23,13 @@ namespace Units {
     m_gpu_sampler_ptr_= SDL_CreateGPUSampler(sdl_gpu_device_ptr, &sdl_gpu_sampler_create_info);
     if (m_gpu_sampler_ptr_ == nullptr) {
       UE_CORE_ERROR("SDL error: {0}", SDL_GetError());
-      UE_CORE_ASSERT(false, "Could not create GPUSmapler!");
+      UE_CORE_ASSERT(false, "Could not create GPUSampler!");
     }
   }
-  GPUSampler::~GPUSampler() noexcept {
-    if (m_gpu_sampler_ptr_ != nullptr) {
+  void GPUSampler::destroy() noexcept {
+    if (!expired()) {
       SDL_ReleaseGPUSampler(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_), reinterpret_cast<SDL_GPUSampler*>(m_gpu_sampler_ptr_));
+      m_gpu_sampler_ptr_= nullptr;
     }
   }
-} // namespace Units
+} // namespace units
