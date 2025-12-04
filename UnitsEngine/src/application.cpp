@@ -72,7 +72,9 @@ namespace units {
       m_layer_stack_.processLayerQueue();
       {
         while (SDL_PollEvent(&m_sdl_event_)) {
-          ImGui_ImplSDL3_ProcessEvent(&m_sdl_event_);
+          if (m_application_ptr_->m_imgui_context_ptr_ != nullptr) {
+            ImGui_ImplSDL3_ProcessEvent(&m_sdl_event_);
+          }
           if (m_sdl_event_.type == SDL_EVENT_QUIT) {
             quit();
             break;
@@ -105,18 +107,22 @@ namespace units {
       m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
         p_layer_uptr->onTick();
       });
-      ImGui_ImplSDLGPU3_NewFrame();
-      ImGui_ImplSDL3_NewFrame();
-      ImGui::NewFrame();
-      m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
-        p_layer_uptr->onImGui();
-      });
-      m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
+      if (m_application_ptr_->m_imgui_context_ptr_ != nullptr) {
+        ImGui_ImplSDLGPU3_NewFrame();
+        ImGui_ImplSDL3_NewFrame();
+        ImGui::NewFrame();
+        m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
+          p_layer_uptr->onImGui();
+        });
+      }
+      m_layer_stack_.forEachLayerReverse([](std::unique_ptr<ILayer>& p_layer_uptr){
         p_layer_uptr->onRender();
       });
-      ImGui::UpdatePlatformWindows();
-      ImGui::RenderPlatformWindowsDefault();
-      ImGui::EndFrame();
+      if (m_application_ptr_->m_imgui_context_ptr_ != nullptr) {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        ImGui::EndFrame();
+      }
     }
     m_layer_stack_.detatchAllLayers();
     m_on_quit_callback_();

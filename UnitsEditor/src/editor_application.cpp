@@ -4,7 +4,7 @@
 
 #include "editor_layer.h"
 
-namespace Editor {
+namespace editor {
   Application::Application() noexcept: units::IApplication{this} {}
   Application::~Application() noexcept {}
 
@@ -12,4 +12,4 @@ namespace Editor {
     attatchLayer<EditorLayer>(0);
   }
   void Application::onQuit() noexcept {}
-} // namespace Editor
+} // namespace editor

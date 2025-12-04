@@ -28,6 +28,11 @@ namespace units {
     inline void attatchLayer(const I& p_layer_i) noexcept {
       attatchLayer(LayerTraits<LayerT>::id, p_layer_i);
     }
+    template<typename LayerT>
+    inline LayerT* getLayer(const I& p_layer_i) noexcept {
+      static_assert(std::is_base_of<ILayer, LayerT>::value, "LayerT must inherit from ILayer!");
+      return static_cast<LayerT*>(getLayer(p_layer_i));
+    }
     void detatchLayer(const I& p_layer_i) noexcept;
 
     template<typename EventT>
@@ -81,6 +86,7 @@ namespace units {
     ImDrawData* m_imgui_draw_data_ptr_= nullptr;
 
     void attatchLayer(const Id& p_layer_id, const I& p_layer_i) noexcept;
+    ILayer* getLayer(const I& p_layer_i) noexcept;
 
     void initImGuiBackend(Window& p_window, GPUDevice& p_gpu_device) noexcept;
   };

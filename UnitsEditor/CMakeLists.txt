@@ -10,10 +10,15 @@ target_include_directories(UnitsEditor PRIVATE
 )
 target_link_libraries(UnitsEditor PRIVATE
   UnitsEngine
+  UnitsGameLogic
 )
 if(WIN32)
   add_custom_command(TARGET UnitsEditor POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     $<TARGET_FILE:UnitsEngine> $<TARGET_FILE_DIR:UnitsEditor>
+  )
+  add_custom_command(TARGET UnitsEditor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:UnitsGameLogic> $<TARGET_FILE_DIR:UnitsEditor>
   )
 endif()

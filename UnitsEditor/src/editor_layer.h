@@ -5,7 +5,7 @@
 #include <UnitsEngine/gpu/gpu_texture.h>
 #include <UnitsEngine/gpu/gpu_sampler.h>
 
-namespace Editor {
+namespace editor {
   class EditorLayer final : public units::ILayer {
   public:
     EditorLayer() noexcept;
@@ -22,5 +22,8 @@ namespace Editor {
     units::Window m_window_;
     units::GPUDevice m_gpu_device_;
     units::GPUTexture m_gpu_texture_;
+
+    void showSceneWindow() noexcept;
+    void showSceneResolutionWindow() noexcept;
   };
-} // namespace Editor
+} // namespace editor

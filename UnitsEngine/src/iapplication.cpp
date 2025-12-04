@@ -26,6 +26,9 @@ namespace units {
   void IApplication::attatchLayer(const Id& p_layer_id, const I& p_layer_i) noexcept {
     m_impl_uptr_->m_layer_stack_.attatchLayer(p_layer_id, p_layer_i);
   }
+  ILayer* IApplication::getLayer(const I& p_layer_i) noexcept {
+    return m_impl_uptr_->m_layer_stack_.getLayer(p_layer_i);
+  }
   void IApplication::detatchLayer(const I& p_layer_i) noexcept {
     m_impl_uptr_->m_layer_stack_.detatchLayer(p_layer_i);
   }

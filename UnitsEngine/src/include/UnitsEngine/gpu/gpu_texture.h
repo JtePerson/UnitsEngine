@@ -28,8 +28,8 @@ namespace units {
 
     void destroy() noexcept;
 
-    inline int getWidth() noexcept { return m_width_; }
-    inline int getHeight() noexcept { return m_height_; }
+    inline uint32_t getWidth() noexcept { return m_width_; }
+    inline uint32_t getHeight() noexcept { return m_height_; }
 
     inline void* getGPUTexturePtr() noexcept { return m_gpu_texture_ptr_; }
   private:
@@ -39,8 +39,8 @@ namespace units {
     void* m_gpu_device_ptr_= nullptr;
     void* m_gpu_texture_ptr_= nullptr;
 
-    int m_width_= 0;
-    int m_height_= 0;
+    uint32_t m_width_= 0;
+    uint32_t m_height_= 0;
 
     bool m_from_window_= false;
   };

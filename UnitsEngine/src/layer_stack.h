@@ -16,6 +16,12 @@ namespace units {
     inline void attatchLayer(const Id& p_layer_id, const I& p_layer_i) noexcept {
       m_layer_queue_.emplace(std::make_tuple(p_layer_id, p_layer_i, 1));
     }
+    inline ILayer* getLayer(const I& p_layer_i) noexcept {
+      if (p_layer_i >= m_layer_vector_.size()) {
+        return nullptr;
+      }
+      return m_layer_vector_[p_layer_i].get();
+    }
     inline void detatchLayer(const I& p_layer_i) noexcept {
       m_layer_queue_.emplace(std::make_tuple(-1, p_layer_i, -1));
     }

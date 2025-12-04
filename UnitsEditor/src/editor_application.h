@@ -1,7 +1,7 @@
 #pragma once
 #include <UnitsEngine/iapplication.h>
 
-namespace Editor {
+namespace editor {
   class Application final : public units::IApplication {
   public:
     Application() noexcept;
@@ -13,4 +13,4 @@ namespace Editor {
     static inline Application* getInstance() noexcept { return IApplication::getInstance<Application>(); }
   private:
   };
-} // namespace Editor
+} // namespace editor
