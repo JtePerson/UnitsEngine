@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(UnitsRepo LANGUAGES CXX)
+project(UnitsRepo LANGUAGES CXX VERSION 1.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
@@ -12,7 +12,8 @@ option(BUILD_EDITOR  "Build UnitsEditor" true)
 option(BUILD_GAME "Build UnitsGame"     true)
 
 if(BUILD_ENGINE OR BUILD_TESTS OR BUILD_GAME OR BUILD_EDITOR)
-	add_subdirectory(${PROJECT_SOURCE_DIR}/UnitsEngine)
+	# add_subdirectory(${PROJECT_SOURCE_DIR}/UnitsEngine)
+  find_package(UnitsEngine)
 endif()
 if(BUILD_TESTS)
 	add_subdirectory(${PROJECT_SOURCE_DIR}/UnitTests)
