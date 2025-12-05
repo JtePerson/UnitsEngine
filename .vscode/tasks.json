@@ -4,7 +4,7 @@
 		{
 			"label": "CMake: clean Cache Windows",
 			"type": "shell",
-			"command": "rmdir /s /q ${workspaceFolder}\\build",
+			"command": "Remove-Item -Path '${workspaceFolder}/build/' -Recurse -Force",
 			"problemMatcher": []
 		},
 		{
