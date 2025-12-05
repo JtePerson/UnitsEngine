@@ -5,7 +5,7 @@
 			"name": "All Multi-Config",
 			"generator": "Ninja Multi-Config",
 			"binaryDir": "${sourceDir}/build",
-      "installDir": "${sourceDir}/install/UnitsEngine-v1.1",
+      "installDir": "${sourceDir}/../UnitsEngineInstalls/UnitsEngine-v1.1",
 			"cacheVariables": {
 			}
 		}
