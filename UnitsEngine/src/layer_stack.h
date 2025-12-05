@@ -46,17 +46,21 @@ namespace units {
       m_layer_vector_.clear();
     }
 
-    inline void forEachLayer(std::function<void(std::unique_ptr<ILayer>&)>&& p_callable) noexcept {
+    inline void forEachLayer(std::function<bool(std::unique_ptr<ILayer>&)>&& p_callable) noexcept {
       for (auto layer_it= m_layer_vector_.begin(); layer_it != m_layer_vector_.end(); layer_it++) {
         if (*layer_it != nullptr) {
-          p_callable(*layer_it);
+          if (p_callable(*layer_it)) {
+            break;
+          }
         }
       }
     }
-    inline void forEachLayerReverse(std::function<void(std::unique_ptr<ILayer>&)>&& p_callable) noexcept {
+    inline void forEachLayerReverse(std::function<bool(std::unique_ptr<ILayer>&)>&& p_callable) noexcept {
       for (auto layer_it= m_layer_vector_.rbegin(); layer_it != m_layer_vector_.rend(); layer_it++) {
         if (*layer_it != nullptr) {
-          p_callable(*layer_it);
+          if (p_callable(*layer_it)) {
+            break;
+          }
         }
       }
     }

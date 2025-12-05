@@ -4,14 +4,12 @@
 #include "UnitsEngine/core/engine_api.h"
 #include "UnitsEngine/types/number.h"
 #include "UnitsEngine/types/factory.h"
-#include "UnitsEngine/ilayer.h"
 
 namespace units {
+  class ILayer;
   class LayerFactory final {
   public:
-    static inline std::unique_ptr<ILayer> createLayer(const Id& p_layer_id) noexcept {
-      return s_layer_factory.createType(p_layer_id);
-    }
+    static std::unique_ptr<ILayer> createLayer(const Id& p_layer_id) noexcept;
   private:
     template<typename LayerT>
     friend struct LayerTraits;

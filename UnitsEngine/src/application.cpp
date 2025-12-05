@@ -63,6 +63,10 @@ namespace units {
     );
   }
 
+  void IApplication::processLayerQueue() noexcept {
+    m_impl_uptr_->m_layer_stack_.processLayerQueue();
+  }
+
   void IApplication::Impl::run() noexcept {
     if (m_should_run_) { return; }
     m_should_run_= true;
@@ -89,7 +93,7 @@ namespace units {
             WindowCloseEvent window_close_event{
               .window_ptr= Window::getFromId(m_sdl_event_.window.windowID)
             };
-            m_application_ptr_->m_event_dispatcher_.dispatch(event, &window_close_event);
+            m_application_ptr_->dispatchEvent(event, &window_close_event);
             window_close_event.window_ptr->destroy();
             if (Window::count() == 0) {
               quit();
@@ -100,23 +104,27 @@ namespace units {
         Event event;
         const void* data_ptr;
         while (m_application_ptr_->m_event_bus_.pollEvents(event, data_ptr)) {
-          m_application_ptr_->m_event_dispatcher_.dispatch(event, data_ptr);
+          m_application_ptr_->dispatchEvent(event, data_ptr);
+          m_layer_stack_.forEachLayer([&](std::unique_ptr<ILayer>& p_layer_uptr){
+            return p_layer_uptr->onEvent(event, data_ptr);
+          });
         }
       }
       if (!m_should_run_) { break; }
       m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
-        p_layer_uptr->onTick();
+        return p_layer_uptr->onTick();
       });
       if (m_application_ptr_->m_imgui_context_ptr_ != nullptr) {
         ImGui_ImplSDLGPU3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
         m_layer_stack_.forEachLayer([](std::unique_ptr<ILayer>& p_layer_uptr){
-          p_layer_uptr->onImGui();
+          return p_layer_uptr->onImGui();
         });
       }
       m_layer_stack_.forEachLayerReverse([](std::unique_ptr<ILayer>& p_layer_uptr){
         p_layer_uptr->onRender();
+        return false;
       });
       if (m_application_ptr_->m_imgui_context_ptr_ != nullptr) {
         ImGui::UpdatePlatformWindows();
@@ -131,6 +139,6 @@ namespace units {
     UE_CORE_WARN("Attempt made to quit Application");
     if (!m_should_run_) { return; }
     m_should_run_= false;
-    m_application_ptr_->m_event_bus_.push(ApplicationQuitEvent{});
+    m_application_ptr_->pushEvent(ApplicationQuitEvent{});
   }
 } // namespace units

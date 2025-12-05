@@ -18,7 +18,8 @@ PRIVATE
 )
 
 set(UnitsGame_CPP_EXE_SRC
-	${UnitsGame_SRC_DIR}/main.cpp
+	${UnitsGame_SRC_DIR}/game_application.cpp
+	${UnitsGame_SRC_DIR}/entry.cpp
 )
 add_executable(UnitsGame ${UnitsGame_CPP_EXE_SRC})
 target_include_directories(UnitsGame PRIVATE

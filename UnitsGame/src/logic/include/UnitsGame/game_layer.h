@@ -13,9 +13,10 @@ namespace game {
     virtual void onAttatch() noexcept override;
     virtual void onDetatch() noexcept override;
 
-    virtual void onFixedTick() noexcept override;
-    virtual void onTick() noexcept override;
-    virtual void onImGui() noexcept override {}
+    virtual bool onEvent(units::Event& p_event, const void*& p_data_ptr) noexcept override { return true; }
+    virtual bool onFixedTick() noexcept override { return true; }
+    virtual bool onTick() noexcept override { return true; }
+    virtual bool onImGui() noexcept override { return true; }
     virtual void onRender() noexcept override;
   private:
   };

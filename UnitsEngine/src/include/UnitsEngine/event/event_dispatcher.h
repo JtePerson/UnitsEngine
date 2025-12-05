@@ -7,13 +7,12 @@
 #include "UnitsEngine/event/event_type.h"
 #include "UnitsEngine/types/number.h"
 #include "UnitsEngine/core/log.h"
+#include "UnitsEngine/config.h"
 
 namespace units {
   class EventDispatcher final {
   public:
-    inline EventDispatcher(const size_t& p_user_event_count) noexcept
-    : m_user_listeners_(p_user_event_count)
-    {}
+    inline EventDispatcher() noexcept= default;
 
     template<typename CallableT>
     inline void registerListener(CallableT&& p_listener) noexcept {
@@ -53,7 +52,7 @@ namespace units {
     };
   private:
     std::array<std::vector<ListenerFunc>, EventType::kUE_EventTypeEnd> m_listeners_;
-    std::vector<std::vector<ListenerFunc>> m_user_listeners_;
+    std::vector<std::vector<ListenerFunc>> m_user_listeners_{UE_USER_EVENT_COUNT};
 
     template<typename EventT>
     inline ListenerFunc makeWrapper(const std::function<bool(EventT&)>& p_listener) noexcept {

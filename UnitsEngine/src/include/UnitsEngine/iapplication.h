@@ -18,6 +18,9 @@ namespace units {
   public:
     virtual ~IApplication() noexcept;
 
+    Window m_window_;
+    GPUDevice m_gpu_device_;
+
     virtual void onRun() noexcept= 0;
     virtual void onQuit() noexcept= 0;
 
@@ -36,8 +39,8 @@ namespace units {
     void detatchLayer(const I& p_layer_i) noexcept;
 
     template<typename EventT>
-    inline void pushEvent(const EventT& p_event, const EventType& p_type, const EventCategory& p_category) noexcept {
-      m_event_bus_.push(p_event, p_type, p_category);
+    inline void pushEvent(const EventT& p_event) noexcept {
+      m_event_bus_.push(p_event);
     }
     template<typename CallableT>
     inline void registerEventListener(CallableT&& p_listener) noexcept {
@@ -63,15 +66,18 @@ namespace units {
     void renderImGuiDrawData(GPUCommandBuffer& p_gpu_command_buffer, GPURenderPass& p_gpu_render_pass) noexcept;
 
 
-    template<typename ApplicationT>
+    template<typename ApplicationT= IApplication>
     static inline ApplicationT* getInstance() noexcept {
       static_assert(std::is_base_of<IApplication, ApplicationT>::value, "ApplicationT must inherit from IApplication!");
       return static_cast<ApplicationT*>(s_application_instance_);
     }
   protected:
     IApplication(IApplication* p_instance) noexcept;
+
+    void processLayerQueue() noexcept;
   private:
     friend struct Impl;
+    friend class ILayer;
   private:
     struct Impl;
     std::unique_ptr<Impl> m_impl_uptr_= nullptr;
@@ -79,7 +85,7 @@ namespace units {
     static inline IApplication* s_application_instance_= nullptr;
 
     EventBus m_event_bus_;
-    EventDispatcher m_event_dispatcher_{0};
+    EventDispatcher m_event_dispatcher_;
 
     ImGuiContext* m_imgui_context_ptr_= nullptr;
 

@@ -8,25 +8,7 @@
 #include "editor_application.h"
 
 namespace editor {
-  EditorLayer::EditorLayer() noexcept {
-    m_window_= units::WindowSpecs{
-      .title= "UnitsEditor Window",
-      .width= 1280,
-      .height= 720,
-      .flags= UE_WINDOW_RESIZABLE
-    };
-    m_gpu_device_= units::GPUDevice{m_window_};
-    Application::getInstance()->initImGui(m_window_, m_gpu_device_);
-    units::GPUTextureSpecs gpu_texture_specs{
-      .type= units::GPU_TEXTURETYPE_2D,
-      .format= units::GPU_TEXTUREFORMAT_R8G8B8A8_UNORM,
-      .usage= UE_GPU_TEXTUREUSAGE_COLOR_TARGET | UE_GPU_TEXTUREUSAGE_SAMPLER,
-      .width= 100,
-      .height= 100,
-      .layer_count_or_depth= 1
-    };
-    m_gpu_texture_= units::GPUTexture{m_gpu_device_, gpu_texture_specs};
-  }
+  EditorLayer::EditorLayer() noexcept {}
   EditorLayer::~EditorLayer() noexcept {
     Application::getInstance()->quitImGui();
   }
@@ -38,32 +20,29 @@ namespace editor {
     UE_TRACE("EditorLayer detatched");
   }
 
-  void EditorLayer::onFixedTick() noexcept {}
-  void EditorLayer::onTick() noexcept {}
-  void EditorLayer::onImGui() noexcept {
+  bool EditorLayer::onEvent(units::Event& p_event, const void*& p_data_ptr) noexcept { return false; }
+  bool EditorLayer::onFixedTick() noexcept { return false; }
+  bool EditorLayer::onTick() noexcept { return false; }
+  bool EditorLayer::onImGui() noexcept {
     ImGui::DockSpaceOverViewport(ImGui::GetID("Editor Dockspace"), ImGui::GetMainViewport());
     showSceneWindow();
     showSceneResolutionWindow();
+    return false;
   }
   void EditorLayer::onRender() noexcept {
-    units::GPUCommandBuffer gpu_command_buffer{m_gpu_device_};
+    units::GPUCommandBuffer gpu_command_buffer{Application::getInstance()->m_gpu_device_};
+
     Application::getInstance()->prepareImGuiDrawData(gpu_command_buffer);
-    {
+    units::GPUTexture* gpu_texture_ptr= getGPUTexture(&gpu_command_buffer);
+    if (gpu_texture_ptr != nullptr && !gpu_texture_ptr->expired()) {
       units::GPURenderPassSpecs gpu_render_pass_specs{
-        .texture_ptr= &m_gpu_texture_,
-        .clear_color= {0.117f, 0.117f, 0.176f, 1.0f}
-      };
-      units::GPURenderPass gpu_render_pass{gpu_command_buffer, gpu_render_pass_specs};
-    }
-    {
-      units::GPUTexture gpu_texture{gpu_command_buffer, m_window_};
-      units::GPURenderPassSpecs gpu_render_pass_specs{
-        .texture_ptr= &gpu_texture,
+        .texture_ptr= gpu_texture_ptr,
         .clear_color= {0.0f, 0.0f, 0.0f, 1.0f}
       };
       units::GPURenderPass gpu_render_pass{gpu_command_buffer, gpu_render_pass_specs};
       Application::getInstance()->renderImGuiDrawData(gpu_command_buffer, gpu_render_pass);
     }
+    
     gpu_command_buffer.submit();
   }
 
@@ -72,12 +51,13 @@ namespace editor {
     ImGui::GetStyle().WindowPadding= ImVec2{0.0f, 0.0f};
     if (ImGui::Begin("Scene")) {
       ImVec2 window_size= ImGui::GetWindowSize();
-      ImVec2 texture_size= {static_cast<float32_t>(m_gpu_texture_.getWidth()), static_cast<float32_t>(m_gpu_texture_.getHeight())};
+      units::GPUTexture& gpu_texture= Application::getInstance()->m_game_gpu_texture_;
+      ImVec2 texture_size= {static_cast<float32_t>(gpu_texture.getWidth()), static_cast<float32_t>(gpu_texture.getHeight())};
       float32_t scale= std::min(window_size.x / texture_size.x, window_size.y / texture_size.y);
       texture_size.x*= scale;
       texture_size.y*= scale;
       ImGui::SetCursorPos(ImVec2{0.5f * (window_size.x - texture_size.x), 0.5f * (window_size.y - texture_size.y)});
-      ImGui::Image(reinterpret_cast<ImTextureID>(m_gpu_texture_.getGPUTexturePtr()), texture_size);
+      ImGui::Image(reinterpret_cast<ImTextureID>(gpu_texture.getGPUTexturePtr()), texture_size);
     }
     ImGui::End();
     ImGui::GetStyle().WindowPadding= old_padding;
@@ -96,7 +76,7 @@ namespace editor {
           .height= resolutions[selected_item].y,
           .layer_count_or_depth= 1
         };
-        m_gpu_texture_= units::GPUTexture{m_gpu_device_, gpu_texture_specs};
+        Application::getInstance()->m_game_gpu_texture_= units::GPUTexture{Application::getInstance()->m_gpu_device_, gpu_texture_specs};
       }
     }
     ImGui::End();
