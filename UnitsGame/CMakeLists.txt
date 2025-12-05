@@ -10,7 +10,7 @@ PRIVATE
   ${UnitsGame_SRC_DIR}
 )
 target_link_libraries(UnitsGameLogic PRIVATE
-  UnitsEngine
+  UnitsEngine::UnitsEngine
 )
 target_compile_definitions(UnitsGameLogic
 PRIVATE
@@ -26,13 +26,14 @@ target_include_directories(UnitsGame PRIVATE
   ${UnitsGame_SRC_DIR}
 )
 target_link_libraries(UnitsGame PRIVATE
-  UnitsEngine
+  UnitsEngine::UnitsEngine
   UnitsGameLogic
 )
 
 if(WIN32)
   add_custom_command(TARGET UnitsGame POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    $<TARGET_FILE:UnitsEngine> $<TARGET_FILE_DIR:UnitsGame>
+    COMMAND ${CMAKE_COMMAND} -E copy
+    $<TARGET_RUNTIME_DLLS:UnitsGame> $<TARGET_FILE_DIR:UnitsGame>
+    COMMAND_EXPAND_LISTS
   )
 endif()
