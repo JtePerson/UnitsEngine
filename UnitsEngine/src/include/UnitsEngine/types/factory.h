@@ -3,7 +3,7 @@
 
 #include "UnitsEngine/core/assert.h"
 
-namespace Units {
+namespace units {
 	template<typename KeyT, typename BaseT, typename PtrT= BaseT*, typename KeyHashT= std::hash<KeyT>>
 	class Factory {
 	public:
@@ -35,4 +35,4 @@ namespace Units {
 	protected:
 		Registry _registry;
 	};
-} // namespace Units
+} // namespace units

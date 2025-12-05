@@ -1,49 +1,68 @@
 #pragma once
-#include <memory>
-#include <string>
+#include "UnitsEngine/window/window_specs.h"
+
 #include <unordered_map>
-#include <glm/vec2.hpp>
+#include <string>
 
 #include "UnitsEngine/core/engine_api.h"
 #include "UnitsEngine/types/number.h"
-#include "UnitsEngine/window/window_specs.h"
-#include "UnitsEngine/core/assert.h"
-#include "UnitsEngine/gpu/gpu_command_buffer.h"
 
-namespace Units {
-  class GPUTexture;
+namespace units {
   class UE_API Window final {
   public:
-    inline Window() noexcept {}
-    inline Window(Window&) noexcept= default;
-    inline Window(Window&&) noexcept= default;
-    inline Window(const Window&) noexcept= delete;
-    inline Window& operator=(Window&) noexcept= default;
-    inline Window& operator=(Window&&) noexcept= default;
-    inline Window& operator=(const Window&) noexcept= delete;
-    ~Window() noexcept;
-
-    static Window& newWindow(const WindowSpecs& p_specs) noexcept;
-    static inline Window& getFromTitle(const std::string& p_window_title) noexcept {
-      UE_CORE_ASSERT(s_window_title_map_.find(p_window_title) != s_window_title_map_.end(), "Window with Title does not exist!");
-      return s_window_title_map_.at(p_window_title);
-    }
-    inline Id getId() noexcept { return m_id_; }
-    inline bool expired() const noexcept { return m_expired_; }
-    void make_expired() noexcept;
-
-    glm::i32vec2 getSize() noexcept;
-
-    GPUTexture getGPUTexture(GPUCommandBuffer& p_gpu_command_buffer, const bool& p_wait= true) noexcept;
-  private:
+    inline Window() noexcept= default;
     Window(const WindowSpecs& p_specs) noexcept;
-    std::string m_title_= "";
+    inline Window(Window&& p_other) noexcept {
+      *this= p_other;
+      p_other.m_window_ptr_= nullptr;
+      if (m_window_ptr_ != nullptr) {
+        s_id_map_[m_id_]= this;
+        s_title_map_[m_title_]= this;
+      }
+    }
+    inline Window& operator=(Window&& p_other) noexcept {
+      *this= p_other;
+      p_other.m_window_ptr_= nullptr;
+      if (m_window_ptr_ != nullptr) {
+        s_id_map_[m_id_]= this;
+        s_title_map_[m_title_]= this;
+      }
+      return *this;
+    }
+    inline ~Window() noexcept { destroy(); }
+
+    inline bool expired() noexcept { return m_window_ptr_ == nullptr; }
+
+    void destroy() noexcept;
+
+    inline void* getWindowPtr() noexcept { return m_window_ptr_; }
+
+    static inline Window* getFromId(const Id& p_window_id) noexcept {
+      const auto window_it= s_id_map_.find(p_window_id);
+      if (window_it == s_id_map_.end()) {
+        return nullptr;
+      }
+      return window_it->second;
+    }
+    static inline Window* getFromTitle(const std::string& p_window_title) noexcept {
+      const auto window_it= s_title_map_.find(p_window_title);
+      if (window_it == s_title_map_.end()) {
+        return nullptr;
+      }
+      return window_it->second;
+    }
+    static inline N count() noexcept {
+      return s_id_map_.size();
+    }
+  private:
+    inline Window(const Window& p_other) noexcept= default;
+    inline Window& operator=(const Window& p_other) noexcept= default;
+
+    void* m_window_ptr_= nullptr;
     Id m_id_= k_null_Id;
+    std::string m_title_= "";
 
-    bool m_expired_= true;
-    
-    static std::unordered_map<std::string, Window> s_window_title_map_;
+    static std::unordered_map<Id, Window*> s_id_map_;
+    static std::unordered_map<std::string, Window*> s_title_map_;
   };
-} // namespace Units
-
-#include "UnitsEngine/window/window_flags.h"
+} // namespace units

@@ -3,10 +3,11 @@
 #include "UnitsEngine/gpu/gpu_device.h"
 #include "UnitsEngine/gpu/gpu_sampler_specs.h"
 
-namespace Units {
+namespace units {
   class UE_API GPUSampler final {
   public:
     inline GPUSampler() noexcept= default;
+    GPUSampler(GPUDevice& p_gpu_device, GPUSamplerSpecs& p_specs) noexcept;
     inline GPUSampler(GPUSampler&& p_gpu_sampler) noexcept {
       *this= p_gpu_sampler;
       p_gpu_sampler.m_gpu_sampler_ptr_= nullptr;
@@ -16,8 +17,12 @@ namespace Units {
       p_gpu_sampler.m_gpu_sampler_ptr_= nullptr;
       return *this;
     }
-    GPUSampler(GPUDevice& p_gpu_device, GPUSamplerSpecs& p_specs) noexcept;
-    ~GPUSampler() noexcept;
+    inline ~GPUSampler() noexcept { destroy(); }
+
+    inline bool expired() noexcept { return m_gpu_sampler_ptr_ == nullptr; }
+
+    void destroy() noexcept;
+
     inline void* getGPUSamplerPtr() noexcept {
       return m_gpu_sampler_ptr_;
     }
@@ -28,7 +33,7 @@ namespace Units {
     void* m_gpu_device_ptr_= nullptr;
     void* m_gpu_sampler_ptr_= nullptr;
   };
-} // namespace Units
+} // namespace units
 
 #include "UnitsEngine/gpu/gpu_filter.h"
 #include "UnitsEngine/gpu/gpu_sampler_address_mode.h"

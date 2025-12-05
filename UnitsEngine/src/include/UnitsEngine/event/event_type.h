@@ -1,13 +1,13 @@
 #pragma once
-#include <stdint.h>
+#include "UnitsEngine/types/number.h"
 
-namespace Units {
-  using EventId= uint16_t;
-  constexpr EventId k_UserEventStart= 100;
-  enum class EventType : EventId {
-    kNone= 0,
-    kApplicationQuit,
-    kWindowClose,
-    kUser= k_UserEventStart
+namespace units {
+  constexpr Id k_UserEventTypeStart= 100;
+  enum EventType : units::Id {
+    kUE_EventTypeNone= 0,
+    kUE_EventTypeApplicationQuit,
+    kUE_EventTypeWindowClose,
+    kUE_EventTypeEnd,
+    kUE_EventTypeUser= units::k_UserEventTypeStart
   };
-} // namespace Units
+} // namespace units

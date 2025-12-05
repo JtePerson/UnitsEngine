@@ -1,10 +1,10 @@
 #pragma once
 #include <stdint.h>
 
-namespace Units {
+namespace units {
   // Window Flags
   using WindowFlags= uint64_t;
-} // namespace Units
+} // namespace units
 
 #define UE_WINDOW_FULLSCREEN           UINT64_C(0x0000000000000001)    /**< window is in fullscreen mode */
 #define UE_WINDOW_OPENGL               UINT64_C(0x0000000000000002)    /**< window usable with OpenGL context */

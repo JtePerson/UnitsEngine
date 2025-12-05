@@ -1,17 +1,25 @@
 set(UnitsGame_SRC_DIR ${PROJECT_SOURCE_DIR}/UnitsGame/src)
 set(UnitsGame_CPP_DLL_SRC
-  ${UnitsGame_SRC_DIR}/game.cpp
+  ${UnitsGame_SRC_DIR}/logic/game_layer.cpp
 )
 add_library(UnitsGameLogic SHARED ${UnitsGame_CPP_DLL_SRC})
-target_include_directories(UnitsGameLogic PRIVATE
+target_include_directories(UnitsGameLogic
+PUBLIC
+  ${UnitsGame_SRC_DIR}/logic/include
+PRIVATE
   ${UnitsGame_SRC_DIR}
 )
 target_link_libraries(UnitsGameLogic PRIVATE
   UnitsEngine
 )
+target_compile_definitions(UnitsGameLogic
+PRIVATE
+  GAME_BUILD_DLL
+)
 
 set(UnitsGame_CPP_EXE_SRC
-	${UnitsGame_SRC_DIR}/main.cpp
+	${UnitsGame_SRC_DIR}/game_application.cpp
+	${UnitsGame_SRC_DIR}/entry.cpp
 )
 add_executable(UnitsGame ${UnitsGame_CPP_EXE_SRC})
 target_include_directories(UnitsGame PRIVATE
@@ -19,6 +27,7 @@ target_include_directories(UnitsGame PRIVATE
 )
 target_link_libraries(UnitsGame PRIVATE
   UnitsEngine
+  UnitsGameLogic
 )
 
 if(WIN32)

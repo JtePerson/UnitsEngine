@@ -1,0 +1,31 @@
+Units Architecture:
+Branches:
+- Main
+- Development
+- Specialized:
+  - Rising Walls
+
+
+Architecture:
+- Application
+- Windows
+- Layers:
+  - Tests
+  - Editor
+  - Game
+
+Application:
+- Created by *.exe files
+- Creates Layers
+- Ownes Main Window
+- Hands out GPUTextures to Layers
+- Dispatches Application events
+- Ownes GPUCommandBuffer
+
+Windows:
+- Can be created by anything
+
+Layers:
+- Seperate program within Application
+- Binds to an output GPUTexture
+- Dispatches Layer events

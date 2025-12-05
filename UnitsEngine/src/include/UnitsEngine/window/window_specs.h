@@ -1,13 +1,12 @@
 #pragma once
 #include <string>
-#include <stdint.h>
 
 #include "UnitsEngine/window/window_flags.h"
 
-namespace Units {
+namespace units {
   struct WindowSpecs final {
     std::string title= "new window";
-    int width= 100, height= 100;
+    int width= 255, height= 255;
     WindowFlags flags= 0;
   };
-} // namespace Units
+} // namespace units

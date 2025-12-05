@@ -2,7 +2,7 @@
 #include "UnitsEngine/core/engine_api.h"
 #include "UnitsEngine/gpu/gpu_device.h"
 
-namespace Units {
+namespace units {
   class UE_API GPUCommandBuffer final {
   public:
     inline GPUCommandBuffer() noexcept= default;
@@ -16,17 +16,19 @@ namespace Units {
       p_gpu_command_buffer.m_gpu_command_buffer_ptr_= nullptr;
       return *this;
     }
-    ~GPUCommandBuffer() noexcept;
+    inline ~GPUCommandBuffer() noexcept { destroy(); }
+
+    inline bool expired() noexcept { return m_gpu_command_buffer_ptr_ == nullptr; }
     
     void submit() noexcept;
+
+    void destroy() noexcept;
     
-    inline void* getGPUCommandBufferPtr() noexcept {
-      return m_gpu_command_buffer_ptr_;
-    }
+    inline void* getGPUCommandBufferPtr() noexcept { return m_gpu_command_buffer_ptr_; }
   private:
     inline GPUCommandBuffer(const GPUCommandBuffer&) noexcept= default;
     inline GPUCommandBuffer& operator=(const GPUCommandBuffer&) noexcept= default;
 
     void* m_gpu_command_buffer_ptr_= nullptr;
   };
-} // namespace Units
+} // namespace units

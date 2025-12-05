@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-namespace Units {
+namespace units {
   using GPUTextureUsageFlags= uint32_t;
 
   #define UE_GPU_TEXTUREUSAGE_SAMPLER                                 (1u << 0) /**< Texture supports sampling. */
@@ -11,4 +11,4 @@ namespace Units {
   #define UE_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_READ                    (1u << 4) /**< Texture supports storage reads in the compute stage. */
   #define UE_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_WRITE                   (1u << 5) /**< Texture supports storage writes in the compute stage. */
   #define UE_GPU_TEXTUREUSAGE_COMPUTE_STORAGE_SIMULTANEOUS_READ_WRITE (1u << 6) /**< Texture supports reads and writes in the same compute shader. This is NOT equivalent to READ | WRITE. */
-} // namespace Units
+} // namespace units

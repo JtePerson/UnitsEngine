@@ -4,11 +4,11 @@
 
 #include "UnitsEngine/core/log.h"
 #include "UnitsEngine/core/assert.h"
-#include "window/window.h"
+#include "UnitsEngine/window/window.h"
 
-namespace Units {
-  GPUDevice::GPUDevice() noexcept {
-    UE_CORE_WARN("Initializing GPUDevice");
+namespace units {
+  GPUDevice::GPUDevice(Window& p_window) noexcept {
+    UE_CORE_WARN("Creating GPUDevice");
     SDL_GPUShaderFormat shader_format= SDL_GPU_SHADERFORMAT_SPIRV |
                                        SDL_GPU_SHADERFORMAT_DXIL |
                                        SDL_GPU_SHADERFORMAT_DXBC |
@@ -25,20 +25,25 @@ namespace Units {
       UE_CORE_ASSERT(false, "Could not initialize GPUDevice!");
     }
     UE_CORE_TRACE("GPUDevice backend: {0}", SDL_GetGPUDeviceDriver(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_)));
-    UE_CORE_INFO("GPUDevice Initialized");
-  }
-  GPUDevice::~GPUDevice() noexcept {
-    UE_CORE_WARN("Quitting GPUDevice");
-    if (m_gpu_device_ptr_ != nullptr) {
-      SDL_DestroyGPUDevice(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_));
-    }
-    UE_CORE_INFO("GPUDevice Quit");
+    claimWindow(p_window);
+    UE_CORE_INFO("GPUDevice Created");
   }
 
   void GPUDevice::claimWindow(Window& p_window) noexcept {
-    if (!SDL_ClaimWindowForGPUDevice(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_), core::Window::getFromId(p_window.getId()).getSDLWindowPtr())) {
-      UE_CORE_ERROR("SDL error: {0}", SDL_GetError());
-      UE_CORE_ASSERT(false && "Could not claim Window for GPUDevice");
+    if (!expired()) {
+      if (!SDL_ClaimWindowForGPUDevice(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_), reinterpret_cast<SDL_Window*>(p_window.getWindowPtr()))) {
+        UE_CORE_ERROR("SDL error: {0}", SDL_GetError());
+        UE_CORE_ASSERT(false && "Could not claim Window for GPUDevice");
+      }
     }
   }
-} // namespace Units
+
+  void GPUDevice::destroy() noexcept {
+    if (!expired()) {
+      UE_CORE_WARN("Destroying GPUDevice");
+      SDL_DestroyGPUDevice(reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_));
+      m_gpu_device_ptr_= nullptr;
+      UE_CORE_INFO("GPUDevice Destroyed");
+    }
+  }
+} // namespace units

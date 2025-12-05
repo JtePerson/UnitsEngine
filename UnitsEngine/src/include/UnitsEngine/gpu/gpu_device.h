@@ -1,11 +1,12 @@
 #pragma once
 #include "UnitsEngine/core/engine_api.h"
+#include "UnitsEngine/window/window.h"
 
-namespace Units {
-  class Window;
+namespace units {
   class UE_API GPUDevice final {
   public:
-    GPUDevice() noexcept;
+    inline GPUDevice() noexcept= default;
+    GPUDevice(Window& p_window) noexcept;
     inline GPUDevice(GPUDevice&& p_gpu_device) noexcept {
       *this= p_gpu_device;
       p_gpu_device.m_gpu_device_ptr_= nullptr;
@@ -15,16 +16,19 @@ namespace Units {
       p_gpu_device.m_gpu_device_ptr_= nullptr;
       return *this;
     }
-    ~GPUDevice() noexcept;
+    inline ~GPUDevice() noexcept { destroy(); }
+
+    inline bool expired() noexcept { return m_gpu_device_ptr_ == nullptr; }
     
     void claimWindow(Window& p_window) noexcept;
-    inline void* getDevicePtr() noexcept {
-      return m_gpu_device_ptr_;
-    }
+
+    inline void* getGPUDevicePtr() noexcept { return m_gpu_device_ptr_; }
+
+    void destroy() noexcept;
   private:
     inline GPUDevice(const GPUDevice&) noexcept= default;
     inline GPUDevice& operator=(const GPUDevice&) noexcept= default;
 
     void* m_gpu_device_ptr_= nullptr;
   };
-} // namespace Units
+} // namespace units

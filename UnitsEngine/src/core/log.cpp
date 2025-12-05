@@ -6,7 +6,7 @@
 #include "UnitsEngine/core/engine_api.h"
 
 #if defined(UE_LOGGING_ENABLED)
-  namespace Units {
+  namespace units {
     std::shared_ptr<spdlog::logger> Log::s_core_logger_;
     std::shared_ptr<spdlog::logger> Log::s_client_logger_;
     void Log::init() noexcept {
@@ -19,5 +19,5 @@
       s_core_logger_->info("Logging Initialized");
       m_initialized_= true;
     }
-  } // namespace Units
+  } // namespace units
 #endif

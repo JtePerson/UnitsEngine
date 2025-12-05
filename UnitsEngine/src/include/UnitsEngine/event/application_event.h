@@ -1,13 +1,9 @@
 #pragma once
-#include "UnitsEngine/event/event_type.h"
 #include "UnitsEngine/event/event.h"
 
-namespace Units {
-  class ApplicationQuitEvent final : public IEvent {
-  public:
-    inline ApplicationQuitEvent() noexcept= default;
-    virtual inline ~ApplicationQuitEvent() noexcept override= default;
-    UE_EVENT_TYPE(EventType::kApplicationQuit);
-  private:
+namespace units {
+  struct ApplicationQuitEvent final {
+    UE_EVENT_TYPE(kUE_EventTypeApplicationQuit)
+    UE_EVENT_CATEGORY(UE_EVENTCATEGORY_NONE)
   };
-} // namespace Units
+} // namespace units
