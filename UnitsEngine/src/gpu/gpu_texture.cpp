@@ -8,7 +8,8 @@
 namespace units {
   GPUTexture::GPUTexture(GPUDevice& p_gpu_device, GPUTextureSpecs& p_specs) noexcept {
     if (p_gpu_device.expired()) { return; }
-    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(p_gpu_device.getGPUDevicePtr());
+    m_gpu_device_ptr_= p_gpu_device.getGPUDevicePtr();
+    auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_);
     SDL_GPUTextureCreateInfo sdl_texture_create_info= {
       .type= static_cast<SDL_GPUTextureType>(p_specs.type),
       .format= static_cast<SDL_GPUTextureFormat>(p_specs.format),

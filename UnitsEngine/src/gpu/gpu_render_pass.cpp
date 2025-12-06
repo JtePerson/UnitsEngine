@@ -35,4 +35,34 @@ namespace units {
       m_gpu_render_pass_ptr_= nullptr;
     }
   }
+
+  void GPURenderPass::setGPUViewport(const float32_t& p_x, const float32_t& p_y, const float32_t& p_w, const float32_t& p_h, const float32_t& p_min_depth, const float32_t& p_max_depth) noexcept {
+    if (expired()) { return; }
+    static SDL_GPUViewport sdl_gpu_viewport;
+    sdl_gpu_viewport= {
+      .x= p_x,
+      .y= p_y,
+      .w= p_w,
+      .h= p_h,
+      .min_depth= p_min_depth,
+      .max_depth= p_max_depth
+    };
+    SDL_SetGPUViewport(reinterpret_cast<SDL_GPURenderPass*>(m_gpu_render_pass_ptr_), &sdl_gpu_viewport);
+  }
+  void GPURenderPass::setGPUScissor(const int& p_x, const int& p_y, const int& p_w, const int& p_h) noexcept {
+    if (expired()) { return; }
+    static SDL_Rect sdl_gpu_scissor;
+    sdl_gpu_scissor= {
+      .x= p_x,
+      .y= p_y,
+      .w= p_w,
+      .h= p_h
+    };
+    SDL_SetGPUScissor(reinterpret_cast<SDL_GPURenderPass*>(m_gpu_render_pass_ptr_), &sdl_gpu_scissor);
+  }
+
+  void GPURenderPass::drawGPUPrimitives(const uint32_t& p_vertex_count, const uint32_t& p_instance_count, const uint32_t& p_first_vertex, const uint32_t& p_first_instance) noexcept {
+    if (expired()) { return; }
+    SDL_DrawGPUPrimitives(reinterpret_cast<SDL_GPURenderPass*>(m_gpu_render_pass_ptr_), p_vertex_count, p_instance_count, p_first_vertex, p_first_instance);
+  }
 } // namespace units

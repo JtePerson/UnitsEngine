@@ -9,8 +9,8 @@
 
 namespace units {
   GPUSampler::GPUSampler(GPUDevice& p_gpu_device, GPUSamplerSpecs& p_specs) noexcept {
+    if (p_gpu_device.expired()) { return; }
     m_gpu_device_ptr_= p_gpu_device.getGPUDevicePtr();
-    if (m_gpu_device_ptr_ == nullptr) { return; }
     auto* sdl_gpu_device_ptr= reinterpret_cast<SDL_GPUDevice*>(m_gpu_device_ptr_);
     SDL_GPUSamplerCreateInfo sdl_gpu_sampler_create_info= {
       .min_filter= static_cast<SDL_GPUFilter>(p_specs.min_filter),

@@ -4,7 +4,6 @@
 
 #include "UnitsEngine/core/log.h"
 #include "UnitsEngine/core/assert.h"
-#include "UnitsEngine/gpu/gpu_device.h"
 
 namespace units {
   GPUCommandBuffer::GPUCommandBuffer(GPUDevice& p_gpu_device) noexcept {

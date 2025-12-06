@@ -7,13 +7,13 @@ namespace units {
   public:
     inline GPUCommandBuffer() noexcept= default;
     GPUCommandBuffer(GPUDevice& p_gpu_device) noexcept;
-    inline GPUCommandBuffer(GPUCommandBuffer&& p_gpu_command_buffer) noexcept {
-      *this= p_gpu_command_buffer;
-      p_gpu_command_buffer.m_gpu_command_buffer_ptr_= nullptr;
+    inline GPUCommandBuffer(GPUCommandBuffer&& p_other) noexcept {
+      *this= p_other;
+      p_other.m_gpu_command_buffer_ptr_= nullptr;
     }
-    inline GPUCommandBuffer& operator=(GPUCommandBuffer&& p_gpu_command_buffer) noexcept {
-      *this= p_gpu_command_buffer;
-      p_gpu_command_buffer.m_gpu_command_buffer_ptr_= nullptr;
+    inline GPUCommandBuffer& operator=(GPUCommandBuffer&& p_other) noexcept {
+      *this= p_other;
+      p_other.m_gpu_command_buffer_ptr_= nullptr;
       return *this;
     }
     inline ~GPUCommandBuffer() noexcept { destroy(); }

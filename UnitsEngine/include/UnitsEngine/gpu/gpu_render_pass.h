@@ -22,6 +22,11 @@ namespace units {
     inline bool expired() noexcept { return m_gpu_render_pass_ptr_ == nullptr; }
 
     void destroy() noexcept;
+
+    void setGPUViewport(const float32_t& p_x, const float32_t& p_y, const float32_t& p_w, const float32_t& p_h, const float32_t& p_min_depth, const float32_t& p_max_depth) noexcept;
+    void setGPUScissor(const int& p_x, const int& p_y, const int& p_w, const int& p_h) noexcept;
+
+    void drawGPUPrimitives(const uint32_t& p_vertex_count, const uint32_t& p_instance_count, const uint32_t& p_first_vertex, const uint32_t& p_first_instance) noexcept;
     
     inline void* getGPURenderPassPtr() noexcept { return m_gpu_render_pass_ptr_; }
   private:

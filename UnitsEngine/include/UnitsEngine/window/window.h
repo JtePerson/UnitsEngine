@@ -6,8 +6,10 @@
 
 #include "UnitsEngine/core/engine_api.h"
 #include "UnitsEngine/types/number.h"
+#include "UnitsEngine/gpu/gpu_texture_format.h"
 
 namespace units {
+  class GPUDevice;
   class UE_API Window final {
   public:
     inline Window() noexcept= default;
@@ -36,6 +38,8 @@ namespace units {
     void destroy() noexcept;
 
     inline void* getWindowPtr() noexcept { return m_window_ptr_; }
+
+    GPUTextureFormat getGPUTextureFormat(GPUDevice& p_gpu_device) noexcept;
 
     static inline Window* getFromId(const Id& p_window_id) noexcept {
       const auto window_it= s_id_map_.find(p_window_id);

@@ -1,10 +1,11 @@
 #pragma once
 #include <UnitsEngine/ilayer.h>
+#include <UnitsEngine/gpu/gpu_graphics_pipeline.h>
 
 namespace test {
   class TestLayer : public units::ILayer {
   public:
-    inline TestLayer() noexcept= default;
+    TestLayer() noexcept;
     virtual inline ~TestLayer() noexcept= default;
    
     inline virtual void onAttatch() noexcept override {
@@ -23,5 +24,6 @@ namespace test {
     }
     virtual void onRender() noexcept override;
   private:
+    units::GPUGraphicsPipeline m_gpu_graphics_pipeline_;
   };
 } // namespace test

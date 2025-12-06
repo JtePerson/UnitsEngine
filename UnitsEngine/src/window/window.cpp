@@ -4,6 +4,7 @@
 
 #include "UnitsEngine/core/log.h"
 #include "UnitsEngine/core/assert.h"
+#include "UnitsEngine/gpu/gpu_device.h"
 
 namespace units {
   std::unordered_map<Id, Window*> Window::s_id_map_;
@@ -29,5 +30,9 @@ namespace units {
       s_id_map_.erase(m_id_);
       s_title_map_.erase(m_title_);
     }
+  }
+
+  GPUTextureFormat Window::getGPUTextureFormat(GPUDevice& p_gpu_device) noexcept {
+    return static_cast<GPUTextureFormat>(SDL_GetGPUSwapchainTextureFormat(reinterpret_cast<SDL_GPUDevice*>(p_gpu_device.getGPUDevicePtr()), reinterpret_cast<SDL_Window*>(m_window_ptr_)));
   }
 } // namespace units

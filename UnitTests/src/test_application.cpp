@@ -1,4 +1,5 @@
 #include "test_application.h"
+#include <UnitsEngine/gpu/gpu_shader.h>
 
 namespace test {
   TestApplication::TestApplication() noexcept: IApplication{this} {

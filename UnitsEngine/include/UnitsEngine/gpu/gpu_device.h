@@ -1,8 +1,8 @@
 #pragma once
 #include "UnitsEngine/core/engine_api.h"
-#include "UnitsEngine/window/window.h"
 
 namespace units {
+  class Window;
   class UE_API GPUDevice final {
   public:
     inline GPUDevice() noexcept= default;

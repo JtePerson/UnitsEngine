@@ -14,3 +14,6 @@
 [submodule "UnitsEngine/vendor/glm"]
 	path = UnitsEngine/vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "UnitsEngine/vendor/sdl_shadercross"]
+	path = UnitsEngine/vendor/sdl_shadercross
+	url = https://github.com/libsdl-org/SDL_shadercross.git
