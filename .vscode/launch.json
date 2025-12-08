@@ -6,7 +6,7 @@
       "type": "cppvsdbg",
       "request": "launch",
       "program": "${command:cmake.launchTargetPath}",
-      "cwd": "${workspaceFolder}/bin"
+      "cwd": "${workspaceFolder}/UnitsEditor/bin"
     }
   ]
 }

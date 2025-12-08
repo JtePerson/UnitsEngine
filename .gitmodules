@@ -1,3 +1,6 @@
 [submodule "out/build/Default/UnitsEngine/vendor/sdl3"]
 	path = out/build/Default/UnitsEngine/vendor/sdl3
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "UnitsEngine/vendor/sdl3"]
+	path = UnitsEngine/vendor/sdl3
+	url = https://github.com/libsdl-org/SDL.git
