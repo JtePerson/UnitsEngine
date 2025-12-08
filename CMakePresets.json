@@ -10,11 +10,11 @@
       "displayName": "Default configure preset",
       "description": "",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchains/win32-clang++.cmake"
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/win32-clang++.cmake"
       }
     },
     {
@@ -22,11 +22,11 @@
       "displayName": "Debug configure preset",
       "description": "",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchains/win32-clang++.cmake"
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/win32-clang++.cmake"
       }
     },
     {
@@ -34,11 +34,11 @@
       "displayName": "Release configure preset",
       "description": "",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchains/win32-clang++.cmake"
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/win32-clang++.cmake"
       }
     },
     {
@@ -46,11 +46,11 @@
       "displayName": "RelWithDebInfo configure preset",
       "description": "",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchains/win32-clang++.cmake"
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/win32-clang++.cmake"
       }
     }
   ],
