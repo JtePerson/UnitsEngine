@@ -1,3 +1,0 @@
-C:/Users/Jesse/dev-projects/UnitsEngine/out/build/Debug/CMakeFiles/HelloWorld.dir
-C:/Users/Jesse/dev-projects/UnitsEngine/out/build/Debug/CMakeFiles/edit_cache.dir
-C:/Users/Jesse/dev-projects/UnitsEngine/out/build/Debug/CMakeFiles/rebuild_cache.dir
