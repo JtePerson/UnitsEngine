@@ -1,0 +1,53 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 10
+  },
+  "configurePresets": [
+    {
+      "name": "Default",
+      "displayName": "Default configure preset",
+      "description": "",
+      "generator": "Ninja",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/win32-clang++.cmake"
+      }
+    },
+    {
+      "name": "Debug",
+      "displayName": "Debug configure preset",
+      "description": "",
+      "generator": "Ninja",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/win32-clang++.cmake"
+      }
+    },
+    {
+      "name": "Release",
+      "displayName": "Release configure preset",
+      "description": "",
+      "generator": "Ninja",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/win32-clang++.cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "Default",
+      "displayName": "Default build preset",
+      "description": "",
+      "configurePreset": "Default"
+    }
+  ]
+}
