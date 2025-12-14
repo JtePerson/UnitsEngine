@@ -18,7 +18,7 @@ PRIVATE
   UnitsEngine::UnitsEngine
 )
 
-if(WIN32)
+if(false)
   add_custom_command(TARGET UnitsManager POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     $<TARGET_RUNTIME_DLLS:UnitsManager> $<TARGET_FILE_DIR:UnitsManager>

@@ -16,9 +16,9 @@ add_library(UnitsEngine::UnitsEngine ALIAS UnitsEngine)
 
 target_compile_definitions(UnitsEngine
 PUBLIC
-PRIVATE
   $<$<CONFIG:Debug>:UE_BUILD_DEBUG>
   $<$<CONFIG:Release>:UE_BUILD_RELEASE>
+PRIVATE
   UE_BUILD_DLL
 )
 

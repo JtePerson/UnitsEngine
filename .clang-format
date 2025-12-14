@@ -34,3 +34,4 @@ SpaceBeforeCtorInitializerColon: false
 IndentPPDirectives: AfterHash
 AllowShortMacrosOnASingleLine: true
 SkipMacroDefinitionBody: true
+ShortNamespaceLines: 0
