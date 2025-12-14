@@ -1,3 +1,5 @@
 # Directories
 out/
 UnitsTestProject/
+CMakeUserPresets.json
+.vscode/launch.json
