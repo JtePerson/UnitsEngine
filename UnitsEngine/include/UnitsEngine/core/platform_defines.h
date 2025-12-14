@@ -2,10 +2,17 @@
 
 #if defined(_WIN32)
 #  if defined(_WIN64)
-#    define UE_PLATFORM_WIN64
+#    define UE_PLATFORM_WIN64 1
 #  else
-#    define UE_PLATFORM_WIN32
+#    define UE_PLATFORM_WIN32 1
+#  endif
+#elif defined(__APPLE__)
+#  include <TargetConditionals.h>
+#  if defined(TARGET_OS_MAC)
+#    define UE_PLATFORM_MACOS 1
+#  else
+#    error "UnitsEngine only supports Win32 and macOS at the moment
 #  endif
 #else
-#  error "UnitsEngine only supports Win64 at the moment
+#  error "UnitsEngine only supports Win32 and macOS at the moment
 #endif

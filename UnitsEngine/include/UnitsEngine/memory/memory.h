@@ -106,4 +106,6 @@ namespace units {
 
 #if defined(UE_PLATFORM_WIN32) || defined(UE_PLATFORM_WIN64)
 #  include "UnitsEngine/memory/impl/memory_win32.ipp"
+#elif defined(UE_PLATFORM_MACOS)
+#  include "UnitsEngine/memory/impl/memory_macOS.ipp"
 #endif

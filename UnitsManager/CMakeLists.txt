@@ -15,7 +15,12 @@ PRIVATE
 
 target_link_libraries(UnitsManager
 PRIVATE
-  UnitsEngine::UnitsEngine
+  # UnitsEngine::UnitsEngine
+)
+
+target_include_directories(UnitsManager
+PRIVATE
+  ${PROJECT_SOURCE_DIR}/../UnitsEngine/include
 )
 
 if(false)
