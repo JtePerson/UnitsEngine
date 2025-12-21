@@ -1,0 +1,56 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28
+  },
+  "configurePresets": [
+    {
+      "name": "Default",
+      "displayName": "Default configure preset",
+      "description": "",
+      "generator": "Ninja",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/host-windows-x86_64/target-windows-x86_64.cmake"
+      }
+    },
+    {
+      "name": "Debug",
+      "displayName": "Debug configure preset",
+      "description": "",
+      "generator": "Ninja",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/host-windows-x86_64/target-windows-x86_64.cmake"
+      }
+    },
+    {
+      "name": "Release",
+      "displayName": "Release configure preset",
+      "description": "",
+      "generator": "Ninja",
+      "binaryDir": "${workspaceFolder}/out/build/${presetName}",
+      "installDir": "${workspaceFolder}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/cmake/toolchains/host-windows-x86_64/target-windows-x86_64.cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "Default",
+      "displayName": "Default build preset",
+      "description": "",
+      "configurePreset": "Default",
+      "targets": [
+        "all"
+      ]
+    }
+  ]
+}

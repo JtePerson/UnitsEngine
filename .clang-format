@@ -1,0 +1,38 @@
+AccessModifierOffset: -1
+BraceWrapping:
+  IndentBraces: false
+BreakBeforeBraces: Attach
+CompactNamespaces: false
+FixNamespaceComments: true
+NamespaceIndentation: All
+IndentWidth: 2
+UseTabs: Never
+PointerAlignment: Left
+SpaceBeforeAssignmentOperators: false
+QualifierAlignment: Custom
+QualifierOrder: [friend, static, inline, constexpr, const, type]
+ColumnLimit: 0
+LambdaBodyIndentation: Signature
+SortIncludes:
+  Enabled: true
+  IgnoreCase: false
+  IgnoreExtension: false
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^<.*\..*>$'
+    Priority: 2
+  - Regex: '^<.*>$'
+    Priority: 1
+  - Regex: '^".*"$'
+    Priority: 3
+AlignArrayOfStructs: Right
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: false
+ContinuationIndentWidth: 2
+SpaceBeforeCtorInitializerColon: false
+IndentPPDirectives: AfterHash
+AllowShortMacrosOnASingleLine: true
+SkipMacroDefinitionBody: true
+ShortNamespaceLines: 0
+IndentCaseLabels: true
