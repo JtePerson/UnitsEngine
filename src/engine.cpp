@@ -79,7 +79,10 @@ namespace units {
       getLayerStack()->forEach([&](Layer& p_layer) -> bool {
         return p_layer.onRender();
       });
-      quit();
+    }
+
+    while (getLayerStack()->activeCount() > 0u) {
+      getLayerStack()->pop();
     }
   }
   void Engine::quit(void) noexcept {
