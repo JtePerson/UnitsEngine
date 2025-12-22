@@ -6,6 +6,8 @@ set(UnitsEngineModules_SRC_FILES
   ${UnitsEngine_SOURCE_DIR}/modules/layers.mpp
   ${UnitsEngine_SOURCE_DIR}/modules/memory/memory.mpp
   ${UnitsEngine_SOURCE_DIR}/modules/events/events.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/inputs.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/window.mpp
 )
 
 target_sources(UnitsEngine

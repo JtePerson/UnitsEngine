@@ -1,0 +1,67 @@
+module;
+
+#include <unordered_map>
+#include <utility>
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+export module units.Window;
+
+import units.Events;
+
+export namespace units {
+  enum class RenderBackend {
+    Vulkan= 0u,
+  };
+
+  struct WindowSpecs final {
+    const char* title;
+    RenderBackend render_backend;
+  };
+
+  class UE_API Window final {
+   public:
+    Window(void)= default;
+    Window(const WindowSpecs& p_specs) noexcept;
+    inline Window(Window&& p_other) noexcept { transfer(std::forward<Window>(p_other)); }
+    inline Window& operator=(Window&& p_other) noexcept {
+      transfer(std::forward<Window>(p_other));
+      return *this;
+    }
+    inline ~Window(void) noexcept { destroy(); }
+
+    void destroy(void) noexcept;
+
+    inline void transfer(Window&& p_other) noexcept {
+      *this= p_other;
+      p_other.m_native_ptr_= nullptr;
+      if (!expired())
+        s_title_map_[m_title_]= this;
+    }
+
+    inline bool expired(void) const noexcept { return m_native_ptr_ == nullptr; }
+
+    inline void* native(void) noexcept { return m_native_ptr_; }
+    inline const char* title(void) noexcept { return m_title_; }
+
+    static inline Window* getFromTitle(const char* p_title) noexcept {
+      const auto window_it= s_title_map_.find(p_title);
+      if (window_it == s_title_map_.end())
+        return nullptr;
+      return window_it->second;
+    }
+
+    static void pollCloseEvents(Events::EventBus& p_event_bus) noexcept;
+
+    static inline size_t count(void) noexcept { return s_title_map_.size(); }
+
+   private:
+    Window(const Window&)= default;
+    Window& operator=(const Window&)= default;
+
+    static std::unordered_map<const char*, Window*> s_title_map_;
+
+    void* m_native_ptr_= nullptr;
+    const char* m_title_= nullptr;
+  };
+} // namespace units

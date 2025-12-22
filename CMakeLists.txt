@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+include(${UnitsEngine_SOURCE_DIR}/cmake/config.cmake)
+
 add_library(UnitsEngine SHARED)
 add_library(Units::Engine ALIAS UnitsEngine)
 target_compile_features(UnitsEngine
@@ -16,6 +18,7 @@ PRIVATE
 target_compile_definitions(UnitsEngine
 PUBLIC
   $<$<CONFIG:Debug>:UE_ENABLE_LOGGING>
+  $<$<STREQUAL:${UnitsEngine_WINDOW_INPUT_BACKEND},glfw>:UE_INCLUDE_GLFW>
 PRIVATE
   UE_BUILD_DLL
 )

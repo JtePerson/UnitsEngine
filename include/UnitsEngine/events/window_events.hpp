@@ -16,7 +16,7 @@ namespace units {
       uint32_t size= sizeof(WindowCloseEvent);
       bool handled= false;
       // Data
-      uint64_t window_id= ~UINT64_C(0);
+      const char* title= nullptr;
     };
   } // namespace Events
 } // namespace units
