@@ -1,58 +1,22 @@
 module;
 
-#include <iostream>
-
 #include "UnitsEngine/core/engine_api.hpp"
 
 export module units.Engine;
 
-export extern "C" namespace units {
+export namespace units {
   class UE_API Engine final {
    public:
-    static bool load(void) noexcept {
-      static const bool init_success= [](void) -> bool {
-        std::cout << "Units-Engine Loaded" << std::endl;
+    static bool load(void) noexcept;
+    static bool unload(void) noexcept;
 
-        s_instance_ptr_= [](void) -> Engine* {
-          static Engine instance{};
-          return &instance;
-        }();
-
-        return s_instance_ptr_ != nullptr;
-      }();
-      return init_success;
-    }
-    static bool unload(void) noexcept {
-      if (!loaded() || getInstance()->m_should_run_)
-        return false;
-      std::cout << "Units-Engine Unloaded" << std::endl;
-      return true;
-    }
-
-    void run(void) noexcept {
-      if (m_should_run_)
-        return;
-      m_should_run_= true;
-
-      std::cout << "Units-Engine Running" << std::endl;
-
-      while (m_should_run_) {
-        quit();
-      }
-    }
-    void quit(void) noexcept {
-      if (!m_should_run_)
-        return;
-
-      std::cout << "Units-Engine Quitting" << std::endl;
-
-      m_should_run_= false;
-    }
+    void run(void) noexcept;
+    void quit(void) noexcept;
 
     static inline bool loaded(void) noexcept {
       return s_instance_ptr_ != nullptr;
     }
-    static Engine* getInstance(void) noexcept {
+    static inline Engine* getInstance(void) noexcept {
       return s_instance_ptr_;
     }
 
