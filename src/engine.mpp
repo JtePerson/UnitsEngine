@@ -1,5 +1,7 @@
 module;
 
+#include <iostream>
+
 #include "UnitsEngine/core/engine_api.hpp"
 
 export module units.Engine;
@@ -7,8 +9,12 @@ export module units.Engine;
 export extern "C" namespace units {
   class UE_API Engine final {
    public:
-    static void init(void) noexcept;
-    static void quit(void) noexcept;
+    static void init(void) noexcept {
+      std::cout << "Units-Engine Initialized" << std::endl;
+    }
+    static void quit(void) noexcept {
+      std::cout << "Units-Engine Quit" << std::endl;
+    }
 
    private:
     Engine()= default;

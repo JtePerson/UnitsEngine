@@ -1,14 +1,14 @@
 include_guard()
 
 set(UnitsEngineModules_SRC_FILES
-  ${UnitsEngine_SOURCE_DIR}/modules/UnitsEngine/engine.mpp
+  ${UnitsEngine_SOURCE_DIR}/src/engine.mpp
 )
 
 target_sources(UnitsEngine
 PRIVATE
   FILE_SET cxx_modules TYPE CXX_MODULES
     BASE_DIRS
-      ${UnitsEngine_SOURCE_DIR}/modules/UnitsEngine
+      ${UnitsEngine_SOURCE_DIR}/src
     FILES
       ${UnitsEngineModules_SRC_FILES}
 )
@@ -29,7 +29,7 @@ target_sources(UnitsEngineModules
 PUBLIC
   FILE_SET cxx_modules TYPE CXX_MODULES
     BASE_DIRS
-      ${UnitsEngine_SOURCE_DIR}/modules/UnitsEngine
+      ${UnitsEngine_SOURCE_DIR}/src
     FILES
       ${UnitsEngineModules_SRC_FILES}
 )
