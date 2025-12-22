@@ -25,7 +25,6 @@ namespace units {
     const bool init_success= [](void) -> bool {
       Log::init();
       Memory::Allocator::init(65536u);
-
       Inputs::init();
 
       s_instance_ptr_= [](void) -> Engine* {
@@ -61,12 +60,6 @@ namespace units {
       Events::Event* event_ptr= nullptr;
       while (getInstance()->m_event_bus_.pollEvent(event_ptr)) {
         switch (event_ptr->type) {
-          case Events::Type::ApplicationQuit: {
-            UE_TRACE("Application Quit Event!");
-          } break;
-          case Events::Type::WindowClose: {
-            UE_TRACE("Window Close Event!");
-          } break;
           default: {
           } break;
         }
