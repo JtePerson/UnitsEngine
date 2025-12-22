@@ -1,15 +1,18 @@
 include_guard()
 
 set(UnitsEngineModules_SRC_FILES
-  ${UnitsEngine_SOURCE_DIR}/src/engine.mpp
-  ${UnitsEngine_SOURCE_DIR}/src/core/log.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/engine.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/core/log.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/layers.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/memory/memory.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/events/events.mpp
 )
 
 target_sources(UnitsEngine
 PRIVATE
   FILE_SET cxx_modules TYPE CXX_MODULES
     BASE_DIRS
-      ${UnitsEngine_SOURCE_DIR}/src
+      ${UnitsEngine_SOURCE_DIR}/modules
     FILES
       ${UnitsEngineModules_SRC_FILES}
 )
@@ -35,7 +38,7 @@ target_sources(UnitsEngineModules
 PUBLIC
   FILE_SET cxx_modules TYPE CXX_MODULES
     BASE_DIRS
-      ${UnitsEngine_SOURCE_DIR}/src
+      ${UnitsEngine_SOURCE_DIR}/modules
     FILES
       ${UnitsEngineModules_SRC_FILES}
 )

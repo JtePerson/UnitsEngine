@@ -1,0 +1,218 @@
+module;
+
+#include <stddef.h>
+#include <stdint.h>
+
+#include "UnitsEngine/core/engine_api.hpp"
+#include "UnitsEngine/core/platform_defines.hpp"
+
+#if defined(UE_PLATFORM_WIN32) || defined(UE_PLATFORM_WIN64)
+#  include <Windows.h>
+#elif defined(UE_PLATFORM_MACOS)
+#  include <mach/host_info.h>
+#  include <mach/mach.h>
+#  include <sys/mman.h>
+#endif
+
+export module units.memory;
+
+export namespace units {
+  struct Memory final {
+    using byte_t= unsigned char;
+
+    Memory()= delete;
+    ~Memory()= delete;
+
+    /*
+     * returns OS memory Page Size
+     */
+    static inline size_t getPageSize() noexcept;
+    /*
+     * returns OS memory Allocation Granularity or Page Size if not supported
+     */
+    static inline size_t getAlloctionGranularity() noexcept;
+    /*
+     * returns p_offset rounded down to nearest Page Size
+     */
+    static inline size_t alignDownToPageSize(const size_t& p_offset) noexcept;
+    /*
+     * returns p_offset rounded down to nearest Allocation Granularity
+     */
+    static inline size_t alignDownToAllocationGranularity(const size_t& p_offset) noexcept;
+    /*
+     * returns p_offset rounded up to nearest Page Size
+     */
+    static inline size_t alignUpToPageSize(const size_t& p_offset) noexcept {
+      const size_t offset= alignDownToPageSize(p_offset);
+      return offset == p_offset ? offset : offset + getPageSize();
+    }
+    /*
+     * returns p_offset rounded up to nearest Allocation Granularity
+     */
+    static inline size_t alignUpToAllocationGranularity(const size_t& p_offset) noexcept {
+      const size_t offset= alignDownToAllocationGranularity(p_offset);
+      return offset == p_offset ? offset : offset + getAlloctionGranularity();
+    }
+
+    class VirtualRegion final {
+     public:
+      inline VirtualRegion() noexcept= default;
+
+      /*
+       * p_size is in multiples of Allocation Granularity
+       * p_ptr is rounded down to nearest Allocation Granularity
+       * if p_ptr is nullptr or p_ptr is not available, receives pointer to an available address
+       * receives nullptr on failure
+       */
+      inline VirtualRegion(const uint32_t& p_size, byte_t* p_ptr= nullptr) noexcept;
+
+      inline VirtualRegion(VirtualRegion&& p_other) noexcept {
+        *this= p_other;
+        p_other.m_ptr_= nullptr;
+        p_other.m_size_= 0u;
+      }
+      inline VirtualRegion& operator=(VirtualRegion&& p_other) noexcept {
+        *this= p_other;
+        p_other.m_ptr_= nullptr;
+        p_other.m_size_= 0u;
+        return *this;
+      }
+      inline ~VirtualRegion() noexcept;
+
+      /*
+       * p_size is in multiples of Page Size
+       * p_offset is in multiples of Page Size
+       */
+      inline void commit(const uint32_t& p_size, uint32_t p_offset= 0u) const noexcept;
+      /*
+       * p_offset is in multiples of Page Size
+       */
+      inline byte_t* get(const uint32_t& p_offset= 0u) noexcept {
+        if (m_ptr_ == nullptr)
+          return nullptr;
+        return m_ptr_ + p_offset * getPageSize();
+      }
+      /*
+       * returns size in bytes of virtual region
+       */
+      inline size_t size() const noexcept { return m_size_; }
+
+      inline operator void*() const noexcept { return m_ptr_; }
+      inline operator byte_t*() const noexcept { return m_ptr_; }
+      inline bool operator==(const nullptr_t&) const noexcept { return m_ptr_ == nullptr; }
+      inline operator bool() const noexcept { return m_ptr_ != nullptr; }
+
+     private:
+      inline VirtualRegion(const VirtualRegion&) noexcept= default;
+      inline VirtualRegion& operator=(const VirtualRegion&) noexcept= default;
+
+      size_t m_size_= 0u;
+      byte_t* m_ptr_= nullptr;
+    };
+
+    // Memory Arena Partition Allocator
+    class UE_API Allocator final {
+     public:
+      /*
+       * Data from memory request
+       */
+      struct MemoryBlock final {
+        // Block starting ptr
+        byte_t* const ptr;
+        // Block size in bytes
+        const uint32_t size;
+      };
+
+      /*
+       * Reserves memory of p_size in bytes rounded up to Allocation Granularity
+       * Starts at p_ptr if there's enough space, else finds available space elsewhere
+       */
+      static uint32_t init(const uint32_t& p_size, byte_t* p_ptr= nullptr) noexcept;
+      /*
+       * Unreserves memory from init
+       */
+      static void quit() noexcept;
+
+      // Total memory reserved in bytes
+      static inline uint32_t capcity() noexcept { return static_cast<uint32_t>(s_instance_ptr_->m_virtual_region_.size()); }
+      // Total memory used in bytes
+      static inline uint32_t usage() noexcept { return s_instance_ptr_->m_next_byte_; }
+      // Total memory available in bytes
+      static inline uint32_t space() noexcept { return capcity() - usage(); }
+      // Total MemoryBlocks requested since init
+      static inline uint32_t requests() noexcept { return s_instance_ptr_->m_meta_data_count_; }
+      /*
+       * Requests a block of memory
+       * Returned MemoryBlock ptr is nullptr upon request failure
+       * Returned MemoryBlock size is available size in bytes upon failure
+       */
+      static MemoryBlock request(const uint32_t& p_size) noexcept;
+
+     private:
+      Allocator(const uint32_t& p_size, byte_t* p_ptr= nullptr) noexcept;
+      Allocator(Allocator&&)= delete;
+      Allocator(const Allocator&)= delete;
+      Allocator& operator=(Allocator&&)= delete;
+      Allocator& operator=(const Allocator&)= delete;
+      ~Allocator() noexcept;
+
+      struct MetaData final {
+        uint32_t index;
+        uint32_t size;
+      };
+
+      static Allocator* s_instance_ptr_;
+
+      Memory::VirtualRegion m_virtual_region_;
+      uint32_t m_next_byte_= 0u;
+      uint32_t m_meta_data_count_= 0u;
+    };
+    // CircularArray of byte_t
+    class CircularBuffer {
+     public:
+      CircularBuffer(byte_t* p_buffer_ptr, const size_t& p_buffer_size) noexcept: k_size_(p_buffer_size), m_buffer_(p_buffer_ptr) {}
+      ~CircularBuffer()= default;
+
+      // Size in bytes of buffer
+      inline size_t size() const noexcept { return k_size_; }
+      // Returns wrapped index
+      inline size_t index(const size_t& p_i) const noexcept { return p_i % size(); }
+
+      // Returns a ptr to p_offset wrapped ensuring p_offset to p_offset + p_size is contiguous
+      inline byte_t* operator()(const size_t& p_size, const size_t& p_offset= 0u) noexcept {
+        if (m_buffer_ == nullptr)
+          return nullptr;
+        const size_t start_byte= (p_offset) % size();
+        const size_t end_byte= (p_offset + p_size - 1u) % size();
+        if (end_byte < start_byte)
+          return nullptr;
+        return &m_buffer_[start_byte];
+      }
+      // Returns a const ptr to p_offset wrapped ensuring p_offset to p_offset + p_size is contiguous
+      inline const byte_t* operator()(const size_t& p_size, const size_t& p_offset= 0u) const noexcept {
+        if (m_buffer_ == nullptr)
+          return nullptr;
+        const size_t start_byte= (p_offset) % size();
+        const size_t end_byte= (p_offset + p_size - 1u) % size();
+        if (end_byte < start_byte)
+          return nullptr;
+        return &m_buffer_[start_byte];
+      }
+
+     private:
+      CircularBuffer(CircularBuffer&&)= delete;
+      CircularBuffer(const CircularBuffer&)= delete;
+      CircularBuffer& operator=(CircularBuffer&&)= delete;
+      CircularBuffer& operator=(const CircularBuffer&)= delete;
+
+      const size_t k_size_;
+      byte_t* const m_buffer_;
+    };
+  };
+} // namespace units
+
+#if defined(UE_PLATFORM_WIN32) || defined(UE_PLATFORM_WIN64)
+#  include "../modules/memory/impl/memory_win32.mipp"
+#elif defined(UE_PLATFORM_MACOS)
+#  include "../modules/memory/impl/memory_macOS.mipp"
+#endif

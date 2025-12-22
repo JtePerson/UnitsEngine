@@ -2,7 +2,15 @@ module;
 
 #include "UnitsEngine/core/engine_api.hpp"
 
+#ifdef __INTELLISENSE__
+#  include "../modules/events/events.mpp"
+#  include "../modules/layers.mpp"
+#endif
+
 export module units.Engine;
+
+import units.Layers;
+import units.events;
 
 export namespace units {
   class UE_API Engine final {
@@ -10,14 +18,19 @@ export namespace units {
     static bool load(void) noexcept;
     static bool unload(void) noexcept;
 
-    void run(void) noexcept;
-    void quit(void) noexcept;
+    static void run(void) noexcept;
+    static void quit(void) noexcept;
 
     static inline bool loaded(void) noexcept {
       return s_instance_ptr_ != nullptr;
     }
     static inline Engine* getInstance(void) noexcept {
       return s_instance_ptr_;
+    }
+    static inline LayerStack* getLayerStack(void) noexcept {
+      if (s_instance_ptr_ == nullptr)
+        return nullptr;
+      return &s_instance_ptr_->m_layer_stack_;
     }
 
    private:
@@ -27,5 +40,9 @@ export namespace units {
     static Engine* s_instance_ptr_;
 
     bool m_should_run_= false;
+
+    Events::EventBus m_event_bus_;
+
+    LayerStack m_layer_stack_;
   };
 } // namespace units

@@ -1,0 +1,57 @@
+module;
+
+#include <array>
+
+#include <stdint.h>
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+#ifdef __INTELLISENSE__
+// #  include "UnitsEngine/memory/circular_buffer.hpp"
+#  include "../modules/memory/memory.mpp"
+#endif
+
+export module units.events;
+
+import units.memory;
+
+export namespace units {
+  namespace Events {
+    enum class Type : uint8_t {
+      None= 0u,
+      ApplicationQuit,
+      WindowClose,
+      End= 255u
+    };
+    using Category= uint64_t;
+
+    struct Event {
+      Type type= (Type)UINT8_C(0);
+      Category category= UINT64_C(0);
+      uint32_t size= 0u;
+      bool handled= true;
+    };
+
+    class UE_API EventBus final {
+     public:
+      inline EventBus(Memory::byte_t* p_buffer_ptr, const size_t& p_buffer_size) noexcept: m_buffer_(p_buffer_ptr, p_buffer_size) {}
+      ~EventBus()= default;
+
+      template <typename EventT>
+      inline bool pushEvent(EventT* p_event_ptr) noexcept {
+        return pushEvent((Event*)p_event_ptr, sizeof(EventT));
+      }
+
+      bool pollEvent(Event*& p_event_ptr) noexcept;
+
+     private:
+      Memory::CircularBuffer m_buffer_;
+      size_t m_buffer_start_byte_= UINT64_C(0);
+      size_t m_buffer_next_byte_= UINT64_C(0);
+      size_t m_buffer_usage_= UINT64_C(0);
+      size_t m_newest_event_= ~UINT64_C(0);
+
+      bool pushEvent(Event* p_event_ptr, const size_t& p_size) noexcept;
+    };
+  } // namespace Events
+} // namespace units
