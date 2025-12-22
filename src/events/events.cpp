@@ -8,7 +8,7 @@ module;
 #  include "../modules/events/events.mpp"
 #endif
 
-module units.events;
+module units.Events;
 
 namespace units {
   namespace Events {

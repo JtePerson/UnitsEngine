@@ -11,9 +11,9 @@ module;
 #  include "../modules/memory/memory.mpp"
 #endif
 
-export module units.events;
+export module units.Events;
 
-import units.memory;
+import units.Memory;
 
 export namespace units {
   namespace Events {

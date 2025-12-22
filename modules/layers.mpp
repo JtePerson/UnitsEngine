@@ -13,7 +13,7 @@ module;
 
 export module units.Layers;
 
-import units.events;
+import units.Events;
 
 export namespace units {
   class Layer {

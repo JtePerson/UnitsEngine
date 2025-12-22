@@ -5,7 +5,7 @@
 #  include "../modules/events/events.mpp"
 #endif
 
-import units.events;
+import units.Events;
 
 namespace units {
   namespace Events {

@@ -14,7 +14,7 @@ module;
 #  include <sys/mman.h>
 #endif
 
-export module units.memory;
+export module units.Memory;
 
 export namespace units {
   struct Memory final {

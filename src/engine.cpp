@@ -15,7 +15,7 @@ module;
 module units.Engine;
 
 import units.Log;
-import units.memory;
+import units.Memory;
 
 namespace units {
   bool Engine::load(void) noexcept {

@@ -6,7 +6,7 @@ module;
 #  include "../modules/memory/memory.mpp"
 #endif
 
-module units.memory;
+module units.Memory;
 
 namespace units {
   Memory::Allocator* Memory::Allocator::s_instance_ptr_= nullptr;
