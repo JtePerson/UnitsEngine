@@ -20,17 +20,17 @@ export namespace units {
   struct Memory final {
     using byte_t= unsigned char;
 
-    Memory()= delete;
-    ~Memory()= delete;
+    Memory(void)= delete;
+    ~Memory(void)= delete;
 
     /*
      * returns OS memory Page Size
      */
-    static inline size_t getPageSize() noexcept;
+    static inline size_t getPageSize(void) noexcept;
     /*
      * returns OS memory Allocation Granularity or Page Size if not supported
      */
-    static inline size_t getAlloctionGranularity() noexcept;
+    static inline size_t getAlloctionGranularity(void) noexcept;
     /*
      * returns p_offset rounded down to nearest Page Size
      */
@@ -56,7 +56,7 @@ export namespace units {
 
     class VirtualRegion final {
      public:
-      inline VirtualRegion() noexcept= default;
+      inline VirtualRegion(void) noexcept= default;
 
       /*
        * p_size is in multiples of Allocation Granularity
@@ -77,7 +77,7 @@ export namespace units {
         p_other.m_size_= 0u;
         return *this;
       }
-      inline ~VirtualRegion() noexcept;
+      inline ~VirtualRegion(void) noexcept;
 
       /*
        * p_size is in multiples of Page Size
@@ -95,12 +95,12 @@ export namespace units {
       /*
        * returns size in bytes of virtual region
        */
-      inline size_t size() const noexcept { return m_size_; }
+      inline size_t size(void) const noexcept { return m_size_; }
 
-      inline operator void*() const noexcept { return m_ptr_; }
-      inline operator byte_t*() const noexcept { return m_ptr_; }
+      inline operator void*(void) const noexcept { return m_ptr_; }
+      inline operator byte_t*(void) const noexcept { return m_ptr_; }
       inline bool operator==(const nullptr_t&) const noexcept { return m_ptr_ == nullptr; }
-      inline operator bool() const noexcept { return m_ptr_ != nullptr; }
+      inline operator bool(void) const noexcept { return m_ptr_ != nullptr; }
 
      private:
       inline VirtualRegion(const VirtualRegion&) noexcept= default;
@@ -131,16 +131,16 @@ export namespace units {
       /*
        * Unreserves memory from init
        */
-      static void quit() noexcept;
+      static void quit(void) noexcept;
 
       // Total memory reserved in bytes
-      static inline uint32_t capcity() noexcept { return static_cast<uint32_t>(s_instance_ptr_->m_virtual_region_.size()); }
+      static inline uint32_t capcity(void) noexcept { return static_cast<uint32_t>(s_instance_ptr_->m_virtual_region_.size()); }
       // Total memory used in bytes
-      static inline uint32_t usage() noexcept { return s_instance_ptr_->m_next_byte_; }
+      static inline uint32_t usage(void) noexcept { return s_instance_ptr_->m_next_byte_; }
       // Total memory available in bytes
-      static inline uint32_t space() noexcept { return capcity() - usage(); }
+      static inline uint32_t space(void) noexcept { return capcity() - usage(); }
       // Total MemoryBlocks requested since init
-      static inline uint32_t requests() noexcept { return s_instance_ptr_->m_meta_data_count_; }
+      static inline uint32_t requests(void) noexcept { return s_instance_ptr_->m_meta_data_count_; }
       /*
        * Requests a block of memory
        * Returned MemoryBlock ptr is nullptr upon request failure
@@ -154,7 +154,7 @@ export namespace units {
       Allocator(const Allocator&)= delete;
       Allocator& operator=(Allocator&&)= delete;
       Allocator& operator=(const Allocator&)= delete;
-      ~Allocator() noexcept;
+      ~Allocator(void) noexcept;
 
       struct MetaData final {
         uint32_t index;
@@ -171,10 +171,10 @@ export namespace units {
     class CircularBuffer {
      public:
       CircularBuffer(byte_t* p_buffer_ptr, const size_t& p_buffer_size) noexcept: k_size_(p_buffer_size), m_buffer_(p_buffer_ptr) {}
-      ~CircularBuffer()= default;
+      ~CircularBuffer(void)= default;
 
       // Size in bytes of buffer
-      inline size_t size() const noexcept { return k_size_; }
+      inline size_t size(void) const noexcept { return k_size_; }
       // Returns wrapped index
       inline size_t index(const size_t& p_i) const noexcept { return p_i % size(); }
 

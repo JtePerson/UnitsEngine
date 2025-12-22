@@ -35,7 +35,7 @@ export namespace units {
     class UE_API EventBus final {
      public:
       inline EventBus(Memory::byte_t* p_buffer_ptr, const size_t& p_buffer_size) noexcept: m_buffer_(p_buffer_ptr, p_buffer_size) {}
-      ~EventBus()= default;
+      ~EventBus(void)= default;
 
       template <typename EventT>
       inline bool pushEvent(EventT* p_event_ptr) noexcept {
