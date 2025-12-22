@@ -1,0 +1,17 @@
+module;
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+export module units.Engine;
+
+export extern "C" namespace units {
+  class UE_API Engine final {
+   public:
+    static void init(void) noexcept;
+    static void quit(void) noexcept;
+
+   private:
+    Engine()= default;
+    ~Engine()= default;
+  };
+} // namespace units
