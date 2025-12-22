@@ -15,7 +15,7 @@ export namespace units {
 
     class UE_API Instance final {
      public:
-      static bool init(const InstanceSpecs& p_specs) noexcept;
+      static bool init(const InstanceSpecs& p_specs, const bool& p_debug_mode) noexcept;
       static void quit(void) noexcept;
 
      private:

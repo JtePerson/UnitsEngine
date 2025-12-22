@@ -29,7 +29,7 @@ namespace units {
   namespace GPU {
     Instance* Instance::s_instance_ptr_= nullptr;
 
-    bool Instance::init(const InstanceSpecs& p_specs) noexcept {
+    bool Instance::init(const InstanceSpecs& p_specs, const bool& p_debug_mode) noexcept {
       static const bool initialized= [&]() -> bool {
         vk::ApplicationInfo app_info{};
         app_info.pApplicationName= p_specs.app_name;
@@ -56,10 +56,30 @@ namespace units {
         }
 #  endif
 
+        constexpr uint32_t validation_layer_count= 0u;
+        const char* validation_layer_names[]= {
+          "VK_LAYER_KHRONOS_validation",
+        };
+
+        if (p_debug_mode) {
+          auto [result, validation_layer_properties]= vk::enumerateInstanceLayerProperties();
+          for (size_t i= 0u; i < validation_layer_count; ++i) {
+            const bool none_same= std::ranges::none_of(validation_layer_properties, [validation_layer_name= validation_layer_names[i]](const auto& p_validation_layer_props) -> bool {
+              return std::strcmp(validation_layer_name, p_validation_layer_props.layerName) == 0;
+            });
+            if (none_same) {
+              UE_ERROR("Could not Init GPU Instance!");
+              return false;
+            }
+          }
+        }
+
         vk::InstanceCreateInfo instance_create_info{};
         instance_create_info.pApplicationInfo= &app_info;
         instance_create_info.enabledExtensionCount= extension_count;
         instance_create_info.ppEnabledExtensionNames= extension_names;
+        instance_create_info.enabledLayerCount= p_debug_mode ? validation_layer_count : 0u;
+        instance_create_info.ppEnabledLayerNames= p_debug_mode ? validation_layer_names : nullptr;
 
         s_instance_ptr_= [&]() -> Instance* {
           static auto [result, vk_instance]= vk::createInstance(instance_create_info);
