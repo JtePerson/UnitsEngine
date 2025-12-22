@@ -77,6 +77,9 @@ namespace units {
       return initialized;
     }
     void Instance::quit(void) noexcept {
+      if (!s_instance_ptr_->m_initialized_)
+        return;
+      reinterpret_cast<vk::Instance*>(s_instance_ptr_->m_native_ptr_)->destroy();
     }
   } // namespace GPU
 } // namespace units
