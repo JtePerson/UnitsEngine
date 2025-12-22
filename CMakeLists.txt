@@ -15,7 +15,7 @@ PRIVATE
 
 target_compile_definitions(UnitsEngine
 PUBLIC
-  UE_ENABLE_LOGGING
+  $<$<CONFIG:Debug>:UE_ENABLE_LOGGING>
 PRIVATE
   UE_BUILD_DLL
 )
