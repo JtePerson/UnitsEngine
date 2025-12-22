@@ -18,6 +18,7 @@ import units.Events;
 export namespace units {
   class Layer {
    public:
+    Layer(void)= default;
     virtual ~Layer(void)= default;
 
     virtual void onAttach(void) noexcept {}
@@ -29,8 +30,6 @@ export namespace units {
     virtual bool onRender(void) noexcept { return true; }
 
    private:
-    Layer(void)= default;
-
     Layer(Layer&&)= delete;
     Layer(const Layer&)= delete;
     Layer& operator=(Layer&&)= delete;
