@@ -4,10 +4,13 @@ module;
 
 module units.Engine;
 
+import units.Log;
+
 namespace units {
   bool Engine::load(void) noexcept {
     const bool init_success= [](void) -> bool {
-      std::cout << "Units-Engine Loaded" << std::endl;
+      Log::init();
+      Log::Core::engineLogger()->trace("Units-Engine Loaded");
 
       s_instance_ptr_= [](void) -> Engine* {
         static Engine instance{};
@@ -21,8 +24,14 @@ namespace units {
   bool Engine::unload(void) noexcept {
     if (!loaded() || getInstance()->m_should_run_)
       return false;
-    std::cout << "Units-Engine Unloaded" << std::endl;
+    Log::Core::engineLogger()->trace("Units-Engine Unloaded");
+    Log::quit();
     return true;
+  }
+
+  Engine::Engine(void) noexcept {
+  }
+  Engine::~Engine(void) noexcept {
   }
 
   void Engine::run(void) noexcept {
@@ -30,7 +39,7 @@ namespace units {
       return;
     m_should_run_= true;
 
-    std::cout << "Units-Engine Running" << std::endl;
+    Log::Core::engineLogger()->trace("Units-Engine Running");
 
     while (m_should_run_) {
       quit();
@@ -40,7 +49,7 @@ namespace units {
     if (!m_should_run_)
       return;
 
-    std::cout << "Units-Engine Quitting" << std::endl;
+    Log::Core::engineLogger()->trace("Units-Engine Quitting");
 
     m_should_run_= false;
   }

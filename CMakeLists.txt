@@ -19,6 +19,8 @@ PRIVATE
   UE_BUILD_DLL
 )
 
+include(${UnitsEngine_SOURCE_DIR}/cmake/packages.cmake)
+
 target_include_directories(UnitsEngine
 PUBLIC
   $<BUILD_INTERFACE:${UnitsEngine_SOURCE_DIR}/include>

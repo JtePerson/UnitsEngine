@@ -2,6 +2,7 @@ include_guard()
 
 set(UnitsEngineModules_SRC_FILES
   ${UnitsEngine_SOURCE_DIR}/src/engine.mpp
+  ${UnitsEngine_SOURCE_DIR}/src/core/log.mpp
 )
 
 target_sources(UnitsEngine
@@ -18,6 +19,11 @@ add_library(Units::Modules ALIAS UnitsEngineModules)
 target_compile_features(UnitsEngineModules
 PUBLIC
   cxx_std_20
+)
+
+target_link_libraries(UnitsEngineModules
+PUBLIC
+  spdlog::spdlog
 )
 
 target_include_directories(UnitsEngineModules

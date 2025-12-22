@@ -21,8 +21,8 @@ export namespace units {
     }
 
    private:
-    Engine()= default;
-    ~Engine()= default;
+    Engine(void) noexcept;
+    ~Engine(void) noexcept;
 
     static Engine* s_instance_ptr_;
 
