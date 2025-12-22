@@ -2,6 +2,7 @@ module;
 
 #include <iostream>
 
+#include "UnitsEngine/core/log.hpp"
 #include "UnitsEngine/events/application_events.hpp"
 #include "UnitsEngine/events/window_events.hpp"
 
@@ -29,7 +30,7 @@ namespace units {
       }();
 
       if (s_instance_ptr_ != nullptr)
-        Log::Core::engineLogger()->trace("Loaded");
+        UE_TRACE("Loaded");
       return s_instance_ptr_ != nullptr;
     }();
     return init_success;
@@ -38,7 +39,7 @@ namespace units {
     if (!loaded() || getInstance()->m_should_run_)
       return false;
     Memory::Allocator::quit();
-    Log::Core::engineLogger()->trace("Unloaded");
+    UE_TRACE("Unloaded");
     Log::quit();
     return true;
   }
@@ -53,7 +54,7 @@ namespace units {
       return;
     getInstance()->m_should_run_= true;
 
-    Log::Core::engineLogger()->trace("Running");
+    UE_TRACE("Running");
 
     while (getInstance()->m_should_run_) {
       auto layer_stack_lock= getLayerStack()->lockToScope();
@@ -61,10 +62,10 @@ namespace units {
       while (getInstance()->m_event_bus_.pollEvent(event_ptr)) {
         switch (event_ptr->type) {
           case Events::Type::ApplicationQuit: {
-            Log::Core::engineLogger()->trace("Application Quit Event!");
+            UE_TRACE("Application Quit Event!");
           } break;
           case Events::Type::WindowClose: {
-            Log::Core::engineLogger()->trace("Window Close Event!");
+            UE_TRACE("Window Close Event!");
           } break;
           default: {
           } break;
@@ -88,7 +89,7 @@ namespace units {
   void Engine::quit(void) noexcept {
     if (!getInstance()->m_should_run_)
       return;
-    Log::Core::engineLogger()->trace("Quitting");
+    UE_TRACE("Quitting");
 
     Events::ApplicationQuitEvent event{};
     getInstance()->m_event_bus_.pushEvent(&event);

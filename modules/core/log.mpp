@@ -18,21 +18,6 @@ export namespace units {
 
     static inline std::shared_ptr<spdlog::logger> userLogger() noexcept { return s_user_logger_uptr_; }
 
-#ifdef UE_BUILD_DLL
-    class Core final {
-     public:
-      friend class ::units::Log;
-
-      static inline std::shared_ptr<spdlog::logger> engineLogger() noexcept { return s_engine_logger_uptr_; }
-
-     private:
-      Core()= delete;
-      ~Core()= delete;
-
-      static std::shared_ptr<spdlog::logger> s_engine_logger_uptr_;
-    };
-#endif
-
    private:
     Log()= delete;
     ~Log()= delete;
@@ -40,5 +25,13 @@ export namespace units {
     static bool s_initialized_;
 
     static std::shared_ptr<spdlog::logger> s_user_logger_uptr_;
+
+#ifdef UE_BUILD_DLL
+   public:
+    static inline std::shared_ptr<spdlog::logger> engineLogger() noexcept { return s_engine_logger_uptr_; }
+
+   private:
+    static std::shared_ptr<spdlog::logger> s_engine_logger_uptr_;
+#endif
   };
 } // namespace units

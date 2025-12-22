@@ -14,7 +14,7 @@ namespace units {
   bool Log::s_initialized_= false;
 
   std::shared_ptr<spdlog::logger> Log::s_user_logger_uptr_= nullptr;
-  std::shared_ptr<spdlog::logger> Log::Core::s_engine_logger_uptr_= nullptr;
+  std::shared_ptr<spdlog::logger> Log::s_engine_logger_uptr_= nullptr;
 
   bool Log::init() noexcept {
     if (s_initialized_)
@@ -35,13 +35,13 @@ namespace units {
     debug_file_sink->set_pattern("[%Y/%m/%d | %I:%M:%S.%F-%p] [%-8l] %n: %v; %g - %!");
     error_file_sink->set_pattern("[%Y/%m/%d | %I:%M:%S.%F-%p] [%-8l] %n: %v; %g - %!");
 
-    Core::s_engine_logger_uptr_= std::make_shared<spdlog::logger>("UnitsEngine-Logger");
+    s_engine_logger_uptr_= std::make_shared<spdlog::logger>("UnitsEngine-Logger");
 
-    Core::engineLogger()->set_level(spdlog::level::trace);
+    engineLogger()->set_level(spdlog::level::trace);
 
-    Core::engineLogger()->sinks().emplace_back(console_sink);
-    Core::engineLogger()->sinks().emplace_back(debug_file_sink);
-    Core::engineLogger()->sinks().emplace_back(error_file_sink);
+    engineLogger()->sinks().emplace_back(console_sink);
+    engineLogger()->sinks().emplace_back(debug_file_sink);
+    engineLogger()->sinks().emplace_back(error_file_sink);
 
     return s_initialized_= true;
   }
@@ -49,7 +49,7 @@ namespace units {
     if (!s_initialized_)
       return;
     s_user_logger_uptr_= nullptr;
-    Core::s_engine_logger_uptr_= nullptr;
+    s_engine_logger_uptr_= nullptr;
     s_initialized_= false;
   }
 } // namespace units
