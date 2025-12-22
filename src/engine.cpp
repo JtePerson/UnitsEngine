@@ -26,6 +26,8 @@ namespace units {
       Log::init();
       Memory::Allocator::init(65536u);
 
+      Inputs::init();
+
       s_instance_ptr_= [](void) -> Engine* {
         static Engine instance{};
         return &instance;
