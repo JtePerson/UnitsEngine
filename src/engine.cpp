@@ -29,8 +29,6 @@ namespace units {
         return &instance;
       }();
 
-      if (s_instance_ptr_ != nullptr)
-        UE_TRACE("Loaded");
       return s_instance_ptr_ != nullptr;
     }();
     return init_success;
@@ -39,7 +37,6 @@ namespace units {
     if (!loaded() || getInstance()->m_should_run_)
       return false;
     Memory::Allocator::quit();
-    UE_TRACE("Unloaded");
     Log::quit();
     return true;
   }
@@ -53,8 +50,6 @@ namespace units {
     if (getInstance()->m_should_run_)
       return;
     getInstance()->m_should_run_= true;
-
-    UE_TRACE("Running");
 
     while (getInstance()->m_should_run_) {
       auto layer_stack_lock= getLayerStack()->lockToScope();
@@ -89,7 +84,6 @@ namespace units {
   void Engine::quit(void) noexcept {
     if (!getInstance()->m_should_run_)
       return;
-    UE_TRACE("Quitting");
 
     Events::ApplicationQuitEvent event{};
     getInstance()->m_event_bus_.pushEvent(&event);
