@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+configure_file(${UnitsEngine_SOURCE_DIR}/include/UnitsEngine/config.h.in ${UnitsEngine_SOURCE_DIR}/include/UnitsEngine/config.h)
+
 include(${UnitsEngine_SOURCE_DIR}/cmake/config.cmake)
 
 add_library(UnitsEngine SHARED)
@@ -18,7 +20,6 @@ PRIVATE
 target_compile_definitions(UnitsEngine
 PUBLIC
   $<$<CONFIG:Debug>:UE_ENABLE_LOGGING>
-  $<$<STREQUAL:${UnitsEngine_WINDOW_INPUT_BACKEND},glfw>:UE_INCLUDE_GLFW>
 PRIVATE
   UE_BUILD_DLL
 )

@@ -28,4 +28,22 @@ if(${UnitsEngine_WINDOW_INPUT_BACKEND} STREQUAL "glfw")
   PRIVATE
     glfw
   )
+  target_compile_definitions(UnitsEngine
+  PUBLIC
+    UE_INCLUDE_GLFW
+  )
+endif()
+
+if(${UnitsEngine_RENDER_BACKEND} STREQUAL "vulkan" AND DEFINED ENV{VULKAN_SDK})
+  find_package(Vulkan REQUIRED)
+  target_link_libraries(UnitsEngine
+  PRIVATE
+    Vulkan::Vulkan
+  )
+  target_compile_definitions(UnitsEngine
+  PUBLIC
+    UE_INCLUDE_VULKAN
+  )
+else()
+  message(SEND_ERROR "Vulkan not found!")
 endif()

@@ -29,7 +29,7 @@ namespace units {
         m_buffer_next_byte_= 0u;
         event_ptr= reinterpret_cast<Event*>(m_buffer_(p_size, m_buffer_next_byte_));
       }
-      memcpy(event_ptr, p_event_ptr, p_size);
+      std::memcpy(event_ptr, p_event_ptr, p_size);
       event_ptr->size= p_size;
       m_newest_event_= m_buffer_next_byte_;
       m_buffer_next_byte_+= p_size;

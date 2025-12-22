@@ -1,0 +1,31 @@
+module;
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+export module units.GPU;
+
+export namespace units {
+  namespace GPU {
+    struct InstanceSpecs final {
+      const char* app_name= nullptr;
+      int app_version_major= 1;
+      int app_version_minor= 0;
+      int app_version_patch= 0;
+    };
+
+    class UE_API Instance final {
+     public:
+      static bool init(const InstanceSpecs& p_specs) noexcept;
+      static void quit(void) noexcept;
+
+     private:
+      Instance(void)= default;
+      ~Instance(void)= default;
+
+      static Instance* s_instance_ptr_;
+
+      bool m_initialized_= false;
+      void* m_native_ptr_= nullptr;
+    };
+  } // namespace GPU
+} // namespace units
