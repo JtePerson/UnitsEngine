@@ -43,10 +43,10 @@ namespace units {
         };
 
         constexpr uint32_t vk_layer_count= 0u;
-        const char* vk_layer_names[]= {};
+        const char* vk_layer_names[]= {""};
 
         constexpr uint32_t vk_extension_count= 0u;
-        const char* vk_extension_names[]= {};
+        const char* vk_extension_names[]= {""};
 
         const auto vk_instance_create_info= vk::InstanceCreateInfo{
           .flags= vk_instance_flags,
