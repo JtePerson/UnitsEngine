@@ -9,6 +9,7 @@ set(UnitsEngineModules_SRC_FILES
   ${UnitsEngine_SOURCE_DIR}/modules/inputs.mpp
   ${UnitsEngine_SOURCE_DIR}/modules/window.mpp
   ${UnitsEngine_SOURCE_DIR}/modules/gpu/gpu.mpp
+  ${UnitsEngine_SOURCE_DIR}/modules/gpu/gpu_device.mpp
 )
 
 target_sources(UnitsEngine

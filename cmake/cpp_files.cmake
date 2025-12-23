@@ -12,4 +12,5 @@ PRIVATE
   ${UnitsEngine_SOURCE_DIR}/src/window/${UnitsEngine_WINDOW_INPUT_BACKEND}/window.cpp
   ${UnitsEngine_SOURCE_DIR}/src/inputs/${UnitsEngine_WINDOW_INPUT_BACKEND}/inputs.cpp
   ${UnitsEngine_SOURCE_DIR}/src/gpu/${UnitsEngine_RENDER_BACKEND}/gpu.cpp
+  ${UnitsEngine_SOURCE_DIR}/src/gpu/${UnitsEngine_RENDER_BACKEND}/gpu_device.cpp
 )
