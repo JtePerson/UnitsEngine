@@ -1,5 +1,7 @@
 module;
 
+#include <stdint.h>
+
 #include "UnitsEngine/core/engine_api.hpp"
 
 export module units.GPU;

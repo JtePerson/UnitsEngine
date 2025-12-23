@@ -8,6 +8,7 @@ module;
 
 #ifdef UE_INCLUDE_VULKAN
 #  define VULKAN_HPP_NO_EXCEPTIONS
+#  define VULKAN_HPP_NO_STRUCT_CONSTRUCTORS
 #  include <vulkan/vulkan.hpp>
 #endif
 
@@ -31,63 +32,38 @@ namespace units {
 
     bool Instance::init(const InstanceSpecs& p_specs, const bool& p_debug_mode) noexcept {
       static const bool initialized= [&]() -> bool {
-        vk::ApplicationInfo app_info{};
-        app_info.pApplicationName= p_specs.app_name;
-        app_info.applicationVersion= VK_MAKE_VERSION(p_specs.app_version_major, p_specs.app_version_minor, p_specs.app_version_patch);
-        app_info.pEngineName= "UnitsEngine";
-        app_info.engineVersion= VK_MAKE_VERSION(UE_VERSION_MAJOR, UE_VERSION_MINOR, UE_VERSION_PATCH);
-        app_info.apiVersion= vk::ApiVersion14;
+        vk::InstanceCreateFlags vk_instance_flags{};
 
-        uint32_t extension_count= 0u;
-        const char** extension_names= nullptr;
-
-#  ifdef UE_INCLUDE_GLFW
-        extension_names= glfwGetRequiredInstanceExtensions(&extension_count);
-
-        auto [extension_result, extension_properties]= vk::enumerateInstanceExtensionProperties();
-        for (size_t i= 0u; i < extension_count; ++i) {
-          const bool none_same= std::ranges::none_of(extension_properties, [glfw_extention_name= extension_names[i]](const auto& p_extension_props) -> bool {
-            return std::strcmp(glfw_extention_name, p_extension_props.extensionName) == 0;
-          });
-          if (none_same) {
-            UE_ERROR("Could not Init GPU Instance!");
-            return false;
-          }
-        }
-#  endif
-
-        constexpr uint32_t validation_layer_count= 0u;
-        const char* validation_layer_names[]= {
-          "VK_LAYER_KHRONOS_validation",
+        auto vk_application_info= vk::ApplicationInfo{
+          .pApplicationName= p_specs.app_name,
+          .applicationVersion= VK_MAKE_VERSION(p_specs.app_version_major, p_specs.app_version_minor, p_specs.app_version_patch),
+          .pEngineName= "UnitsEngine",
+          .engineVersion= VK_MAKE_VERSION(UE_VERSION_MAJOR, UE_VERSION_MINOR, UE_VERSION_PATCH),
+          .apiVersion= vk::ApiVersion14,
         };
 
-        if (p_debug_mode) {
-          auto [result, validation_layer_properties]= vk::enumerateInstanceLayerProperties();
-          for (size_t i= 0u; i < validation_layer_count; ++i) {
-            const bool none_same= std::ranges::none_of(validation_layer_properties, [validation_layer_name= validation_layer_names[i]](const auto& p_validation_layer_props) -> bool {
-              return std::strcmp(validation_layer_name, p_validation_layer_props.layerName) == 0;
-            });
-            if (none_same) {
-              UE_ERROR("Could not Init GPU Instance!");
-              return false;
-            }
-          }
-        }
+        constexpr uint32_t vk_layer_count= 0u;
+        const char* vk_layer_names[]= {};
 
-        vk::InstanceCreateInfo instance_create_info{};
-        instance_create_info.pApplicationInfo= &app_info;
-        instance_create_info.enabledExtensionCount= extension_count;
-        instance_create_info.ppEnabledExtensionNames= extension_names;
-        instance_create_info.enabledLayerCount= p_debug_mode ? validation_layer_count : 0u;
-        instance_create_info.ppEnabledLayerNames= p_debug_mode ? validation_layer_names : nullptr;
+        constexpr uint32_t vk_extension_count= 0u;
+        const char* vk_extension_names[]= {};
+
+        const auto vk_instance_create_info= vk::InstanceCreateInfo{
+          .flags= vk_instance_flags,
+          .pApplicationInfo= &vk_application_info,
+          .enabledLayerCount= vk_layer_count,
+          .ppEnabledLayerNames= vk_layer_names,
+          .enabledExtensionCount= vk_extension_count,
+          .ppEnabledExtensionNames= vk_extension_names,
+        };
+
+        static vk::Instance vk_instance{};
+        vk::Result vk_result= vk::createInstance(&vk_instance_create_info, nullptr, &vk_instance);
+        if (vk_result != vk::Result::eSuccess)
+          return false;
 
         s_instance_ptr_= [&]() -> Instance* {
-          static auto [result, vk_instance]= vk::createInstance(instance_create_info);
           static Instance instance{};
-          if (result != vk::Result::eSuccess) {
-            UE_ERROR("Could not Create GPU Instance!");
-            return nullptr;
-          }
           instance.m_native_ptr_= &vk_instance;
           return &instance;
         }();
@@ -97,7 +73,7 @@ namespace units {
       return initialized;
     }
     void Instance::quit(void) noexcept {
-      if (!s_instance_ptr_->m_initialized_)
+      if (s_instance_ptr_ == nullptr || s_instance_ptr_->m_native_ptr_ == nullptr)
         return;
       reinterpret_cast<vk::Instance*>(s_instance_ptr_->m_native_ptr_)->destroy();
     }
