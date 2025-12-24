@@ -11,11 +11,13 @@ module;
 #ifdef __INTELLISENSE__
 #  include "../modules/gpu/gpu.mpp"
 #  include "../modules/gpu/gpu_device.mpp"
+#  include "../modules/gpu/gpu_surface.mpp"
 #endif
 
 module units.GPU.Device;
 
 import units.GPU;
+import units.GPU.Surface;
 
 #include "UnitsEngine/core/log.hpp"
 
@@ -42,7 +44,7 @@ namespace units {
         UE_ERROR("Could not find any Vulkan Physical Devices!");
         return;
       }
-      const auto it= std::find_if(vk_physical_devices.begin(), vk_physical_devices.end(), [&](const auto& p_vk_physical_device) -> bool {
+      const auto it= std::find_if(vk_physical_devices.begin(), vk_physical_devices.end(), [&](const vk::PhysicalDevice& p_vk_physical_device) -> bool {
         auto vk_device_features= p_vk_physical_device.getFeatures();
         auto vk_device_props= p_vk_physical_device.getProperties();
         auto vk_queue_family_props= p_vk_physical_device.getQueueFamilyProperties();
@@ -68,7 +70,7 @@ namespace units {
       m_native_ptr_= nullptr;
     }
 
-    Device::Device(const PhysicalDevice& p_physical_device, const DeviceSpecs& p_specs) noexcept {
+    Device::Device(const PhysicalDevice& p_physical_device, const Surface& p_surface, const DeviceSpecs& p_specs) noexcept {
       static vk::Device vk_device{};
       if (!Instance::loaded()) {
         UE_ERROR("Could not create GPU Device!");
@@ -77,6 +79,7 @@ namespace units {
       }
       vk::Instance* vk_instance_ptr= reinterpret_cast<vk::Instance*>(Instance::getInstance()->native());
       auto* vk_physical_device_ptr= reinterpret_cast<vk::PhysicalDevice*>(p_physical_device.native());
+      auto* vk_surface_ptr= reinterpret_cast<vk::SurfaceKHR*>(p_surface.native());
 
       const vk::DeviceCreateFlags vk_device_create_flags{0u};
 
@@ -87,6 +90,13 @@ namespace units {
       constexpr uint32_t vk_queue_count= 1u;
       const uint32_t vk_graphics_queue_index= vk_qfp_it - vk_device_qfp.begin();
       const float vk_queue_prority= 0.5f;
+
+      vk::Bool32 vk_supported;
+      if (vk_physical_device_ptr->getSurfaceSupportKHR(vk_graphics_queue_index, *vk_surface_ptr, &vk_supported) != vk::Result::eSuccess) {
+        UE_ERROR("Could not create Logical Device!");
+        UE_ERROR("Vulkan Graphics Queue Family does not support Surface!");
+        return;
+      }
 
       constexpr uint32_t vk_queue_create_info_count= 1u;
       const vk::DeviceQueueCreateInfo vk_queue_create_infos[]= {{

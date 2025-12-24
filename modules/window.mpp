@@ -41,7 +41,7 @@ export namespace units {
 
     inline bool expired(void) const noexcept { return m_native_ptr_ == nullptr; }
 
-    inline void* native(void) noexcept { return m_native_ptr_; }
+    inline void* native(void) const noexcept { return m_native_ptr_; }
     inline const char* title(void) noexcept { return m_title_; }
 
     static inline Window* getFromTitle(const char* p_title) noexcept {

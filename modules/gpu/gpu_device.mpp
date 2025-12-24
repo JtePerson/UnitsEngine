@@ -4,7 +4,13 @@ module;
 
 #include "UnitsEngine/core/engine_api.hpp"
 
+#ifdef __INTELLISENSE__
+#  include "../modules/gpu/gpu_surface.mpp"
+#endif
+
 export module units.GPU.Device;
+
+import units.GPU.Surface;
 
 export namespace units {
   namespace GPU {
@@ -48,7 +54,7 @@ export namespace units {
     class UE_API Device final {
      public:
       Device()= default;
-      Device(const PhysicalDevice& p_physical_device, const DeviceSpecs& p_specs) noexcept;
+      Device(const PhysicalDevice& p_physical_device, const Surface& p_surface, const DeviceSpecs& p_specs) noexcept;
       inline Device(Device&& p_other) noexcept { transfer(std::forward<Device>(p_other)); }
       inline Device& operator=(Device&& p_other) noexcept {
         transfer(std::forward<Device>(p_other));
