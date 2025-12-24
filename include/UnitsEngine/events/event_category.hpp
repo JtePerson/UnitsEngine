@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+
+#define UE_EVENT_CATEGORY_ALL         UINT64_C(0xffffffffffffffff)
+#define UE_EVENT_CATEGORY_APPLICATION UINT64_C(0x0000000000000001)
+#define UE_EVENT_CATEGORY_WINDOW      UINT64_C(0x0000000000000002)

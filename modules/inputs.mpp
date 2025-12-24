@@ -1,0 +1,23 @@
+module;
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+export module units.Inputs;
+
+import units.Events;
+
+export namespace units {
+  class UE_API Inputs final {
+   public:
+    static void init(void) noexcept;
+    static void quit(void) noexcept;
+
+    static void pollInputs(Events::EventBus& p_event_bus) noexcept;
+
+   private:
+    Inputs()= delete;
+    ~Inputs()= delete;
+
+    static bool s_initialized_;
+  };
+} // namespace units

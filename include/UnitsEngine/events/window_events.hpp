@@ -1,0 +1,22 @@
+#pragma once
+#include "UnitsEngine/events/event_category.hpp"
+
+#ifdef __INTELLISENSE__
+#  include "../modules/events/events.mpp"
+#endif
+
+import units.Events;
+
+namespace units {
+  namespace Events {
+    struct WindowCloseEvent final {
+      // Header
+      Type type= Type::WindowClose;
+      Category category= UE_EVENT_CATEGORY_WINDOW;
+      uint32_t size= sizeof(WindowCloseEvent);
+      bool handled= false;
+      // Data
+      const char* title= nullptr;
+    };
+  } // namespace Events
+} // namespace units

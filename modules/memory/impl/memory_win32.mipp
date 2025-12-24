@@ -1,0 +1,53 @@
+#pragma once
+#include "UnitsEngine/core/platform_defines.hpp"
+
+#ifdef __INTELLISENSE__
+#  include "../modules/memory/memory.mpp"
+#endif
+
+#if defined(UE_PLATFORM_WIN32) || defined(UE_PLATFORM_WIN64)
+
+export namespace units {
+  size_t Memory::getPageSize() noexcept {
+    static size_t page_size= []() -> size_t {
+      SYSTEM_INFO sys_info;
+      GetSystemInfo(&sys_info);
+      return sys_info.dwPageSize;
+    }();
+    return page_size;
+  }
+  size_t Memory::getAlloctionGranularity() noexcept {
+    static size_t allocation_granularity= []() -> size_t {
+      SYSTEM_INFO sys_info;
+      GetSystemInfo(&sys_info);
+      return sys_info.dwAllocationGranularity;
+    }();
+    return allocation_granularity;
+  }
+  size_t Memory::alignDownToPageSize(const size_t& p_offset) noexcept {
+    const size_t page_size= getPageSize();
+    return (p_offset / page_size) * page_size;
+  }
+  size_t Memory::alignDownToAllocationGranularity(const size_t& p_offset) noexcept {
+    const size_t allocation_granularity= getAlloctionGranularity();
+    return (p_offset / allocation_granularity) * allocation_granularity;
+  }
+
+  Memory::VirtualRegion::VirtualRegion(const uint32_t& p_size, byte_t* p_ptr) noexcept {
+    m_size_= p_size * getAlloctionGranularity();
+    m_ptr_= (byte_t*)VirtualAlloc((void*)alignDownToAllocationGranularity((size_t)p_ptr), m_size_, MEM_RESERVE, PAGE_READWRITE);
+    if (m_ptr_ == nullptr)
+      m_size_= 0u;
+  }
+  Memory::VirtualRegion::~VirtualRegion() noexcept {
+    if (m_ptr_ != nullptr)
+      VirtualFree((void*)m_ptr_, m_size_, MEM_RELEASE);
+  }
+
+  void Memory::VirtualRegion::commit(const uint32_t& p_size, uint32_t p_offset) const noexcept {
+    if (m_ptr_ != nullptr && m_ptr_ + (p_offset + p_size) * getPageSize() <= m_ptr_ + m_size_)
+      VirtualAlloc(m_ptr_ + p_offset * getPageSize(), p_size * getPageSize(), MEM_COMMIT, PAGE_READWRITE);
+  }
+} // namespace units
+
+#endif
