@@ -2,10 +2,6 @@ module;
 
 #include <stdint.h>
 
-#ifdef __INTELLISENSE__
-#  include "../modules/memory/memory.mpp"
-#endif
-
 module units.Memory;
 
 namespace units {

@@ -1,15 +1,10 @@
 module;
 
-#include <concepts>
 #include <memory>
 #include <vector>
 
 #include "UnitsEngine/core/engine_api.hpp"
 #include "UnitsEngine/core/macros.hpp"
-
-#ifdef __INTELLISENSE__
-#  include "../modules/events/events.mpp"
-#endif
 
 export module units.Layers;
 
@@ -21,13 +16,13 @@ export namespace units {
     Layer(void)= default;
     virtual ~Layer(void)= default;
 
-    virtual void onAttach(void) noexcept {}
-    virtual void onDetach(void) noexcept {}
+    virtual inline void onAttach(void) noexcept {}
+    virtual inline void onDetach(void) noexcept {}
 
-    virtual bool onEvent(Events::Event* p_event) noexcept { return true; }
-    virtual bool onFixedTick(void) noexcept { return true; }
-    virtual bool onTick(void) noexcept { return true; }
-    virtual bool onRender(void) noexcept { return true; }
+    virtual inline bool onEvent(Events::Event* p_event) noexcept { return true; }
+    virtual inline bool onFixedTick(void) noexcept { return true; }
+    virtual inline bool onTick(void) noexcept { return true; }
+    virtual inline bool onRender(void) noexcept { return true; }
 
    private:
     Layer(Layer&&)= delete;

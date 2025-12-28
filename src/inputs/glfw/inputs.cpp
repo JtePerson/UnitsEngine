@@ -4,10 +4,6 @@ module;
 #  include <GLFW/glfw3.h>
 #endif
 
-#ifdef __INTELLISENSE__
-#  include "../modules/inputs.mpp"
-#endif
-
 module units.Inputs;
 
 import units.Events;

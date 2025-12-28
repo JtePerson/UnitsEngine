@@ -10,12 +10,6 @@ module;
 #  include <GLFW/glfw3.h>
 #endif
 
-#ifdef __INTELLISENSE__
-#  include "../modules/gpu/gpu.mpp"
-#  include "../modules/gpu/gpu_surface.mpp"
-#  include "../modules/window.mpp"
-#endif
-
 module units.GPU.Surface;
 
 #include "UnitsEngine/core/log.hpp"

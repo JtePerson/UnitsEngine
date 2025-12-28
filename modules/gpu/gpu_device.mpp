@@ -1,14 +1,10 @@
 module;
 
-#include <utility>
-
 #include "UnitsEngine/core/engine_api.hpp"
 
-#ifdef __INTELLISENSE__
-#  include "../modules/gpu/gpu_surface.mpp"
-#endif
-
 export module units.GPU.Device;
+
+import std.compat;
 
 import units.GPU.Surface;
 

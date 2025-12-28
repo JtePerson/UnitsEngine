@@ -2,10 +2,6 @@ module;
 
 #include "UnitsEngine/core/macros.hpp"
 
-#ifdef __INTELLISENSE__
-#  include "../modules/layers.mpp"
-#endif
-
 module units.Layers;
 
 namespace units {

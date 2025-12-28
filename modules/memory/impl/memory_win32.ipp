@@ -1,10 +1,6 @@
 #pragma once
 #include "UnitsEngine/core/platform_defines.hpp"
 
-#ifdef __INTELLISENSE__
-#  include "../modules/memory/memory.mpp"
-#endif
-
 #if defined(UE_PLATFORM_WIN32) || defined(UE_PLATFORM_WIN64)
 
 export namespace units {

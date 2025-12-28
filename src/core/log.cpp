@@ -4,10 +4,6 @@ module;
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-#ifdef __INTELLISENSE__
-#  include "../modules/core/log.mpp"
-#endif
-
 module units.Log;
 
 namespace units {

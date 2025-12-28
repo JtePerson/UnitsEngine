@@ -1,28 +1,22 @@
 module;
 
-#include <ranges>
-
-#include <stdint.h>
-
-#include "UnitsEngine/config.h"
+#include "UnitsEngine/config.hpp"
 
 #ifdef UE_INCLUDE_VULKAN
 #  define VULKAN_HPP_NO_EXCEPTIONS
 #  define VULKAN_HPP_NO_STRUCT_CONSTRUCTORS
 #  include <vulkan/vulkan.hpp>
 
-#  include "UnitsEngine/gpu/vulkan/gpu.h"
+#  include "UnitsEngine/gpu/vulkan/gpu.hpp"
 #endif
 
 #ifdef UE_INCLUDE_GLFW
 #  include <GLFW/glfw3.h>
 #endif
 
-#ifdef __INTELLISENSE__
-#  include "../modules/gpu/gpu.mpp"
-#endif
-
 module units.GPU;
+
+import std;
 
 #include "UnitsEngine/core/log.hpp"
 

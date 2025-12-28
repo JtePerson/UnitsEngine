@@ -1,15 +1,10 @@
 module;
 
-#include <array>
+#include <cstdint>
 
 #include <stdint.h>
 
 #include "UnitsEngine/core/engine_api.hpp"
-
-#ifdef __INTELLISENSE__
-// #  include "UnitsEngine/memory/circular_buffer.hpp"
-#  include "../modules/memory/memory.mpp"
-#endif
 
 export module units.Events;
 

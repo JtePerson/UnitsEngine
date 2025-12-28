@@ -1,8 +1,5 @@
 module;
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include "UnitsEngine/core/engine_api.hpp"
 #include "UnitsEngine/core/platform_defines.hpp"
 
@@ -13,6 +10,8 @@ module;
 #  include <mach/mach.h>
 #  include <sys/mman.h>
 #endif
+
+#include <stdint.h>
 
 export module units.Memory;
 
@@ -212,7 +211,7 @@ export namespace units {
 } // namespace units
 
 #if defined(UE_PLATFORM_WIN32) || defined(UE_PLATFORM_WIN64)
-#  include "../modules/memory/impl/memory_win32.mipp"
+#  include "../modules/memory/impl/memory_win32.ipp"
 #elif defined(UE_PLATFORM_MACOS)
-#  include "../modules/memory/impl/memory_macOS.mipp"
+#  include "../modules/memory/impl/memory_macOS.ipp"
 #endif

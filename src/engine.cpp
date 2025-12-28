@@ -1,31 +1,19 @@
 module;
 
-#include <iostream>
-
 #include "UnitsEngine/core/log.hpp"
 #include "UnitsEngine/events/application_events.hpp"
 #include "UnitsEngine/events/window_events.hpp"
-
-#ifdef __INTELLISENSE__
-#  include "../modules/core/log.mpp"
-#  include "../modules/engine.mpp"
-#  include "../modules/events/events.mpp"
-#  include "../modules/inputs.mpp"
-#  include "../modules/layers.mpp"
-#endif
 
 module units.Engine;
 
 import units.Log;
 import units.Memory;
-import units.Inputs;
 
 namespace units {
   bool Engine::load(void) noexcept {
     const bool init_success= [](void) -> bool {
       Log::init();
       Memory::Allocator::init(65536u);
-      Inputs::init();
 
       s_instance_ptr_= [](void) -> Engine* {
         static Engine instance{};
@@ -56,7 +44,6 @@ namespace units {
 
     while (getInstance()->m_should_run_) {
       auto layer_stack_lock= getLayerStack()->lockToScope();
-      Inputs::pollInputs(getInstance()->m_event_bus_);
       Events::Event* event_ptr= nullptr;
       while (getInstance()->m_event_bus_.pollEvent(event_ptr)) {
         switch (event_ptr->type) {

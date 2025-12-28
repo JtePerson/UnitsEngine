@@ -1,20 +1,14 @@
 module;
 
-#include <algorithm>
-
 #ifdef UE_INCLUDE_VULKAN
 #  define VULKAN_HPP_NO_EXCEPTIONS
 #  define VULKAN_HPP_NO_STRUCT_CONSTRUCTORS
 #  include <vulkan/vulkan.hpp>
 #endif
 
-#ifdef __INTELLISENSE__
-#  include "../modules/gpu/gpu.mpp"
-#  include "../modules/gpu/gpu_device.mpp"
-#  include "../modules/gpu/gpu_surface.mpp"
-#endif
-
 module units.GPU.Device;
+
+import std;
 
 import units.GPU;
 import units.GPU.Surface;

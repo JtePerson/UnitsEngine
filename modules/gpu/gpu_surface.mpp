@@ -1,15 +1,10 @@
 module;
 
-#include <utility>
-
 #include "UnitsEngine/core/engine_api.hpp"
 
-#ifdef __INTELLISENSE__
-#  include "../modules/gpu/gpu.mpp"
-#  include "../modules/window.mpp"
-#endif
-
 export module units.GPU.Surface;
+
+import std.compat;
 
 import units.GPU;
 import units.Window;
@@ -22,7 +17,7 @@ export namespace units {
     class UE_API Surface final {
      public:
       Surface()= default;
-      Surface(const SurfaceSpecs& p_specs) noexcept {}
+      constexpr Surface(const SurfaceSpecs& p_specs) noexcept {}
       Surface(const Instance& p_gpu_instance, const Window& p_window) noexcept;
       inline Surface(Surface&& p_other) noexcept { transfer(std::forward<Surface>(p_other)); }
       inline Surface& operator=(Surface&& p_other) noexcept {

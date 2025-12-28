@@ -2,11 +2,6 @@ module;
 
 #include "UnitsEngine/core/engine_api.hpp"
 
-#ifdef __INTELLISENSE__
-#  include "../modules/events/events.mpp"
-#  include "../modules/layers.mpp"
-#endif
-
 export module units.Engine;
 
 import units.Layers;
@@ -26,6 +21,11 @@ export namespace units {
     }
     static inline Engine* getInstance(void) noexcept {
       return s_instance_ptr_;
+    }
+    static inline Events::EventBus* getEventBus(void) noexcept {
+      if (s_instance_ptr_ == nullptr)
+        return nullptr;
+      return &s_instance_ptr_->m_event_bus_;
     }
     static inline LayerStack* getLayerStack(void) noexcept {
       if (s_instance_ptr_ == nullptr)

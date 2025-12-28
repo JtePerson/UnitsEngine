@@ -1,12 +1,8 @@
 module;
 
-#include <cstring>
+#include <string>
 
 #include <stdint.h>
-
-#ifdef __INTELLISENSE__
-#  include "../modules/events/events.mpp"
-#endif
 
 module units.Events;
 
@@ -43,7 +39,7 @@ namespace units {
         m_buffer_start_byte_= 0u;
         m_buffer_next_byte_= m_buffer_start_byte_;
         m_buffer_usage_= 0u;
-        m_newest_event_= ~UINT64_C(0);
+        m_newest_event_= UINT64_MAX;
         return false;
       }
       p_event_ptr= reinterpret_cast<Event*>(m_buffer_(sizeof(Event), m_buffer_start_byte_));

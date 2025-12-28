@@ -6,11 +6,6 @@ set(UnitsEngineModules_SRC_FILES
   ${UnitsEngine_SOURCE_DIR}/modules/layers.mpp
   ${UnitsEngine_SOURCE_DIR}/modules/memory/memory.mpp
   ${UnitsEngine_SOURCE_DIR}/modules/events/events.mpp
-  ${UnitsEngine_SOURCE_DIR}/modules/inputs.mpp
-  ${UnitsEngine_SOURCE_DIR}/modules/window.mpp
-  ${UnitsEngine_SOURCE_DIR}/modules/gpu/gpu.mpp
-  ${UnitsEngine_SOURCE_DIR}/modules/gpu/gpu_device.mpp
-  ${UnitsEngine_SOURCE_DIR}/modules/gpu/gpu_surface.mpp
 )
 
 target_sources(UnitsEngine
@@ -22,24 +17,31 @@ PRIVATE
       ${UnitsEngineModules_SRC_FILES}
 )
 
-add_library(UnitsEngineModules STATIC)
-add_library(Units::Modules ALIAS UnitsEngineModules)
-target_compile_features(UnitsEngineModules
+add_library(Modules STATIC)
+add_library(Units::Modules ALIAS Modules)
+target_compile_features(Modules
 PUBLIC
-  cxx_std_20
+  cxx_std_23
 )
 
-target_link_libraries(UnitsEngineModules
+target_compile_definitions(Modules
 PUBLIC
-  spdlog::spdlog
+  $<$<CONFIG:Debug>:UE_ENABLE_LOGGING>
 )
 
-target_include_directories(UnitsEngineModules
+target_include_directories(Modules
 PUBLIC
   $<BUILD_INTERFACE:${UnitsEngine_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+PRIVATE
 )
 
-target_sources(UnitsEngineModules
+target_link_libraries(Modules
+PRIVATE
+  spdlog::spdlog_header_only
+)
+
+target_sources(Modules
 PUBLIC
   FILE_SET cxx_modules TYPE CXX_MODULES
     BASE_DIRS

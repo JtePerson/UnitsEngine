@@ -1,16 +1,10 @@
 module;
 
-#include <unordered_map>
-
 #ifdef UE_INCLUDE_GLFW
 #  include <GLFW/glfw3.h>
 #endif
 
 #include "UnitsEngine/events/window_events.hpp"
-
-#ifdef __INTELLISENSE__
-#  include "../modules/window.mpp"
-#endif
 
 module units.Window;
 
@@ -19,7 +13,7 @@ module units.Window;
 #ifdef UE_INCLUDE_GLFW
 
 namespace units {
-  std::unordered_map<const char*, Window*> Window::s_title_map_;
+  std::unordered_map<const char*, Window*> Window::s_title_map_{};
 
   Window::Window(const WindowSpecs& p_specs) noexcept {
     if (p_specs.render_backend == RenderBackend::Vulkan)
