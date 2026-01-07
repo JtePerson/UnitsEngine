@@ -1,0 +1,131 @@
+module;
+
+#include <memory>
+#include <vector>
+
+#include "UnitsEngine/core/engine_api.hpp"
+#include "UnitsEngine/core/macros.hpp"
+
+export module units.Layers;
+
+import units.Events;
+
+export namespace units {
+  class Layer {
+   public:
+    Layer(void)= default;
+    virtual ~Layer(void)= default;
+
+    virtual inline void onAttach(void) noexcept {}
+    virtual inline void onDetach(void) noexcept {}
+
+    virtual inline bool onEvent(Events::Event* p_event) noexcept { return true; }
+    virtual inline bool onFixedTick(void) noexcept { return true; }
+    virtual inline bool onTick(void) noexcept { return true; }
+    virtual inline bool onRender(void) noexcept { return true; }
+
+   private:
+    Layer(Layer&&)= delete;
+    Layer(const Layer&)= delete;
+    Layer& operator=(Layer&&)= delete;
+    Layer& operator=(const Layer&)= delete;
+  };
+
+  class UE_API LayerStack final {
+   public:
+    LayerStack(void)= default;
+    ~LayerStack(void)= default;
+
+    template <std::derived_from<Layer> LayerT, typename... Args>
+    inline Layer* push(Args&&... p_args) noexcept {
+      if (m_next_top_layer_ < m_top_layer_)
+        return nullptr;
+
+      m_next_top_layer_= m_stack_.size();
+      m_stack_.emplace_back(std::make_shared<LayerT>(std::forward<Args>(p_args)...));
+
+      if (!m_locked_) {
+        m_top_layer_= m_next_top_layer_;
+        m_stack_[m_top_layer_]->onAttach();
+      }
+      return m_stack_.back().get();
+    }
+
+    void pop(void) noexcept;
+
+    template <typename CallbackT>
+      requires std::is_invocable_r_v<bool, CallbackT, Layer&>
+    inline size_t forEach(CallbackT&& p_callback) noexcept {
+      size_t count= UE_MIN(m_top_layer_ + 1u, m_stack_.size());
+      for (size_t i= 0; i < count; ++i) {
+        if (!p_callback(*m_stack_[i])) {
+          return i;
+        }
+      }
+      return count;
+    }
+
+    inline Layer* getTop(void) noexcept {
+      if (m_top_layer_ >= m_stack_.size())
+        return nullptr;
+      return m_stack_[m_top_layer_].get();
+    }
+
+    inline bool empty(void) const noexcept { return m_stack_.empty(); }
+    inline bool isLocked(void) const noexcept { return m_locked_; }
+    inline size_t activeCount(void) const noexcept { return m_top_layer_ + 1u; }
+
+    class ScopeLock final {
+     public:
+      inline ~ScopeLock(void) noexcept {
+        if (m_layer_stack_ == nullptr)
+          return;
+        if (m_layer_stack_->m_next_top_layer_ < m_layer_stack_->m_top_layer_) {
+          for (size_t i= m_layer_stack_->m_next_top_layer_ + 1u; i <= m_layer_stack_->m_top_layer_; ++i) {
+            m_layer_stack_->m_stack_[i]->onDetach();
+          }
+          m_layer_stack_->m_stack_.resize(m_layer_stack_->m_next_top_layer_ + 1u);
+          m_layer_stack_->m_top_layer_= m_layer_stack_->m_next_top_layer_;
+        }
+        m_layer_stack_->m_locked_= false;
+      }
+
+     private:
+      friend class LayerStack;
+
+      ScopeLock(void)= default;
+      ScopeLock(ScopeLock&&)= delete;
+      ScopeLock(const ScopeLock&)= delete;
+      ScopeLock& operator=(ScopeLock&&)= delete;
+      ScopeLock& operator=(const ScopeLock&)= delete;
+
+      inline ScopeLock(LayerStack* p_owner) noexcept: m_layer_stack_(p_owner) {
+        m_layer_stack_->m_locked_= true;
+        if (m_layer_stack_->m_next_top_layer_ > m_layer_stack_->m_top_layer_) {
+          for (size_t i= m_layer_stack_->m_top_layer_ + 1u; i <= m_layer_stack_->m_next_top_layer_; ++i) {
+            m_layer_stack_->m_stack_[i]->onAttach();
+          }
+          m_layer_stack_->m_top_layer_= m_layer_stack_->m_next_top_layer_;
+        }
+      }
+      LayerStack* const m_layer_stack_= nullptr;
+    };
+
+    inline ScopeLock lockToScope(void) noexcept {
+      if (m_locked_)
+        return ScopeLock{};
+      return ScopeLock{this};
+    }
+
+   private:
+    LayerStack(LayerStack&&)= delete;
+    LayerStack(const LayerStack&)= delete;
+    LayerStack& operator=(LayerStack&&)= delete;
+    LayerStack& operator=(const LayerStack&)= delete;
+
+    bool m_locked_= false;
+    size_t m_top_layer_= 0u;
+    size_t m_next_top_layer_= 0u;
+    std::vector<std::shared_ptr<Layer>> m_stack_;
+  };
+} // namespace units

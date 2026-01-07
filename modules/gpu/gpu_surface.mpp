@@ -1,0 +1,46 @@
+module;
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+export module units.GPU.Surface;
+
+import std.compat;
+
+import units.GPU;
+import units.Window;
+
+export namespace units {
+  namespace GPU {
+    struct SurfaceSpecs final {
+    };
+
+    class UE_API Surface final {
+     public:
+      Surface()= default;
+      constexpr Surface(const SurfaceSpecs& p_specs) noexcept {}
+      Surface(const Instance& p_gpu_instance, const Window& p_window) noexcept;
+      inline Surface(Surface&& p_other) noexcept { transfer(std::forward<Surface>(p_other)); }
+      inline Surface& operator=(Surface&& p_other) noexcept {
+        transfer(std::forward<Surface>(p_other));
+        return *this;
+      }
+      inline ~Surface(void) noexcept { destroy(); };
+
+      void destroy(void) noexcept;
+      inline void transfer(Surface&& p_other) noexcept {
+        *this= p_other;
+        p_other.m_native_ptr_= nullptr;
+      }
+
+      inline bool expired(void) const noexcept { return m_native_ptr_ == nullptr; }
+
+      inline void* native(void) const noexcept { return m_native_ptr_; }
+
+     private:
+      Surface(const Surface&)= default;
+      Surface& operator=(const Surface&)= default;
+
+      void* m_native_ptr_= nullptr;
+    };
+  } // namespace GPU
+} // namespace units

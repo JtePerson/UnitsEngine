@@ -1,0 +1,37 @@
+module;
+
+#include <memory>
+
+#include <spdlog/spdlog.h>
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+export module units.Log;
+
+export namespace units {
+  class UE_API Log final {
+   public:
+    static inline bool initialized(void) noexcept { return s_initialized_; }
+
+    static bool init(void) noexcept;
+    static void quit(void) noexcept;
+
+    static inline std::shared_ptr<spdlog::logger> userLogger(void) noexcept { return s_user_logger_uptr_; }
+
+   private:
+    Log(void)= delete;
+    ~Log(void)= delete;
+
+    static bool s_initialized_;
+
+    static std::shared_ptr<spdlog::logger> s_user_logger_uptr_;
+
+#ifdef UE_BUILD_DLL
+   public:
+    static inline std::shared_ptr<spdlog::logger> engineLogger(void) noexcept { return s_engine_logger_uptr_; }
+
+   private:
+    static std::shared_ptr<spdlog::logger> s_engine_logger_uptr_;
+#endif
+  };
+} // namespace units

@@ -1,0 +1,78 @@
+module;
+
+#include "UnitsEngine/core/engine_api.hpp"
+
+export module units.GPU.Device;
+
+import std.compat;
+
+import units.GPU.Surface;
+
+export namespace units {
+  namespace GPU {
+    struct PhysicalDeviceSpecs final {};
+
+    class UE_API PhysicalDevice final {
+     public:
+      PhysicalDevice()= default;
+      PhysicalDevice(const PhysicalDeviceSpecs& p_specs) noexcept;
+      inline PhysicalDevice(PhysicalDevice&& p_other) noexcept { transfer(std::forward<PhysicalDevice>(p_other)); }
+      inline PhysicalDevice& operator=(PhysicalDevice&& p_other) noexcept {
+        transfer(std::forward<PhysicalDevice>(p_other));
+        return *this;
+      }
+      inline ~PhysicalDevice(void) noexcept { destroy(); };
+
+      void destroy(void) noexcept;
+      inline void transfer(PhysicalDevice&& p_other) noexcept {
+        *this= p_other;
+        p_other.m_native_ptr_= nullptr;
+      }
+
+      inline bool expired(void) const noexcept { return m_native_ptr_ == nullptr; }
+
+      inline void* native(void) const noexcept { return m_native_ptr_; }
+      inline uint32_t id() const noexcept { return m_id_; }
+
+      inline bool operator==(const PhysicalDevice& p_other) const noexcept { return m_id_ == p_other.m_id_; }
+      inline bool operator!=(const PhysicalDevice& p_other) const noexcept { return !(*this == p_other); }
+
+     private:
+      PhysicalDevice(const PhysicalDevice&)= default;
+      PhysicalDevice& operator=(const PhysicalDevice&)= default;
+
+      void* m_native_ptr_= nullptr;
+      uint32_t m_id_= 0u;
+    };
+
+    struct DeviceSpecs final {};
+
+    class UE_API Device final {
+     public:
+      Device()= default;
+      Device(const PhysicalDevice& p_physical_device, const Surface& p_surface, const DeviceSpecs& p_specs) noexcept;
+      inline Device(Device&& p_other) noexcept { transfer(std::forward<Device>(p_other)); }
+      inline Device& operator=(Device&& p_other) noexcept {
+        transfer(std::forward<Device>(p_other));
+        return *this;
+      }
+      inline ~Device(void) noexcept { destroy(); };
+
+      void destroy(void) noexcept;
+      inline void transfer(Device&& p_other) noexcept {
+        *this= p_other;
+        p_other.m_native_ptr_= nullptr;
+      }
+
+      inline bool expired(void) const noexcept { return m_native_ptr_ == nullptr; }
+
+      inline void* native(void) const noexcept { return m_native_ptr_; }
+
+     private:
+      Device(const Device&)= default;
+      Device& operator=(const Device&)= default;
+
+      void* m_native_ptr_= nullptr;
+    };
+  } // namespace GPU
+} // namespace units

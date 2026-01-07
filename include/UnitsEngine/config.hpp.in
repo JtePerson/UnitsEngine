@@ -1,0 +1,11 @@
+#pragma once
+
+#define UE_BUILD_MODE    "@CMAKE_BUILD_TYPE@"
+#define UE_VERSION_STR   "v@UnitsEngine_VERSION_MAJOR@.@UnitsEngine_VERSION_MINOR@.@UnitsEngine_VERSION_PATCH@"
+#define UE_VERSION_MAJOR @UnitsEngine_VERSION_MAJOR@
+#define UE_VERSION_MINOR @UnitsEngine_VERSION_MINOR@
+#define UE_VERSION_PATCH @UnitsEngine_VERSION_PATCH@
+
+#define UE_COMPILER_ID "@CMAKE_CXX_COMPILER_ID@"
+
+#define UE_SYSTEM_NAME    "@CMAKE_SYSTEM_NAME@"
